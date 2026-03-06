@@ -17,7 +17,8 @@ import {
   LayoutList,
   Bell,
   Settings,
-  BarChart3 } from
+  BarChart3,
+  MessageCircle } from
 "lucide-react";
 import {
   Popover,
@@ -32,6 +33,7 @@ const navItems = [
 { name: "Projects", icon: Folder, page: "Projects" },
 { name: "Backlog", icon: FileText, page: "Backlog" },
 { name: "Tasks", icon: ListTodo, page: "Tasks" },
+{ name: "Messages", icon: MessageCircle, page: "DirectMessages" },
 { name: "Reports", icon: BarChart3, page: "Reports" },
 { name: "Initiatives", icon: Rocket, page: "Initiatives" }];
 

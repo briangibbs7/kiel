@@ -52,6 +52,7 @@ import Initiatives from './pages/Initiatives';
 import MyIssues from './pages/MyIssues';
 import ProjectDetail from './pages/ProjectDetail';
 import Projects from './pages/Projects';
+import NotificationSettings from './pages/NotificationSettings';
 import __Layout from './Layout.jsx';
 
 
@@ -61,6 +62,7 @@ export const PAGES = {
     "MyIssues": MyIssues,
     "ProjectDetail": ProjectDetail,
     "Projects": Projects,
+    "NotificationSettings": NotificationSettings,
 }
 
 export const pagesConfig = {

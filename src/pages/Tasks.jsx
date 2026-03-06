@@ -5,6 +5,7 @@ import { Plus, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SubTaskManager from "@/components/tasks/SubTaskManager";
 import TaskDependencyManager from "@/components/tasks/TaskDependencyManager";
+import CommentThread from "@/components/comments/CommentThread";
 import CreateTaskModal from "@/components/tasks/CreateTaskModal";
 
 export default function Tasks() {
@@ -173,6 +174,8 @@ export default function Tasks() {
                               taskId={task.id}
                               storyId={story.id}
                             />
+
+                            <CommentThread taskId={task.id} />
                           </div>
                         )}
                       </div>

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, CheckCircle2, Circle } from "lucide-react";
+import { Plus, Trash2, CheckCircle2, Circle, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import CommentThread from "@/components/comments/CommentThread";
 import {
   Select,
   SelectContent,
@@ -15,6 +16,7 @@ import { format } from "date-fns";
 
 export default function SubTaskManager({ taskId }) {
   const [showCreate, setShowCreate] = useState(false);
+  const [expandedSubtask, setExpandedSubtask] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     assignee: "",
@@ -102,9 +104,9 @@ export default function SubTaskManager({ taskId }) {
         {subtasks.map((subtask) => (
           <div
             key={subtask.id}
-            className="p-3 bg-[#0D0D0D] border border-[#1A1A1A] rounded hover:border-[#252525] transition-colors group"
+            className="bg-[#0D0D0D] border border-[#1A1A1A] rounded hover:border-[#252525] transition-colors"
           >
-            <div className="flex items-start gap-3">
+            <div className="p-3 flex items-start gap-3 group">
               <button
                 onClick={() =>
                   updateMutation.mutate({
@@ -155,13 +157,32 @@ export default function SubTaskManager({ taskId }) {
                 </div>
               </div>
 
-              <button
-                onClick={() => deleteMutation.mutate(subtask.id)}
-                className="text-[#555] hover:text-[#F87171] transition-colors opacity-0 group-hover:opacity-100"
-              >
-                <Trash2 size={14} />
-              </button>
+              <div className="flex gap-1 opacity-0 group-hover:opacity-100">
+                <button
+                  onClick={() =>
+                    setExpandedSubtask(
+                      expandedSubtask === subtask.id ? null : subtask.id
+                    )
+                  }
+                  className="text-[#555] hover:text-white transition-colors"
+                  title="Comments"
+                >
+                  <MessageCircle size={14} />
+                </button>
+                <button
+                  onClick={() => deleteMutation.mutate(subtask.id)}
+                  className="text-[#555] hover:text-[#F87171] transition-colors"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
             </div>
+
+            {expandedSubtask === subtask.id && (
+              <div className="border-t border-[#1E1E1E] bg-[#0D0D0D] p-3">
+                <CommentThread subtaskId={subtask.id} />
+              </div>
+            )}
           </div>
         ))}
       </div>

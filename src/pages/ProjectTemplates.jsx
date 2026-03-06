@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const TEMPLATE_ICONS = {
+export const TEMPLATE_ICONS = {
   engineering: Code2,
   sales: TrendingUp,
   hr: Users,
@@ -28,7 +28,7 @@ const TEMPLATE_ICONS = {
   facilities: Building2,
 };
 
-const BUILT_IN_TEMPLATES = [
+export const BUILT_IN_TEMPLATES = [
   {
     id: "eng",
     name: "Engineering",

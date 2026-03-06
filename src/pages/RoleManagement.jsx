@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { PERMISSIONS, PERMISSION_LABELS, DEFAULT_ROLES } from "@/lib/permissions";
+import { PERMISSIONS, PERMISSION_LABELS, DEFAULT_ROLES } from "@/lib/PageNotFound";
 
 export default function RoleManagement() {
   const [showCreate, setShowCreate] = useState(false);

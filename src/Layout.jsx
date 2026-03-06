@@ -14,26 +14,26 @@ import {
   Star,
   ChevronDown,
   LogOut,
-  LayoutList
-} from "lucide-react";
+  LayoutList } from
+"lucide-react";
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  PopoverTrigger } from
+"@/components/ui/popover";
 
 const navItems = [
-  { name: "Inbox", icon: Inbox, page: "Inbox" },
-  { name: "My Issues", icon: ListTodo, page: "MyIssues" },
-  { name: "Projects", icon: Folder, page: "Projects" },
-  { name: "Initiatives", icon: Rocket, page: "Initiatives" },
-];
+{ name: "Inbox", icon: Inbox, page: "Inbox" },
+{ name: "My Issues", icon: ListTodo, page: "MyIssues" },
+{ name: "Projects", icon: Folder, page: "Projects" },
+{ name: "Initiatives", icon: Rocket, page: "Initiatives" }];
+
 
 const sidebarPositions = [
-  { value: "left", label: "Left" },
-  { value: "right", label: "Right" },
-  { value: "top", label: "Top" },
-];
+{ value: "left", label: "Left" },
+{ value: "right", label: "Right" },
+{ value: "top", label: "Top" }];
+
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
@@ -58,8 +58,8 @@ export default function Layout({ children, currentPageName }) {
   return (
     <div className={`h-screen bg-[#0D0D0D] overflow-hidden ${isSidebarVertical ? "flex" : "flex flex-col"}`}>
       {/* Sidebar - Top */}
-      {isSidebarTop && (
-        <aside className="h-16 flex-shrink-0 bg-[#111111] border-b border-[#1E1E1E] flex items-center px-4 gap-2 overflow-x-auto">
+      {isSidebarTop &&
+      <aside className="h-16 flex-shrink-0 bg-[#111111] border-b border-[#1E1E1E] flex items-center px-4 gap-2 overflow-x-auto">
           <div className="flex items-center gap-2 flex-shrink-0">
             <div className="w-5 h-5 rounded bg-gradient-to-br from-[#5E6AD2] to-[#7C3AED]">
               <span className="text-[8px] font-bold text-white flex items-center justify-center h-full">PM</span>
@@ -68,55 +68,55 @@ export default function Layout({ children, currentPageName }) {
           </div>
           <nav className="flex gap-0.5 flex-1 ml-4">
             {navItems.map((item) => {
-              const isActive = currentPageName === item.page;
-              return (
-                <Link
-                  key={item.page}
-                  to={createPageUrl(item.page)}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded text-[12px] transition-colors whitespace-nowrap ${
-                    isActive
-                      ? "bg-[#1E1E1E] text-white"
-                      : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"
-                  }`}
-                >
+            const isActive = currentPageName === item.page;
+            return (
+              <Link
+                key={item.page}
+                to={createPageUrl(item.page)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded text-[12px] transition-colors whitespace-nowrap ${
+                isActive ?
+                "bg-[#1E1E1E] text-white" :
+                "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"}`
+                }>
+
                   <item.icon size={14} />
                   {item.name}
-                </Link>
-              );
-            })}
+                </Link>);
+
+          })}
           </nav>
           <Popover>
             <PopoverTrigger asChild>
               <button className="text-[#555] hover:text-white transition-colors flex-shrink-0">
-                <LayoutList size={16} />
+                <LayoutList size={16} className="text-slate-100 lucide lucide-layout-list" />
               </button>
             </PopoverTrigger>
             <PopoverContent className="w-40 bg-[#1A1A1A] border-[#333] p-2">
               <div className="space-y-1">
-                {sidebarPositions.map((pos) => (
-                  <button
-                    key={pos.value}
-                    onClick={() => handlePositionChange(pos.value)}
-                    className={`w-full text-left text-xs px-2 py-1.5 rounded transition-colors ${
-                      sidebarPos === pos.value
-                        ? "bg-[#5E6AD2] text-white"
-                        : "text-[#999] hover:bg-[#252525] hover:text-white"
-                    }`}
-                  >
+                {sidebarPositions.map((pos) =>
+              <button
+                key={pos.value}
+                onClick={() => handlePositionChange(pos.value)}
+                className={`w-full text-left text-xs px-2 py-1.5 rounded transition-colors ${
+                sidebarPos === pos.value ?
+                "bg-[#5E6AD2] text-white" :
+                "text-[#999] hover:bg-[#252525] hover:text-white"}`
+                }>
+
                     {pos.label}
                   </button>
-                ))}
+              )}
               </div>
             </PopoverContent>
           </Popover>
         </aside>
-      )}
+      }
 
       {/* Sidebar - Left/Right */}
-      {isSidebarVertical && (
-        <aside className={`w-56 flex-shrink-0 bg-[#111111] ${sidebarPos === "left" ? "border-r" : "border-l"} border-[#1E1E1E] flex flex-col ${sidebarPos === "right" ? "order-last" : ""}`}>
-        {isSidebarVertical && (
-          <>
+      {isSidebarVertical &&
+      <aside className={`w-56 flex-shrink-0 bg-[#111111] ${sidebarPos === "left" ? "border-r" : "border-l"} border-[#1E1E1E] flex flex-col ${sidebarPos === "right" ? "order-last" : ""}`}>
+        {isSidebarVertical &&
+        <>
             {/* Workspace header */}
             <div className="px-4 py-3 flex items-center justify-between border-b border-[#1E1E1E]">
               <div className="flex items-center gap-2">
@@ -130,9 +130,9 @@ export default function Layout({ children, currentPageName }) {
                   <Search size={14} />
                 </button>
                 <button
-                  onClick={() => navigate(createPageUrl("MyIssues") + "?create=true")}
-                  className="p-1 text-[#6B6B6B] hover:text-white transition-colors"
-                >
+                onClick={() => navigate(createPageUrl("MyIssues") + "?create=true")}
+                className="p-1 text-[#6B6B6B] hover:text-white transition-colors">
+
                   <PenSquare size={14} />
                 </button>
                 <Popover>
@@ -143,26 +143,26 @@ export default function Layout({ children, currentPageName }) {
                   </PopoverTrigger>
                   <PopoverContent className={`w-40 bg-[#1A1A1A] border-[#333] p-2 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
                     <div className="space-y-1">
-                      {sidebarPositions.map((pos) => (
-                        <button
-                          key={pos.value}
-                          onClick={() => handlePositionChange(pos.value)}
-                          className={`w-full text-left text-xs px-2 py-1.5 rounded transition-colors ${
-                            sidebarPos === pos.value
-                              ? "bg-[#5E6AD2] text-white"
-                              : "text-[#999] hover:bg-[#252525] hover:text-white"
-                          }`}
-                        >
+                      {sidebarPositions.map((pos) =>
+                    <button
+                      key={pos.value}
+                      onClick={() => handlePositionChange(pos.value)}
+                      className={`w-full text-left text-xs px-2 py-1.5 rounded transition-colors ${
+                      sidebarPos === pos.value ?
+                      "bg-[#5E6AD2] text-white" :
+                      "text-[#999] hover:bg-[#252525] hover:text-white"}`
+                      }>
+
                           {pos.label}
                         </button>
-                      ))}
+                    )}
                     </div>
                   </PopoverContent>
                 </Popover>
               </div>
             </div>
           </>
-        )}
+        }
 
         {/* Navigation */}
         <nav className="flex-1 py-2 overflow-y-auto">
@@ -174,15 +174,15 @@ export default function Layout({ children, currentPageName }) {
                   key={item.page}
                   to={createPageUrl(item.page)}
                   className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors ${
-                    isActive
-                      ? "bg-[#1E1E1E] text-white"
-                      : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"
-                  }`}
-                >
+                  isActive ?
+                  "bg-[#1E1E1E] text-white" :
+                  "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"}`
+                  }>
+
                   <item.icon size={15} className="flex-shrink-0" />
                   {item.name}
-                </Link>
-              );
+                </Link>);
+
             })}
           </div>
 
@@ -193,29 +193,29 @@ export default function Layout({ children, currentPageName }) {
             <Link
               to={createPageUrl("Initiatives")}
               className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors ${
-                currentPageName === "Initiatives" ? "text-white" : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"
-              }`}
-            >
+              currentPageName === "Initiatives" ? "text-white" : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"}`
+              }>
+
               <Rocket size={15} />
               Initiatives
             </Link>
             <Link
               to={createPageUrl("Projects")}
               className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors ${
-                currentPageName === "Projects" ? "text-white" : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"
-              }`}
-            >
+              currentPageName === "Projects" ? "text-white" : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"}`
+              }>
+
               <Folder size={15} />
               Projects
             </Link>
           </div>
         </nav>
 
-        {isSidebarVertical && (
-          <>
+        {isSidebarVertical &&
+        <>
             {/* User */}
-            {user && (
-              <div className="px-3 py-3 border-t border-[#1E1E1E] flex items-center justify-between">
+            {user &&
+          <div className="px-3 py-3 border-t border-[#1E1E1E] flex items-center justify-between">
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-full bg-[#5E6AD2] flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">
                     {user.full_name?.[0]?.toUpperCase() || "U"}
@@ -226,11 +226,11 @@ export default function Layout({ children, currentPageName }) {
                   <LogOut size={13} />
                 </button>
               </div>
-            )}
+          }
           </>
-        )}
+        }
       </aside>
-      )}
+      }
 
 
 
@@ -238,6 +238,6 @@ export default function Layout({ children, currentPageName }) {
       <main className={`${isSidebarVertical ? "flex-1" : "flex-1"} overflow-hidden`}>
         {children}
       </main>
-    </div>
-  );
+    </div>);
+
 }

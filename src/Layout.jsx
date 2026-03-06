@@ -30,6 +30,7 @@ const navItems = [
 { name: "Inbox", icon: Inbox, page: "Inbox" },
 { name: "My Issues", icon: ListTodo, page: "MyIssues" },
 { name: "Projects", icon: Folder, page: "Projects" },
+{ name: "Backlog", icon: FileText, page: "Backlog" },
 { name: "Reports", icon: BarChart3, page: "Reports" },
 { name: "Initiatives", icon: Rocket, page: "Initiatives" }];
 

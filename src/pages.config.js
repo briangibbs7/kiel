@@ -54,6 +54,7 @@ import ProjectDetail from './pages/ProjectDetail';
 import Projects from './pages/Projects';
 import NotificationSettings from './pages/NotificationSettings';
 import Reports from './pages/Reports';
+import Backlog from './pages/Backlog';
 import __Layout from './Layout.jsx';
 
 
@@ -65,6 +66,7 @@ export const PAGES = {
     "Projects": Projects,
     "NotificationSettings": NotificationSettings,
     "Reports": Reports,
+    "Backlog": Backlog,
 }
 
 export const pagesConfig = {

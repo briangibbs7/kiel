@@ -34,6 +34,7 @@ const navItems = [
 { name: "Backlog", icon: FileText, page: "Backlog" },
 { name: "Tasks", icon: ListTodo, page: "Tasks" },
 { name: "Messages", icon: MessageCircle, page: "DirectMessages" },
+{ name: "Roadmap", icon: Rocket, page: "Roadmap" },
 { name: "Reports", icon: BarChart3, page: "Reports" },
 { name: "Initiatives", icon: Rocket, page: "Initiatives" }];
 

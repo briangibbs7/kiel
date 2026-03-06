@@ -57,6 +57,7 @@ import Projects from './pages/Projects';
 import Reports from './pages/Reports';
 import Tasks from './pages/Tasks';
 import DirectMessages from './pages/DirectMessages';
+import Roadmap from './pages/Roadmap';
 import __Layout from './Layout.jsx';
 
 
@@ -71,6 +72,7 @@ export const PAGES = {
     "Reports": Reports,
     "Tasks": Tasks,
     "DirectMessages": DirectMessages,
+    "Roadmap": Roadmap,
 }
 
 export const pagesConfig = {

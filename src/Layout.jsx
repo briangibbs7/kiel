@@ -14,13 +14,16 @@ import {
   Star,
   ChevronDown,
   LogOut,
-  LayoutList } from
+  LayoutList,
+  Bell,
+  Settings } from
 "lucide-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger } from
 "@/components/ui/popover";
+import NotificationBell from "@/components/notifications/NotificationBell";
 
 const navItems = [
 { name: "Inbox", icon: Inbox, page: "Inbox" },
@@ -135,6 +138,7 @@ export default function Layout({ children, currentPageName }) {
 
                   <PenSquare size={14} />
                 </button>
+                <NotificationBell />
                 <Popover>
                   <PopoverTrigger asChild>
                     <button className="p-1 text-[#6B6B6B] hover:text-white transition-colors">
@@ -222,6 +226,9 @@ export default function Layout({ children, currentPageName }) {
                   </div>
                   <span className="text-xs text-[#999] truncate">{user.full_name || user.email}</span>
                 </div>
+                <button onClick={() => navigate(createPageUrl("NotificationSettings"))} className="text-[#555] hover:text-white transition-colors" title="Notification settings">
+                  <Settings size={13} />
+                </button>
                 <button onClick={() => base44.auth.logout()} className="text-[#555] hover:text-white transition-colors">
                   <LogOut size={13} />
                 </button>

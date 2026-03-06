@@ -137,6 +137,30 @@ export default function Layout({ children, currentPageName }) {
                 >
                   <PenSquare size={14} />
                 </button>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button className="p-1 text-[#6B6B6B] hover:text-white transition-colors">
+                      <LayoutList size={14} />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className={`w-40 bg-[#1A1A1A] border-[#333] p-2 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
+                    <div className="space-y-1">
+                      {sidebarPositions.map((pos) => (
+                        <button
+                          key={pos.value}
+                          onClick={() => handlePositionChange(pos.value)}
+                          className={`w-full text-left text-xs px-2 py-1.5 rounded transition-colors ${
+                            sidebarPos === pos.value
+                              ? "bg-[#5E6AD2] text-white"
+                              : "text-[#999] hover:bg-[#252525] hover:text-white"
+                          }`}
+                        >
+                          {pos.label}
+                        </button>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
           </>
@@ -200,30 +224,9 @@ export default function Layout({ children, currentPageName }) {
                   </div>
                   <span className="text-xs text-[#999] truncate">{user.full_name || user.email}</span>
                 </div>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <button className="text-[#555] hover:text-white transition-colors">
-                      <LayoutList size={13} />
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-40 bg-[#1A1A1A] border-[#333] p-2">
-                    <div className="space-y-1">
-                      {sidebarPositions.map((pos) => (
-                        <button
-                          key={pos.value}
-                          onClick={() => handlePositionChange(pos.value)}
-                          className={`w-full text-left text-xs px-2 py-1.5 rounded transition-colors ${
-                            sidebarPos === pos.value
-                              ? "bg-[#5E6AD2] text-white"
-                              : "text-[#999] hover:bg-[#252525] hover:text-white"
-                          }`}
-                        >
-                          {pos.label}
-                        </button>
-                      ))}
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                <button onClick={() => base44.auth.logout()} className="text-[#555] hover:text-white transition-colors">
+                  <LogOut size={13} />
+                </button>
               </div>
             )}
           </>

@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Filter, Settings2, LayoutGrid, Plus } from "lucide-react";
+import { Plus, Layout, LayoutGrid, Calendar } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import IssueRow from "../components/issues/IssueRow";
 import IssueDetail from "../components/issues/IssueDetail";
 import CreateIssueModal from "../components/shared/CreateIssueModal";
+import IssueTableView from "../components/issues/IssueTableView";
+import IssueKanbanView from "../components/issues/IssueKanbanView";
+import IssueCalendarView from "../components/issues/IssueCalendarView";
+import IssueViewControls from "../components/issues/IssueViewControls";
 
 export default function MyIssues() {
   const [activeTab, setActiveTab] = useState("assigned");
+  const [viewMode, setViewMode] = useState("list");
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
+  const [selectedIssues, setSelectedIssues] = useState([]);
+  const [columns, setColumns] = useState(["id", "title", "status", "priority", "assignee"]);
+  const [filters, setFilters] = useState({});
+  const [sortBy, setSortBy] = useState("created_date");
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [currentMonth, setCurrentMonth] = useState(new Date());
   const queryClient = useQueryClient();
 
   // Check URL params for create=true
@@ -19,9 +31,25 @@ export default function MyIssues() {
     if (params.get("create") === "true") setShowCreate(true);
   }, []);
 
-  const { data: issues = [], isLoading } = useQuery({
+  const { data: allIssues = [], isLoading } = useQuery({
     queryKey: ["my-issues"],
-    queryFn: () => base44.entities.Issue.list("-created_date", 50),
+    queryFn: () => base44.entities.Issue.list("-created_date", 100),
+  });
+
+  // Filter and sort issues
+  const issues = allIssues.filter((issue) => {
+    if (filters.status && !filters.status.includes(issue.status)) return false;
+    if (filters.priority && !filters.priority.includes(issue.priority)) return false;
+    return true;
+  }).sort((a, b) => {
+    let aVal = a[sortBy];
+    let bVal = b[sortBy];
+    if (sortBy === "created_date") {
+      aVal = new Date(a.created_date);
+      bVal = new Date(b.created_date);
+    }
+    if (sortOrder === "asc") return aVal > bVal ? 1 : -1;
+    return aVal < bVal ? 1 : -1;
   });
 
   const { data: projects = [] } = useQuery({
@@ -66,6 +94,26 @@ export default function MyIssues() {
       author: "You",
     });
     queryClient.invalidateQueries({ queryKey: ["comments", selectedIssue?.id] });
+  };
+
+  const handleBulkDelete = async () => {
+    if (!confirm(`Delete ${selectedIssues.length} issue(s)?`)) return;
+    for (const id of selectedIssues) {
+      await base44.entities.Issue.delete(id);
+    }
+    setSelectedIssues([]);
+    queryClient.invalidateQueries({ queryKey: ["my-issues"] });
+  };
+
+  const handleDragEnd = async (result) => {
+    const { draggableId, destination } = result;
+    if (!destination) return;
+    
+    const issue = issues.find(i => i.id === draggableId);
+    if (issue && issue.status !== destination.droppableId) {
+      await base44.entities.Issue.update(draggableId, { status: destination.droppableId });
+      queryClient.invalidateQueries({ queryKey: ["my-issues"] });
+    }
   };
 
   return (

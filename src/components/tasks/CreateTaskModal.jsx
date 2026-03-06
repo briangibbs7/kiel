@@ -45,6 +45,9 @@ export default function CreateTaskModal({
       estimated_hours: formData.estimated_hours
         ? parseInt(formData.estimated_hours)
         : undefined,
+      story_points: formData.story_points
+        ? parseInt(formData.story_points)
+        : undefined,
     });
     setFormData({
       title: "",
@@ -54,6 +57,7 @@ export default function CreateTaskModal({
       status: "todo",
       assignee: "",
       estimated_hours: "",
+      story_points: "",
     });
   };
 

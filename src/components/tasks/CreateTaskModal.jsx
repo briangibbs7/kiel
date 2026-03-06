@@ -167,7 +167,7 @@ export default function CreateTaskModal({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-3">
             <div>
               <label className="text-xs font-medium text-[#999] block mb-1">
                 Assignee Email
@@ -195,6 +195,23 @@ export default function CreateTaskModal({
                 value={formData.estimated_hours}
                 onChange={(e) =>
                   setFormData({ ...formData, estimated_hours: e.target.value })
+                }
+                className="bg-[#111] border-[#333] text-white placeholder-[#555]"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-medium text-[#999] block mb-1">
+                Story Points
+              </label>
+              <Input
+                type="number"
+                min="0"
+                step="1"
+                placeholder="5"
+                value={formData.story_points}
+                onChange={(e) =>
+                  setFormData({ ...formData, story_points: e.target.value })
                 }
                 className="bg-[#111] border-[#333] text-white placeholder-[#555]"
               />

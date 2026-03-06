@@ -41,6 +41,9 @@ export const BUILT_IN_TEMPLATES = [
       { title: "Documentation", priority: "medium" },
       { title: "Deployment & Launch", priority: "high" },
     ],
+    sprint_length_days: 14,
+    story_point_options: [1, 2, 3, 5, 8, 13, 21],
+    allowed_entity_types: ["epic", "task"],
   },
   {
     id: "sales",

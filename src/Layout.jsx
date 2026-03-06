@@ -129,12 +129,40 @@ export default function Layout({ children, currentPageName }) {
         <>
             {/* Workspace header */}
             <div className="px-4 py-3 flex items-center justify-between border-b border-[#1E1E1E]">
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded bg-gradient-to-br from-[#5E6AD2] to-[#7C3AED] flex items-center justify-center">
-                  <span className="text-[9px] font-bold text-white">PM</span>
-                </div>
-                <span className="text-sm font-semibold text-[#E5E5E5]">Workspace</span>
-              </div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
+                    <div className="w-5 h-5 rounded bg-gradient-to-br from-[#5E6AD2] to-[#7C3AED] flex items-center justify-center">
+                      <span className="text-[9px] font-bold text-white">PM</span>
+                    </div>
+                    <span className="text-sm font-semibold text-[#E5E5E5]">Workspace</span>
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className={`w-48 bg-[#1A1A1A] border-[#333] p-0 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
+                  <div className="space-y-1">
+                    <button
+                      onClick={() => navigate(createPageUrl("UserManagement"))}
+                      className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors"
+                    >
+                      User Management
+                    </button>
+                    <button
+                      onClick={() => navigate(createPageUrl("Security"))}
+                      className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors"
+                    >
+                      Security
+                    </button>
+                    <div className="border-t border-[#252525]" />
+                    <button
+                      onClick={() => base44.auth.logout()}
+                      className="w-full text-left text-sm px-4 py-2.5 text-[#F87171] hover:bg-[#252525] transition-colors"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
               <div className="flex items-center gap-1">
                 <button className="p-1 text-[#6B6B6B] hover:text-white transition-colors">
                   <Search size={14} />
@@ -235,9 +263,6 @@ export default function Layout({ children, currentPageName }) {
                 </div>
                 <button onClick={() => navigate(createPageUrl("NotificationSettings"))} className="text-[#555] hover:text-white transition-colors" title="Notification settings">
                   <Settings size={13} />
-                </button>
-                <button onClick={() => base44.auth.logout()} className="text-[#555] hover:text-white transition-colors">
-                  <LogOut size={13} />
                 </button>
               </div>
           }

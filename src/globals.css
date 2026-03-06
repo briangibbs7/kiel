@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --pm-bg: #0D0D0D;
+  --pm-surface: #161616;
+  --pm-surface-hover: #1E1E1E;
+  --pm-border: #252525;
+  --pm-border-light: #333333;
+  --pm-text: #E5E5E5;
+  --pm-text-muted: #6B6B6B;
+  --pm-text-secondary: #999999;
+  --pm-accent: #5E6AD2;
+  --pm-green: #4ADE80;
+  --pm-yellow: #FACC15;
+  --pm-red: #F87171;
+  --pm-orange: #FB923C;
+  --pm-blue: #60A5FA;
+  --pm-purple: #A78BFA;
+  --pm-cyan: #22D3EE;
+}
+
+body {
+  background-color: var(--pm-bg);
+  color: var(--pm-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+@layer base {
+  * {
+    @apply border-[#252525];
+  }
+}

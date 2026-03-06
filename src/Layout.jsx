@@ -31,6 +31,7 @@ const navItems = [
 { name: "Inbox", icon: Inbox, page: "Inbox" },
 { name: "My Issues", icon: ListTodo, page: "MyIssues" },
 { name: "Projects", icon: Folder, page: "Projects" },
+{ name: "Templates", icon: FileText, page: "ProjectTemplates" },
 { name: "Backlog", icon: FileText, page: "Backlog" },
 { name: "Tasks", icon: ListTodo, page: "Tasks" },
 { name: "Messages", icon: MessageCircle, page: "DirectMessages" },

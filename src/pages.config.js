@@ -48,6 +48,7 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import Backlog from './pages/Backlog';
+import DirectMessages from './pages/DirectMessages';
 import Inbox from './pages/Inbox';
 import Initiatives from './pages/Initiatives';
 import MyIssues from './pages/MyIssues';
@@ -55,17 +56,18 @@ import NotificationSettings from './pages/NotificationSettings';
 import ProjectDetail from './pages/ProjectDetail';
 import Projects from './pages/Projects';
 import Reports from './pages/Reports';
-import Tasks from './pages/Tasks';
-import DirectMessages from './pages/DirectMessages';
 import Roadmap from './pages/Roadmap';
-import UserManagement from './pages/UserManagement';
-import Security from './pages/Security';
 import RoleManagement from './pages/RoleManagement';
+import Security from './pages/Security';
+import Tasks from './pages/Tasks';
+import UserManagement from './pages/UserManagement';
+import ProjectTemplates from './pages/ProjectTemplates';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Backlog": Backlog,
+    "DirectMessages": DirectMessages,
     "Inbox": Inbox,
     "Initiatives": Initiatives,
     "MyIssues": MyIssues,
@@ -73,12 +75,12 @@ export const PAGES = {
     "ProjectDetail": ProjectDetail,
     "Projects": Projects,
     "Reports": Reports,
-    "Tasks": Tasks,
-    "DirectMessages": DirectMessages,
     "Roadmap": Roadmap,
-    "UserManagement": UserManagement,
-    "Security": Security,
     "RoleManagement": RoleManagement,
+    "Security": Security,
+    "Tasks": Tasks,
+    "UserManagement": UserManagement,
+    "ProjectTemplates": ProjectTemplates,
 }
 
 export const pagesConfig = {

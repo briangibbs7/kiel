@@ -31,6 +31,7 @@ const navItems = [
 { name: "My Issues", icon: ListTodo, page: "MyIssues" },
 { name: "Projects", icon: Folder, page: "Projects" },
 { name: "Backlog", icon: FileText, page: "Backlog" },
+{ name: "Tasks", icon: ListTodo, page: "Tasks" },
 { name: "Reports", icon: BarChart3, page: "Reports" },
 { name: "Initiatives", icon: Rocket, page: "Initiatives" }];
 

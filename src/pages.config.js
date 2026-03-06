@@ -47,26 +47,28 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import Backlog from './pages/Backlog';
 import Inbox from './pages/Inbox';
 import Initiatives from './pages/Initiatives';
 import MyIssues from './pages/MyIssues';
+import NotificationSettings from './pages/NotificationSettings';
 import ProjectDetail from './pages/ProjectDetail';
 import Projects from './pages/Projects';
-import NotificationSettings from './pages/NotificationSettings';
 import Reports from './pages/Reports';
-import Backlog from './pages/Backlog';
+import Tasks from './pages/Tasks';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "Backlog": Backlog,
     "Inbox": Inbox,
     "Initiatives": Initiatives,
     "MyIssues": MyIssues,
+    "NotificationSettings": NotificationSettings,
     "ProjectDetail": ProjectDetail,
     "Projects": Projects,
-    "NotificationSettings": NotificationSettings,
     "Reports": Reports,
-    "Backlog": Backlog,
+    "Tasks": Tasks,
 }
 
 export const pagesConfig = {

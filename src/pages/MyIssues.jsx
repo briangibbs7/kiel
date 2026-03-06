@@ -136,6 +136,12 @@ export default function MyIssues() {
             onClose={() => setSelectedIssue(null)}
             onStatusChange={handleStatusChange}
             onAddComment={handleAddComment}
+            allIssues={issues}
+            onUpdateIssue={async (issueId, data) => {
+              await base44.entities.Issue.update(issueId, data);
+              setSelectedIssue(prev => ({ ...prev, ...data }));
+              queryClient.invalidateQueries({ queryKey: ["my-issues"] });
+            }}
           />
         </div>
       )}

@@ -3,11 +3,14 @@ import { IssueStatusIcon, PriorityIcon, LabelBadge, HealthBadge } from "../share
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { X, Send, MessageSquare } from "lucide-react";
+import { X, Send, MessageSquare, Link2 } from "lucide-react";
 import { format } from "date-fns";
+import DependencyManager from "../shared/DependencyManager";
+import DependencyViewer from "../shared/DependencyViewer";
 
-export default function IssueDetail({ issue, comments, onClose, onStatusChange, onAddComment }) {
+export default function IssueDetail({ issue, comments, onClose, onStatusChange, onAddComment, allIssues = [], onUpdateIssue }) {
   const [commentText, setCommentText] = useState("");
+  const [showDeps, setShowDeps] = useState(false);
 
   const handleComment = () => {
     if (!commentText.trim()) return;
@@ -81,7 +84,40 @@ export default function IssueDetail({ issue, comments, onClose, onStatusChange, 
               <span className="text-[#E5E5E5] text-xs">{issue.assignee}</span>
             </div>
           )}
+          <div className="flex items-center gap-4 pt-2 border-t border-[#252525]">
+            <button
+              onClick={() => setShowDeps(true)}
+              className="flex items-center gap-1.5 text-[#5E6AD2] hover:text-white text-xs font-medium transition-colors"
+            >
+              <Link2 size={13} />
+              Manage Dependencies
+            </button>
+          </div>
         </div>
+
+        {/* Dependencies viewer */}
+        {(issue.depends_on_issue_ids?.length > 0 || issue.blocked_by_issue_ids?.length > 0) && (
+          <div className="pt-4 border-t border-[#252525] space-y-3">
+            {issue.blocked_by_issue_ids?.length > 0 && (
+              <DependencyViewer
+                dependencies={issue.blocked_by_issue_ids.map(id => ({
+                  itemId: id,
+                  type: "is blocked by"
+                }))}
+                items={allIssues}
+              />
+            )}
+            {issue.depends_on_issue_ids?.length > 0 && (
+              <DependencyViewer
+                dependencies={issue.depends_on_issue_ids.map(id => ({
+                  itemId: id,
+                  type: "blocks"
+                }))}
+                items={allIssues}
+              />
+            )}
+          </div>
+        )}
 
         {/* Activity */}
         <div className="pt-4 border-t border-[#252525]">
@@ -128,6 +164,39 @@ export default function IssueDetail({ issue, comments, onClose, onStatusChange, 
           </Button>
         </div>
       </div>
+
+      <DependencyManager
+        open={showDeps}
+        onClose={() => setShowDeps(false)}
+        type="issue"
+        currentId={issue.id}
+        availableItems={allIssues}
+        currentDependencies={[
+          ...(issue.depends_on_issue_ids || []).map(id => ({ itemId: id, type: "blocks" })),
+          ...(issue.blocked_by_issue_ids || []).map(id => ({ itemId: id, type: "is blocked by" })),
+        ]}
+        onAddDependency={async (dep) => {
+          const updated = { ...issue };
+          if (dep.type === "blocks") {
+            updated.depends_on_issue_ids = [...(updated.depends_on_issue_ids || []), dep.itemId];
+          } else {
+            updated.blocked_by_issue_ids = [...(updated.blocked_by_issue_ids || []), dep.itemId];
+          }
+          await onUpdateIssue?.(issue.id, dep.type === "blocks" 
+            ? { depends_on_issue_ids: updated.depends_on_issue_ids }
+            : { blocked_by_issue_ids: updated.blocked_by_issue_ids }
+          );
+        }}
+        onRemoveDependency={async (depId) => {
+          const updated = { ...issue };
+          updated.depends_on_issue_ids = updated.depends_on_issue_ids?.filter(id => id !== depId);
+          updated.blocked_by_issue_ids = updated.blocked_by_issue_ids?.filter(id => id !== depId);
+          await onUpdateIssue?.(issue.id, {
+            depends_on_issue_ids: updated.depends_on_issue_ids,
+            blocked_by_issue_ids: updated.blocked_by_issue_ids,
+          });
+        }}
+      />
     </div>
   );
 }

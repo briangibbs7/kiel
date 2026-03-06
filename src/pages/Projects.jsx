@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,20 +8,30 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Plus, Filter, Settings2, BarChart3 } from "lucide-react";
+import { Plus, Filter, Settings2, BarChart3, ChevronLeft } from "lucide-react";
 import ProjectRow from "../components/projects/ProjectRow";
 import ProjectTimeline from "../components/projects/ProjectTimeline";
 import { HealthBadge } from "../components/shared/StatusBadge";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { TEMPLATE_ICONS, BUILT_IN_TEMPLATES } from "./ProjectTemplates";
 
 export default function Projects() {
   const [activeTab, setActiveTab] = useState("active");
   const [view, setView] = useState("list");
   const [showCreate, setShowCreate] = useState(false);
+  const [showTemplateSelect, setShowTemplateSelect] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [form, setForm] = useState({ name: "", prefix: "", description: "", health: "on_track", target_date: "", start_date: "", icon: "📁", lead: "" });
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("create") === "true") {
+      setShowTemplateSelect(true);
+    }
+  }, []);
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],
@@ -34,10 +44,27 @@ export default function Projects() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) => base44.entities.Project.create(data),
+    mutationFn: async (data) => {
+      const project = await base44.entities.Project.create(data);
+      
+      // Create default epics from template
+      if (selectedTemplate?.default_epics) {
+        for (const epicData of selectedTemplate.default_epics) {
+          await base44.entities.Epic.create({
+            ...epicData,
+            project_id: project.id,
+          });
+        }
+      }
+      
+      return project;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
+      queryClient.invalidateQueries({ queryKey: ["epics"] });
       setShowCreate(false);
+      setShowTemplateSelect(false);
+      setSelectedTemplate(null);
       setForm({ name: "", prefix: "", description: "", health: "on_track", target_date: "", start_date: "", icon: "📁", lead: "" });
     },
   });
@@ -128,13 +155,77 @@ export default function Projects() {
         <ProjectTimeline projects={filtered} />
       )}
 
+      {/* Template Selection Modal */}
+      <Dialog open={showTemplateSelect} onOpenChange={setShowTemplateSelect}>
+        <DialogContent className="bg-[#1A1A1A] border-[#333] text-[#E5E5E5] max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-[#E5E5E5]">Select a Template</DialogTitle>
+          </DialogHeader>
+          <div className="grid grid-cols-2 gap-3 max-h-96 overflow-y-auto">
+            {BUILT_IN_TEMPLATES.map((template) => {
+              const IconComponent = TEMPLATE_ICONS[template.category];
+              return (
+                <button
+                  key={template.id}
+                  onClick={() => {
+                    setSelectedTemplate(template);
+                    setShowTemplateSelect(false);
+                    setShowCreate(true);
+                  }}
+                  className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg hover:border-[#5E6AD2] transition-colors text-left"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded bg-[#1E1E1E] flex items-center justify-center flex-shrink-0">
+                      <IconComponent size={20} className="text-[#5E6AD2]" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white text-sm">{template.name}</h4>
+                      <p className="text-xs text-[#999] mt-1">{template.default_epics.length} epics</p>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => {
+                setShowTemplateSelect(false);
+                setShowCreate(true);
+              }}
+              className="text-[#6B6B6B] hover:text-white hover:bg-[#252525]"
+            >
+              Skip & Create Blank
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Create Project Modal */}
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
         <DialogContent className="bg-[#1A1A1A] border-[#333] text-[#E5E5E5] max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-[#E5E5E5]">New Project</DialogTitle>
+            <div className="flex items-center gap-2">
+              {selectedTemplate && (
+                <button
+                  onClick={() => {
+                    setShowCreate(false);
+                    setSelectedTemplate(null);
+                    setShowTemplateSelect(true);
+                  }}
+                  className="text-[#6B6B6B] hover:text-white transition-colors"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+              )}
+              <DialogTitle className="text-[#E5E5E5]">
+                {selectedTemplate ? `New ${selectedTemplate.name} Project` : "New Project"}
+              </DialogTitle>
+            </div>
           </DialogHeader>
-          <form onSubmit={(e) => { e.preventDefault(); createMutation.mutate(form); }} className="space-y-4">
+          <form onSubmit={(e) => { e.preventDefault(); if (form.name && form.prefix) createMutation.mutate(form); }} className="space-y-4">
             <div className="grid grid-cols-3 gap-3">
               <div className="col-span-2">
                 <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Name</Label>

@@ -12,7 +12,49 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { PERMISSIONS, PERMISSION_LABELS, DEFAULT_ROLES } from "@/lib/PageNotFound";
+const PERMISSIONS = {
+  CREATE_EPIC: "create_epic",
+  EDIT_EPIC: "edit_epic",
+  DELETE_EPIC: "delete_epic",
+  CREATE_ISSUE: "create_issue",
+  EDIT_ISSUE: "edit_issue",
+  DELETE_ISSUE: "delete_issue",
+  CREATE_PROJECT: "create_project",
+  EDIT_PROJECT: "edit_project",
+  DELETE_PROJECT: "delete_project",
+  MANAGE_PROJECT_ACCESS: "manage_project_access",
+  CREATE_TASK: "create_task",
+  EDIT_TASK: "edit_task",
+  DELETE_TASK: "delete_task",
+  CREATE_COMMENT: "create_comment",
+  EDIT_COMMENT: "edit_comment",
+  DELETE_COMMENT: "delete_comment",
+  MANAGE_USERS: "manage_users",
+  MANAGE_ROLES: "manage_roles",
+  VIEW_REPORTS: "view_reports",
+};
+
+const PERMISSION_LABELS = {
+  [PERMISSIONS.CREATE_EPIC]: "Create Epics",
+  [PERMISSIONS.EDIT_EPIC]: "Edit Epics",
+  [PERMISSIONS.DELETE_EPIC]: "Delete Epics",
+  [PERMISSIONS.CREATE_ISSUE]: "Create Issues",
+  [PERMISSIONS.EDIT_ISSUE]: "Edit Issues",
+  [PERMISSIONS.DELETE_ISSUE]: "Delete Issues",
+  [PERMISSIONS.CREATE_PROJECT]: "Create Projects",
+  [PERMISSIONS.EDIT_PROJECT]: "Edit Projects",
+  [PERMISSIONS.DELETE_PROJECT]: "Delete Projects",
+  [PERMISSIONS.MANAGE_PROJECT_ACCESS]: "Manage Project Access",
+  [PERMISSIONS.CREATE_TASK]: "Create Tasks",
+  [PERMISSIONS.EDIT_TASK]: "Edit Tasks",
+  [PERMISSIONS.DELETE_TASK]: "Delete Tasks",
+  [PERMISSIONS.CREATE_COMMENT]: "Create Comments",
+  [PERMISSIONS.EDIT_COMMENT]: "Edit Comments",
+  [PERMISSIONS.DELETE_COMMENT]: "Delete Comments",
+  [PERMISSIONS.MANAGE_USERS]: "Manage Users",
+  [PERMISSIONS.MANAGE_ROLES]: "Manage Roles",
+  [PERMISSIONS.VIEW_REPORTS]: "View Reports",
+};
 
 export default function RoleManagement() {
   const [showCreate, setShowCreate] = useState(false);

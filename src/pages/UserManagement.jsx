@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Shield } from "lucide-react";
+import { Plus, Trash2, Shield, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -22,6 +24,7 @@ import {
 export default function UserManagement() {
   const [showInvite, setShowInvite] = useState(false);
   const [inviteData, setInviteData] = useState({ email: "", role: "user" });
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { data: currentUser } = useQuery({
@@ -55,22 +58,34 @@ export default function UserManagement() {
   return (
     <div className="h-full bg-[#0D0D0D] overflow-y-auto">
       <div className="px-6 py-4 border-b border-[#1E1E1E] sticky top-0 bg-[#0D0D0D]">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-2xl font-bold text-white">User Management</h1>
             <p className="text-sm text-[#999] mt-1">
               Manage workspace members and permissions
             </p>
           </div>
-          {isAdmin && (
-            <Button
-              onClick={() => setShowInvite(true)}
-              className="bg-[#5E6AD2] hover:bg-[#5E6AD2]/90"
-            >
-              <Plus size={16} className="mr-2" />
-              Invite User
-            </Button>
-          )}
+          <div className="flex gap-2">
+            {isAdmin && (
+              <Button
+                onClick={() => navigate(createPageUrl("RoleManagement"))}
+                variant="outline"
+                className="border-[#333]"
+              >
+                <Settings size={16} className="mr-2" />
+                Manage Roles
+              </Button>
+            )}
+            {isAdmin && (
+              <Button
+                onClick={() => setShowInvite(true)}
+                className="bg-[#5E6AD2] hover:bg-[#5E6AD2]/90"
+              >
+                <Plus size={16} className="mr-2" />
+                Invite User
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -163,8 +178,10 @@ export default function UserManagement() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-[#1A1A1A] border-[#333]">
-                  <SelectItem value="user">User</SelectItem>
-                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="user">User (Standard)</SelectItem>
+                  <SelectItem value="admin">Admin (Full Access)</SelectItem>
+                  <SelectItem value="editor">Editor (Content)</SelectItem>
+                  <SelectItem value="viewer">Viewer (Read-Only)</SelectItem>
                 </SelectContent>
               </Select>
             </div>

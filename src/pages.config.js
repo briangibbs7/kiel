@@ -60,6 +60,7 @@ import DirectMessages from './pages/DirectMessages';
 import Roadmap from './pages/Roadmap';
 import UserManagement from './pages/UserManagement';
 import Security from './pages/Security';
+import RoleManagement from './pages/RoleManagement';
 import __Layout from './Layout.jsx';
 
 
@@ -77,6 +78,7 @@ export const PAGES = {
     "Roadmap": Roadmap,
     "UserManagement": UserManagement,
     "Security": Security,
+    "RoleManagement": RoleManagement,
 }
 
 export const pagesConfig = {

@@ -33,7 +33,6 @@ const sidebarPositions = [
   { value: "left", label: "Left" },
   { value: "right", label: "Right" },
   { value: "top", label: "Top" },
-  { value: "bottom", label: "Bottom" },
 ];
 
 export default function Layout({ children, currentPageName }) {
@@ -55,7 +54,6 @@ export default function Layout({ children, currentPageName }) {
 
   const isSidebarVertical = sidebarPos === "left" || sidebarPos === "right";
   const isSidebarTop = sidebarPos === "top";
-  const isSidebarBottom = sidebarPos === "bottom";
 
   return (
     <div className={`h-screen bg-[#0D0D0D] overflow-hidden ${isSidebarVertical ? "flex" : "flex flex-col"}`}>
@@ -234,73 +232,7 @@ export default function Layout({ children, currentPageName }) {
       </aside>
       )}
 
-      {/* Sidebar - Bottom */}
-      {isSidebarBottom && (
-        <aside className="h-16 flex-shrink-0 bg-[#111111] border-t border-[#1E1E1E] flex items-center px-4 gap-2 overflow-x-auto mt-auto">
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="w-5 h-5 rounded bg-gradient-to-br from-[#5E6AD2] to-[#7C3AED]">
-              <span className="text-[8px] font-bold text-white flex items-center justify-center h-full">PM</span>
-            </div>
-            <span className="text-sm font-semibold text-[#E5E5E5]">Workspace</span>
-          </div>
-          <nav className="flex gap-0.5 flex-1 ml-4">
-            {navItems.map((item) => {
-              const isActive = currentPageName === item.page;
-              return (
-                <Link
-                  key={item.page}
-                  to={createPageUrl(item.page)}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded text-[12px] transition-colors whitespace-nowrap ${
-                    isActive
-                      ? "bg-[#1E1E1E] text-white"
-                      : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"
-                  }`}
-                >
-                  <item.icon size={14} />
-                  {item.name}
-                </Link>
-              );
-            })}
-          </nav>
-          <div className="flex items-center gap-2 ml-auto flex-shrink-0">
-            {user && (
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-[#5E6AD2] flex items-center justify-center text-[9px] font-bold text-white">
-                  {user.full_name?.[0]?.toUpperCase() || "U"}
-                </div>
-                <span className="text-xs text-[#999]">{user.full_name || user.email}</span>
-              </div>
-            )}
-            <Popover>
-              <PopoverTrigger asChild>
-                <button className="text-[#555] hover:text-white transition-colors">
-                  <LayoutList size={14} />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-40 bg-[#1A1A1A] border-[#333] p-2">
-                <div className="space-y-1">
-                  {sidebarPositions.map((pos) => (
-                    <button
-                      key={pos.value}
-                      onClick={() => handlePositionChange(pos.value)}
-                      className={`w-full text-left text-xs px-2 py-1.5 rounded transition-colors ${
-                        sidebarPos === pos.value
-                          ? "bg-[#5E6AD2] text-white"
-                          : "text-[#999] hover:bg-[#252525] hover:text-white"
-                      }`}
-                    >
-                      {pos.label}
-                    </button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-            <button onClick={() => base44.auth.logout()} className="text-[#555] hover:text-white transition-colors">
-              <LogOut size={13} />
-            </button>
-          </div>
-        </aside>
-      )}
+
 
       {/* Main content */}
       <main className={`${isSidebarVertical ? "flex-1" : "flex-1"} overflow-hidden`}>

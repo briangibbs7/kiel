@@ -31,6 +31,7 @@ export default function CreateTaskModal({
     status: "todo",
     assignee: "",
     estimated_hours: "",
+    story_points: "",
   });
 
   const handleSubmit = (e) => {

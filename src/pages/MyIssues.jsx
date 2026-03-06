@@ -117,39 +117,54 @@ export default function MyIssues() {
   };
 
   return (
-    <div className="h-full flex">
-      {/* Issue list */}
-      <div className={`${selectedIssue ? "w-[420px] flex-shrink-0" : "flex-1"} border-r border-[#1E1E1E] flex flex-col`}>
-        <div className="px-5 py-2.5 border-b border-[#1E1E1E] flex items-center justify-between">
-          <Tabs defaultValue="assigned" onValueChange={setActiveTab}>
-            <TabsList className="bg-transparent h-8 p-0 gap-0">
-              <TabsTrigger value="assigned" className="data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none text-[#6B6B6B] text-xs px-3 h-8 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-white">
-                My issues
-              </TabsTrigger>
-              <TabsTrigger value="created" className="data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none text-[#6B6B6B] text-xs px-3 h-8 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-white">
-                Assigned
-              </TabsTrigger>
-              <TabsTrigger value="activity" className="data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none text-[#6B6B6B] text-xs px-3 h-8 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-white">
-                Created
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-          <div className="flex items-center gap-2">
-            <button onClick={() => setShowCreate(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
-              <Plus size={16} />
+    <div className="h-full flex flex-col">
+      {/* Header */}
+      <div className="px-5 py-2.5 border-b border-[#1E1E1E] flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="flex gap-1 bg-[#111] p-1 rounded">
+            <button
+              onClick={() => setViewMode("list")}
+              className={`p-1.5 rounded text-xs ${viewMode === "list" ? "bg-[#1E1E1E]" : "hover:bg-[#1A1A1A]"}`}
+              title="List view"
+            >
+              <Layout size={14} />
             </button>
-            <button className="text-[#555] hover:text-white transition-colors">
-              <Filter size={14} />
+            <button
+              onClick={() => setViewMode("kanban")}
+              className={`p-1.5 rounded text-xs ${viewMode === "kanban" ? "bg-[#1E1E1E]" : "hover:bg-[#1A1A1A]"}`}
+              title="Kanban view"
+            >
+              <LayoutGrid size={14} />
             </button>
-            <button className="text-[#555] hover:text-white transition-colors">
-              <Settings2 size={14} />
+            <button
+              onClick={() => setViewMode("calendar")}
+              className={`p-1.5 rounded text-xs ${viewMode === "calendar" ? "bg-[#1E1E1E]" : "hover:bg-[#1A1A1A]"}`}
+              title="Calendar view"
+            >
+              <Calendar size={14} />
             </button>
           </div>
         </div>
+        <div className="flex items-center gap-2">
+          <button onClick={() => setShowCreate(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
+            <Plus size={16} />
+          </button>
+          <IssueViewControls
+            columns={columns}
+            onColumnsChange={setColumns}
+            filters={filters}
+            onFiltersChange={setFilters}
+            selectedCount={selectedIssues.length}
+            onBulkDelete={handleBulkDelete}
+          />
+        </div>
+      </div>
 
-        <div className="flex-1 overflow-y-auto">
+      {/* Main content */}
+      <div className="flex-1 overflow-hidden flex">
+        <div className={`${selectedIssue ? "flex-1 min-w-0" : "flex-1"} flex flex-col border-r border-[#1E1E1E]`}>
           {isLoading ? (
-            <div className="space-y-0">
+            <div className="space-y-0 flex-1">
               {Array(8).fill(0).map((_, i) => (
                 <div key={i} className="h-10 border-b border-[#1A1A1A] animate-pulse bg-[#111]" />
               ))}
@@ -162,18 +177,40 @@ export default function MyIssues() {
                 Create your first issue
               </button>
             </div>
-          ) : (
-            issues.map((issue) => (
-              <IssueRow
-                key={issue.id}
-                issue={issue}
-                projectPrefix={getPrefix(issue.project_id)}
-                onClick={setSelectedIssue}
+          ) : viewMode === "list" ? (
+            <IssueTableView
+              issues={issues}
+              projects={projects}
+              selectedIssues={selectedIssues}
+              onSelectIssue={setSelectedIssues}
+              onIssueClick={setSelectedIssue}
+              columns={columns}
+              onSort={(col, order) => {
+                setSortBy(col);
+                setSortOrder(order);
+              }}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+            />
+          ) : viewMode === "kanban" ? (
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <IssueKanbanView
+                issues={issues}
+                projects={projects}
+                onIssueClick={setSelectedIssue}
+                onStatusChange={handleStatusChange}
               />
-            ))
+            </DragDropContext>
+          ) : (
+            <IssueCalendarView
+              issues={issues}
+              projects={projects}
+              onIssueClick={setSelectedIssue}
+              currentMonth={currentMonth}
+              onMonthChange={setCurrentMonth}
+            />
           )}
         </div>
-      </div>
 
       {/* Detail panel */}
       {selectedIssue && (

@@ -33,7 +33,7 @@ export default function MyIssues() {
 
   const { data: allIssues = [], isLoading } = useQuery({
     queryKey: ["my-issues"],
-    queryFn: () => base44.entities.Issue.list("-created_date", 100),
+    queryFn: () => base44.entities.Issue.list("-created_date", 100)
   });
 
   // Filter and sort issues
@@ -54,36 +54,36 @@ export default function MyIssues() {
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],
-    queryFn: () => base44.entities.Project.list(),
+    queryFn: () => base44.entities.Project.list()
   });
 
   const { data: comments = [] } = useQuery({
     queryKey: ["comments", selectedIssue?.id],
     queryFn: () => base44.entities.Comment.filter({ issue_id: selectedIssue.id }),
-    enabled: !!selectedIssue?.id,
+    enabled: !!selectedIssue?.id
   });
 
   const createMutation = useMutation({
     mutationFn: async (data) => {
       // Get next issue number
-      const projectIssues = issues.filter(i => i.project_id === data.project_id);
+      const projectIssues = issues.filter((i) => i.project_id === data.project_id);
       const maxNum = projectIssues.reduce((max, i) => Math.max(max, i.issue_number || 0), 0);
       return base44.entities.Issue.create({ ...data, issue_number: maxNum + 1 });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-issues"] });
       setShowCreate(false);
-    },
+    }
   });
 
   const getPrefix = (projectId) => {
-    const p = projects.find(p => p.id === projectId);
+    const p = projects.find((p) => p.id === projectId);
     return p?.prefix || "ISS";
   };
 
   const handleStatusChange = async (issueId, data) => {
     await base44.entities.Issue.update(issueId, data);
-    setSelectedIssue(prev => ({ ...prev, ...data }));
+    setSelectedIssue((prev) => ({ ...prev, ...data }));
     queryClient.invalidateQueries({ queryKey: ["my-issues"] });
   };
 
@@ -91,7 +91,7 @@ export default function MyIssues() {
     await base44.entities.Comment.create({
       issue_id: selectedIssue.id,
       content,
-      author: "You",
+      author: "You"
     });
     queryClient.invalidateQueries({ queryKey: ["comments", selectedIssue?.id] });
   };
@@ -108,8 +108,8 @@ export default function MyIssues() {
   const handleDragEnd = async (result) => {
     const { draggableId, destination } = result;
     if (!destination) return;
-    
-    const issue = issues.find(i => i.id === draggableId);
+
+    const issue = issues.find((i) => i.id === draggableId);
     if (issue && issue.status !== destination.droppableId) {
       await base44.entities.Issue.update(draggableId, { status: destination.droppableId });
       queryClient.invalidateQueries({ queryKey: ["my-issues"] });
@@ -123,31 +123,31 @@ export default function MyIssues() {
         <div className="flex items-center gap-4">
           <div className="flex gap-1 bg-[#111] p-1 rounded">
             <button
-              onClick={() => setViewMode("list")}
-              className={`p-1.5 rounded text-xs ${viewMode === "list" ? "bg-[#1E1E1E]" : "hover:bg-[#1A1A1A]"}`}
-              title="List view"
-            >
+              onClick={() => setViewMode("list")} className="bg-[#1E1E1E] text-slate-100 p-1.5 text-xs rounded"
+
+              title="List view">
+
               <Layout size={14} />
             </button>
             <button
-              onClick={() => setViewMode("kanban")}
-              className={`p-1.5 rounded text-xs ${viewMode === "kanban" ? "bg-[#1E1E1E]" : "hover:bg-[#1A1A1A]"}`}
-              title="Kanban view"
-            >
+              onClick={() => setViewMode("kanban")} className="bg-[#1E1E1E] text-slate-100 p-1.5 text-xs rounded hover:bg-[#1A1A1A]"
+
+              title="Kanban view">
+
               <LayoutGrid size={14} />
             </button>
             <button
-              onClick={() => setViewMode("calendar")}
-              className={`p-1.5 rounded text-xs ${viewMode === "calendar" ? "bg-[#1E1E1E]" : "hover:bg-[#1A1A1A]"}`}
-              title="Calendar view"
-            >
+              onClick={() => setViewMode("calendar")} className="bg-[#1E1E1E] text-slate-100 p-1.5 text-xs rounded hover:bg-[#1A1A1A]"
+
+              title="Calendar view">
+
               <Calendar size={14} />
             </button>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={() => setShowCreate(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
-            <Plus size={16} />
+            <Plus size={16} className="text-slate-100 lucide lucide-plus" />
           </button>
           <IssueViewControls
             columns={columns}
@@ -155,91 +155,91 @@ export default function MyIssues() {
             filters={filters}
             onFiltersChange={setFilters}
             selectedCount={selectedIssues.length}
-            onBulkDelete={handleBulkDelete}
-          />
+            onBulkDelete={handleBulkDelete} />
+
         </div>
       </div>
 
       {/* Main content */}
       <div className="flex-1 overflow-hidden flex">
         <div className={`${selectedIssue ? "flex-1 min-w-0" : "flex-1"} flex flex-col border-r border-[#1E1E1E]`}>
-          {isLoading ? (
-            <div className="space-y-0 flex-1">
-              {Array(8).fill(0).map((_, i) => (
-                <div key={i} className="h-10 border-b border-[#1A1A1A] animate-pulse bg-[#111]" />
-              ))}
-            </div>
-          ) : issues.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-[#555]">
+          {isLoading ?
+          <div className="space-y-0 flex-1">
+              {Array(8).fill(0).map((_, i) =>
+            <div key={i} className="h-10 border-b border-[#1A1A1A] animate-pulse bg-[#111]" />
+            )}
+            </div> :
+          issues.length === 0 ?
+          <div className="flex flex-col items-center justify-center h-full text-[#555]">
               <ListIcon size={24} className="mb-3" />
               <p className="text-sm">No issues yet</p>
               <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
                 Create your first issue
               </button>
-            </div>
-          ) : viewMode === "list" ? (
-            <IssueTableView
-              issues={issues}
-              projects={projects}
-              selectedIssues={selectedIssues}
-              onSelectIssue={setSelectedIssues}
-              onIssueClick={setSelectedIssue}
-              columns={columns}
-              onSort={(col, order) => {
-                setSortBy(col);
-                setSortOrder(order);
-              }}
-              sortBy={sortBy}
-              sortOrder={sortOrder}
-            />
-          ) : viewMode === "kanban" ? (
-            <DragDropContext onDragEnd={handleDragEnd}>
+            </div> :
+          viewMode === "list" ?
+          <IssueTableView
+            issues={issues}
+            projects={projects}
+            selectedIssues={selectedIssues}
+            onSelectIssue={setSelectedIssues}
+            onIssueClick={setSelectedIssue}
+            columns={columns}
+            onSort={(col, order) => {
+              setSortBy(col);
+              setSortOrder(order);
+            }}
+            sortBy={sortBy}
+            sortOrder={sortOrder} /> :
+
+          viewMode === "kanban" ?
+          <DragDropContext onDragEnd={handleDragEnd}>
               <IssueKanbanView
-                issues={issues}
-                projects={projects}
-                onIssueClick={setSelectedIssue}
-                onStatusChange={handleStatusChange}
-              />
-            </DragDropContext>
-          ) : (
-            <IssueCalendarView
               issues={issues}
               projects={projects}
               onIssueClick={setSelectedIssue}
-              currentMonth={currentMonth}
-              onMonthChange={setCurrentMonth}
-            />
-          )}
+              onStatusChange={handleStatusChange} />
+
+            </DragDropContext> :
+
+          <IssueCalendarView
+            issues={issues}
+            projects={projects}
+            onIssueClick={setSelectedIssue}
+            currentMonth={currentMonth}
+            onMonthChange={setCurrentMonth} />
+
+          }
         </div>
 
         {/* Detail panel */}
-        {selectedIssue && (
-          <div className="w-[420px] flex-shrink-0 border-r border-[#1E1E1E]">
+        {selectedIssue &&
+        <div className="w-[420px] flex-shrink-0 border-r border-[#1E1E1E]">
             <IssueDetail
-              issue={selectedIssue}
-              comments={comments}
-              onClose={() => setSelectedIssue(null)}
-              onStatusChange={handleStatusChange}
-              onAddComment={handleAddComment}
-              allIssues={issues}
-              onUpdateIssue={async (issueId, data) => {
-                await base44.entities.Issue.update(issueId, data);
-                setSelectedIssue(prev => ({ ...prev, ...data }));
-                queryClient.invalidateQueries({ queryKey: ["my-issues"] });
-              }}
-            />
+            issue={selectedIssue}
+            comments={comments}
+            onClose={() => setSelectedIssue(null)}
+            onStatusChange={handleStatusChange}
+            onAddComment={handleAddComment}
+            allIssues={issues}
+            onUpdateIssue={async (issueId, data) => {
+              await base44.entities.Issue.update(issueId, data);
+              setSelectedIssue((prev) => ({ ...prev, ...data }));
+              queryClient.invalidateQueries({ queryKey: ["my-issues"] });
+            }} />
+
           </div>
-        )}
+        }
       </div>
 
       <CreateIssueModal
         open={showCreate}
         onClose={() => setShowCreate(false)}
         onSubmit={(data) => createMutation.mutate(data)}
-        projects={projects}
-      />
-    </div>
-  );
+        projects={projects} />
+
+    </div>);
+
 }
 
 function ListIcon({ size }) {
@@ -251,6 +251,6 @@ function ListIcon({ size }) {
       <line x1="3" y1="6" x2="3.01" y2="6" />
       <line x1="3" y1="12" x2="3.01" y2="12" />
       <line x1="3" y1="18" x2="3.01" y2="18" />
-    </svg>
-  );
+    </svg>);
+
 }

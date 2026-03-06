@@ -58,6 +58,8 @@ import Reports from './pages/Reports';
 import Tasks from './pages/Tasks';
 import DirectMessages from './pages/DirectMessages';
 import Roadmap from './pages/Roadmap';
+import UserManagement from './pages/UserManagement';
+import Security from './pages/Security';
 import __Layout from './Layout.jsx';
 
 
@@ -73,6 +75,8 @@ export const PAGES = {
     "Tasks": Tasks,
     "DirectMessages": DirectMessages,
     "Roadmap": Roadmap,
+    "UserManagement": UserManagement,
+    "Security": Security,
 }
 
 export const pagesConfig = {

@@ -108,7 +108,7 @@ export default function Projects() {
           >
             <BarChart3 size={16} />
           </button>
-          <button onClick={() => setShowCreate(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
+          <button onClick={() => setShowTemplateSelect(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
             <Plus size={16} />
           </button>
           <button className="text-[#555] hover:text-white transition-colors">

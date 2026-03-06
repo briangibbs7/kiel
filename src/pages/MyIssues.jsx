@@ -212,24 +212,25 @@ export default function MyIssues() {
           )}
         </div>
 
-      {/* Detail panel */}
-      {selectedIssue && (
-        <div className="flex-1">
-          <IssueDetail
-            issue={selectedIssue}
-            comments={comments}
-            onClose={() => setSelectedIssue(null)}
-            onStatusChange={handleStatusChange}
-            onAddComment={handleAddComment}
-            allIssues={issues}
-            onUpdateIssue={async (issueId, data) => {
-              await base44.entities.Issue.update(issueId, data);
-              setSelectedIssue(prev => ({ ...prev, ...data }));
-              queryClient.invalidateQueries({ queryKey: ["my-issues"] });
-            }}
-          />
-        </div>
-      )}
+        {/* Detail panel */}
+        {selectedIssue && (
+          <div className="w-[420px] flex-shrink-0 border-r border-[#1E1E1E]">
+            <IssueDetail
+              issue={selectedIssue}
+              comments={comments}
+              onClose={() => setSelectedIssue(null)}
+              onStatusChange={handleStatusChange}
+              onAddComment={handleAddComment}
+              allIssues={issues}
+              onUpdateIssue={async (issueId, data) => {
+                await base44.entities.Issue.update(issueId, data);
+                setSelectedIssue(prev => ({ ...prev, ...data }));
+                queryClient.invalidateQueries({ queryKey: ["my-issues"] });
+              }}
+            />
+          </div>
+        )}
+      </div>
 
       <CreateIssueModal
         open={showCreate}

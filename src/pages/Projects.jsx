@@ -8,14 +8,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Plus, Filter, Settings2 } from "lucide-react";
+import { Plus, Filter, Settings2, BarChart3 } from "lucide-react";
 import ProjectRow from "../components/projects/ProjectRow";
+import ProjectTimeline from "../components/projects/ProjectTimeline";
 import { HealthBadge } from "../components/shared/StatusBadge";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
 export default function Projects() {
   const [activeTab, setActiveTab] = useState("active");
+  const [view, setView] = useState("list");
   const [showCreate, setShowCreate] = useState(false);
   const [form, setForm] = useState({ name: "", prefix: "", description: "", health: "on_track", target_date: "", start_date: "", icon: "📁", lead: "" });
   const queryClient = useQueryClient();
@@ -70,6 +72,15 @@ export default function Projects() {
           </TabsList>
         </Tabs>
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setView(view === "list" ? "timeline" : "list")}
+            className={`p-1 rounded transition-colors ${
+              view === "timeline" ? "text-white bg-[#252525]" : "text-[#6B6B6B] hover:text-white"
+            }`}
+            title={view === "list" ? "Switch to timeline" : "Switch to list"}
+          >
+            <BarChart3 size={16} />
+          </button>
           <button onClick={() => setShowCreate(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
             <Plus size={16} />
           </button>
@@ -82,34 +93,40 @@ export default function Projects() {
         </div>
       </div>
 
-      {/* Table header */}
-      <div className="flex items-center gap-4 px-4 py-2 border-b border-[#1E1E1E] text-[10px] text-[#555] uppercase tracking-wider font-semibold">
-        <span className="flex-1">Name</span>
-        <span className="w-20 text-center">Target</span>
-        <span className="w-24">Health</span>
-        <span className="w-16 text-center">Issues</span>
-        <span className="w-4" />
-      </div>
-
-      <div className="flex-1 overflow-y-auto">
-        {filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-[#555]">
-            <p className="text-sm">No projects found</p>
-            <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
-              Create a project
-            </button>
+      {view === "list" ? (
+        <>
+          {/* Table header */}
+          <div className="flex items-center gap-4 px-4 py-2 border-b border-[#1E1E1E] text-[10px] text-[#555] uppercase tracking-wider font-semibold">
+            <span className="flex-1">Name</span>
+            <span className="w-20 text-center">Target</span>
+            <span className="w-24">Health</span>
+            <span className="w-16 text-center">Issues</span>
+            <span className="w-4" />
           </div>
-        ) : (
-          filtered.map(project => (
-            <ProjectRow
-              key={project.id}
-              project={project}
-              issueCount={getIssueCount(project.id)}
-              onClick={handleProjectClick}
-            />
-          ))
-        )}
-      </div>
+
+          <div className="flex-1 overflow-y-auto">
+            {filtered.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-[#555]">
+                <p className="text-sm">No projects found</p>
+                <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
+                  Create a project
+                </button>
+              </div>
+            ) : (
+              filtered.map(project => (
+                <ProjectRow
+                  key={project.id}
+                  project={project}
+                  issueCount={getIssueCount(project.id)}
+                  onClick={handleProjectClick}
+                />
+              ))
+            )}
+          </div>
+        </>
+      ) : (
+        <ProjectTimeline projects={filtered} />
+      )}
 
       {/* Create Project Modal */}
       <Dialog open={showCreate} onOpenChange={setShowCreate}>

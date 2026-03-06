@@ -16,7 +16,8 @@ import {
   LogOut,
   LayoutList,
   Bell,
-  Settings } from
+  Settings,
+  BarChart3 } from
 "lucide-react";
 import {
   Popover,
@@ -29,6 +30,7 @@ const navItems = [
 { name: "Inbox", icon: Inbox, page: "Inbox" },
 { name: "My Issues", icon: ListTodo, page: "MyIssues" },
 { name: "Projects", icon: Folder, page: "Projects" },
+{ name: "Reports", icon: BarChart3, page: "Reports" },
 { name: "Initiatives", icon: Rocket, page: "Initiatives" }];
 
 

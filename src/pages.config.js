@@ -53,6 +53,7 @@ import MyIssues from './pages/MyIssues';
 import ProjectDetail from './pages/ProjectDetail';
 import Projects from './pages/Projects';
 import NotificationSettings from './pages/NotificationSettings';
+import Reports from './pages/Reports';
 import __Layout from './Layout.jsx';
 
 
@@ -63,6 +64,7 @@ export const PAGES = {
     "ProjectDetail": ProjectDetail,
     "Projects": Projects,
     "NotificationSettings": NotificationSettings,
+    "Reports": Reports,
 }
 
 export const pagesConfig = {

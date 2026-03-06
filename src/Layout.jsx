@@ -147,6 +147,12 @@ export default function Layout({ children, currentPageName }) {
                       User Management
                     </button>
                     <button
+                      onClick={() => navigate(createPageUrl("RoleManagement"))}
+                      className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors"
+                    >
+                      Role Management
+                    </button>
+                    <button
                       onClick={() => navigate(createPageUrl("Security"))}
                       className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors"
                     >

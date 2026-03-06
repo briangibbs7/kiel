@@ -14,7 +14,7 @@ import ProjectTimeline from "../components/projects/ProjectTimeline";
 import { HealthBadge } from "../components/shared/StatusBadge";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { TEMPLATE_ICONS, BUILT_IN_TEMPLATES } from "./ProjectTemplates";
+import ProjectTemplates, { TEMPLATE_ICONS, BUILT_IN_TEMPLATES } from "./ProjectTemplates";
 
 export default function Projects() {
   const [activeTab, setActiveTab] = useState("active");

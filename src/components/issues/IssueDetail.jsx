@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import DependencyManager from "../shared/DependencyManager";
 import DependencyViewer from "../shared/DependencyViewer";
 import IssueAttachments from "./IssueAttachments";
+import CommentThread from "../comments/CommentThread";
 
 export default function IssueDetail({ issue, comments, onClose, onStatusChange, onAddComment, allIssues = [], onUpdateIssue }) {
   const [commentText, setCommentText] = useState("");
@@ -125,49 +126,9 @@ export default function IssueDetail({ issue, comments, onClose, onStatusChange, 
           <IssueAttachments issue={issue} />
         </div>
 
-        {/* Activity */}
+        {/* Comments */}
         <div className="pt-4 border-t border-[#252525]">
-          <h3 className="text-sm font-medium text-[#999] mb-4">Activity</h3>
-          <div className="space-y-3">
-            {comments?.map((c) => (
-              <div key={c.id} className="flex gap-3">
-                <div className="w-6 h-6 rounded-full bg-[#333] flex items-center justify-center text-[10px] text-[#999] flex-shrink-0 mt-0.5">
-                  {(c.author || c.created_by || "?")[0]?.toUpperCase()}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-[#CCC]">{c.author || c.created_by}</span>
-                    <span className="text-[10px] text-[#555]">
-                      {c.created_date && format(new Date(c.created_date), "MMM d, HH:mm")}
-                    </span>
-                  </div>
-                  <p className="text-xs text-[#999] mt-1">{c.content}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Comment input */}
-      <div className="p-4 border-t border-[#252525]">
-        <div className="flex gap-2">
-          <Textarea
-            placeholder="Write a comment..."
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-            className="bg-[#111] border-[#333] text-white placeholder:text-[#555] min-h-[40px] text-sm resize-none"
-            rows={1}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleComment();
-              }
-            }}
-          />
-          <Button onClick={handleComment} size="icon" className="bg-[#5E6AD2] hover:bg-[#4F5ABF] flex-shrink-0">
-            <Send size={14} />
-          </Button>
+          <CommentThread issueId={issue.id} />
         </div>
       </div>
 

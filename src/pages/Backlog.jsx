@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import EpicCard from "@/components/backlog/EpicCard";
-import StoryCard from "@/components/backlog/StoryCard";
+import TaskCard from "@/components/backlog/TaskCard";
 import CreateEpicModal from "@/components/backlog/CreateEpicModal";
 
 export default function Backlog() {
@@ -31,11 +31,11 @@ export default function Backlog() {
     enabled: !!selectedProject,
   });
 
-  const { data: stories = [] } = useQuery({
-    queryKey: ["stories", selectedProject],
+  const { data: tasks = [] } = useQuery({
+    queryKey: ["tasks", selectedProject],
     queryFn: () =>
       selectedProject
-        ? base44.entities.Story.filter(
+        ? base44.entities.Task.filter(
             { project_id: selectedProject },
             "-created_date"
           )
@@ -62,12 +62,12 @@ export default function Backlog() {
     }));
   };
 
-  const getStoriesForEpic = (epicId) => {
-    return stories.filter((s) => s.epic_id === epicId);
+  const getTasksForEpic = (epicId) => {
+   return tasks.filter((t) => t.epic_id === epicId);
   };
 
-  const getBacklogStories = () => {
-    return stories.filter((s) => !s.epic_id);
+  const getBacklogTasks = () => {
+   return tasks.filter((t) => !t.epic_id);
   };
 
   if (!selectedProject) {
@@ -103,7 +103,7 @@ export default function Backlog() {
               {projects.find((p) => p.id === selectedProject)?.name} Backlog
             </h1>
             <p className="text-sm text-[#999] mt-1">
-              Manage epics and stories
+              Manage epics and tasks
             </p>
           </div>
           <Button
@@ -118,56 +118,56 @@ export default function Backlog() {
 
       <div className="p-6 max-w-6xl mx-auto space-y-4">
         {/* Epics */}
-        {epics.map((epic) => {
-          const epicStories = getStoriesForEpic(epic.id);
-          const isExpanded = expandedEpics[epic.id];
+         {epics.map((epic) => {
+           const epicTasks = getTasksForEpic(epic.id);
+           const isExpanded = expandedEpics[epic.id];
 
-          return (
-            <div key={epic.id} className="bg-[#111] border border-[#1E1E1E] rounded-lg overflow-hidden">
-              <button
-                onClick={() => toggleEpic(epic.id)}
-                className="w-full px-4 py-3 flex items-center gap-3 hover:bg-[#161616] transition-colors group"
-              >
-                <div className="text-[#999] group-hover:text-white">
-                  {isExpanded ? (
-                    <ChevronDown size={16} />
-                  ) : (
-                    <ChevronRight size={16} />
-                  )}
-                </div>
-                <EpicCard epic={epic} />
-              </button>
+           return (
+             <div key={epic.id} className="bg-[#111] border border-[#1E1E1E] rounded-lg overflow-hidden">
+               <button
+                 onClick={() => toggleEpic(epic.id)}
+                 className="w-full px-4 py-3 flex items-center gap-3 hover:bg-[#161616] transition-colors group"
+               >
+                 <div className="text-[#999] group-hover:text-white">
+                   {isExpanded ? (
+                     <ChevronDown size={16} />
+                   ) : (
+                     <ChevronRight size={16} />
+                   )}
+                 </div>
+                 <EpicCard epic={epic} />
+               </button>
 
-              {isExpanded && (
-                <div className="border-t border-[#1E1E1E] bg-[#0D0D0D]">
-                  <div className="p-4 space-y-2">
-                    {epicStories.length === 0 ? (
-                      <p className="text-xs text-[#555] py-4 text-center">
-                        No stories in this epic
-                      </p>
-                    ) : (
-                      epicStories.map((story) => (
-                        <StoryCard key={story.id} story={story} />
-                      ))
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
+               {isExpanded && (
+                 <div className="border-t border-[#1E1E1E] bg-[#0D0D0D]">
+                   <div className="p-4 space-y-2">
+                     {epicTasks.length === 0 ? (
+                       <p className="text-xs text-[#555] py-4 text-center">
+                         No tasks in this epic
+                       </p>
+                     ) : (
+                       epicTasks.map((task) => (
+                         <TaskCard key={task.id} task={task} />
+                       ))
+                     )}
+                   </div>
+                 </div>
+               )}
+             </div>
+           );
+         })}
 
-        {/* Backlog */}
-        {getBacklogStories().length > 0 && (
-          <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-white mb-3">Backlog</h3>
-            <div className="space-y-2">
-              {getBacklogStories().map((story) => (
-                <StoryCard key={story.id} story={story} />
-              ))}
-            </div>
-          </div>
-        )}
+         {/* Backlog */}
+         {getBacklogTasks().length > 0 && (
+           <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-4">
+             <h3 className="text-sm font-semibold text-white mb-3">Backlog</h3>
+             <div className="space-y-2">
+               {getBacklogTasks().map((task) => (
+                 <TaskCard key={task.id} task={task} />
+               ))}
+             </div>
+           </div>
+         )}
       </div>
 
       <CreateEpicModal

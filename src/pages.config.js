@@ -47,6 +47,7 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import AdminPortal from './pages/AdminPortal';
 import Backlog from './pages/Backlog';
 import DirectMessages from './pages/DirectMessages';
 import Inbox from './pages/Inbox';
@@ -63,11 +64,11 @@ import RoleManagement from './pages/RoleManagement';
 import Security from './pages/Security';
 import Tasks from './pages/Tasks';
 import UserManagement from './pages/UserManagement';
-import AdminPortal from './pages/AdminPortal';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "AdminPortal": AdminPortal,
     "Backlog": Backlog,
     "DirectMessages": DirectMessages,
     "Inbox": Inbox,
@@ -84,7 +85,6 @@ export const PAGES = {
     "Security": Security,
     "Tasks": Tasks,
     "UserManagement": UserManagement,
-    "AdminPortal": AdminPortal,
 }
 
 export const pagesConfig = {

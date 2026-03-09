@@ -152,6 +152,7 @@ export default function Projects() {
             key={project.id}
             project={project}
             issueCount={getIssueCount(project.id)}
+            completedIssueCount={getCompletedIssueCount(project.id)}
             onClick={handleProjectClick} />
 
           )

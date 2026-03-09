@@ -54,7 +54,7 @@ export default function CreateTaskModal({
     setFormData({
       title: "",
       description: "",
-      story_id: "",
+      epic_id: "",
       priority: "medium",
       status: "todo",
       assignee: "",

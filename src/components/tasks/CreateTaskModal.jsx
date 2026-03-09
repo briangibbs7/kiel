@@ -60,6 +60,7 @@ export default function CreateTaskModal({
       assignee: "",
       estimated_hours: "",
       story_points: "",
+      due_date: "",
     });
   };
 

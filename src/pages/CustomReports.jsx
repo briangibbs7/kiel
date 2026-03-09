@@ -22,7 +22,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 
 const reportTypes = ["burndown", "workload", "progress", "resolution_time", "custom"];
-const metricsOptions = ["completion_rate", "velocity", "cycle_time", "team_capacity", "issue_trends"];
+const metricsOptions = ["completion_rate", "velocity", "cycle_time", "team_capacity", "issue_trends", "story_points"];
 
 export default function CustomReports() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);

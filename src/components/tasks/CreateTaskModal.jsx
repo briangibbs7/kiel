@@ -72,24 +72,24 @@ export default function CreateTaskModal({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto">
-          {/* Story Selection */}
+          {/* Epic Selection */}
           <div>
             <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
-              Story *
+              Epic *
             </label>
             <Select
-              value={formData.story_id}
+              value={formData.epic_id}
               onValueChange={(value) =>
-                setFormData({ ...formData, story_id: value })
+                setFormData({ ...formData, epic_id: value })
               }
             >
               <SelectTrigger className="bg-[#111] border-[#333] text-white hover:border-[#444] transition-colors">
-                <SelectValue placeholder="Select a story..." />
+                <SelectValue placeholder="Select an epic..." />
               </SelectTrigger>
               <SelectContent className="bg-[#1A1A1A] border-[#333]">
-                {stories && stories.map((story) => (
-                  <SelectItem key={story.id} value={story.id}>
-                    {story.title}
+                {epics && epics.map((epic) => (
+                  <SelectItem key={epic.id} value={epic.id}>
+                    {epic.title}
                   </SelectItem>
                 ))}
               </SelectContent>

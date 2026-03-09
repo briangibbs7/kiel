@@ -110,7 +110,11 @@ export default function Tasks() {
         </div>
       </div>
 
-      {view === "board" ? (
+      {showDependencyMap ? (
+        <div className="p-6 h-[calc(100%-80px)] overflow-y-auto">
+          <DependencyGraph tasks={tasks} />
+        </div>
+      ) : view === "board" ? (
         <div className="p-6 overflow-x-auto h-[calc(100%-80px)]">
           <TaskKanbanBoard
             tasks={tasks}

@@ -10,6 +10,7 @@ import IssueDetail from "../components/issues/IssueDetail";
 import CreateIssueModal from "../components/shared/CreateIssueModal";
 import SprintBurndownChart from "../components/projects/SprintBurndownChart";
 import ProjectKanban from "../components/projects/ProjectKanban";
+import ProjectBacklog from "../components/projects/ProjectBacklog";
 
 export default function ProjectDetail() {
   const params = new URLSearchParams(window.location.search);

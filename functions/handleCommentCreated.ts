@@ -5,43 +5,63 @@ Deno.serve(async (req) => {
     const base44 = createClientFromRequest(req);
     const { event, data } = await req.json();
 
-    if (event.type !== 'create') {
-      return Response.json({ success: true });
-    }
+    if (event.type !== 'create') return Response.json({ success: true });
 
     const comment = data;
-    const issue = await base44.asServiceRole.entities.Issue.filter({ id: comment.issue_id });
-    
-    if (!issue || !issue[0]?.assignee) {
-      return Response.json({ success: true });
+    const commenterName = comment.author_name || comment.author || 'Someone';
+
+    // Handle Issue comments
+    if (comment.issue_id) {
+      const issues = await base44.asServiceRole.entities.Issue.filter({ id: comment.issue_id });
+      const issue = issues[0];
+      if (!issue?.assignee || issue.assignee === comment.author) return Response.json({ success: true });
+
+      await base44.asServiceRole.entities.Notification.create({
+        user_email: issue.assignee,
+        type: 'comment',
+        title: 'New Comment',
+        message: `${commenterName} commented on: ${issue.title}`,
+        issue_id: comment.issue_id,
+        issue_title: issue.title,
+        action_url: `/MyIssues?issue=${comment.issue_id}`,
+        is_read: false
+      });
+
+      const users = await base44.asServiceRole.entities.User.filter({ email: issue.assignee });
+      const assignee = users[0];
+      if (assignee?.notify_comments !== false) {
+        await base44.asServiceRole.integrations.Core.SendEmail({
+          to: issue.assignee,
+          subject: `New comment on: ${issue.title}`,
+          body: `Hi ${assignee?.full_name || issue.assignee},\n\n<strong>${commenterName}</strong> added a comment on issue "<strong>${issue.title}</strong>":\n\n<blockquote>${comment.content}</blockquote>\n\nView it in your project management app.`
+        });
+      }
     }
 
-    const assignee = issue[0].assignee;
-    const currentUser = await base44.auth.me();
+    // Handle Task comments
+    if (comment.task_id) {
+      const tasks = await base44.asServiceRole.entities.Task.filter({ id: comment.task_id });
+      const task = tasks[0];
+      if (!task?.assignee || task.assignee === comment.author) return Response.json({ success: true });
 
-    // Don't notify if comment is from the assignee
-    if (currentUser?.email === assignee) {
-      return Response.json({ success: true });
+      await base44.asServiceRole.entities.Notification.create({
+        user_email: task.assignee,
+        type: 'comment',
+        title: 'New Comment on Task',
+        message: `${commenterName} commented on task: ${task.title}`,
+        is_read: false
+      });
+
+      const users = await base44.asServiceRole.entities.User.filter({ email: task.assignee });
+      const assignee = users[0];
+      if (assignee?.notify_comments !== false) {
+        await base44.asServiceRole.integrations.Core.SendEmail({
+          to: task.assignee,
+          subject: `New comment on task: ${task.title}`,
+          body: `Hi ${assignee?.full_name || task.assignee},\n\n<strong>${commenterName}</strong> added a comment on task "<strong>${task.title}</strong>":\n\n<blockquote>${comment.content}</blockquote>\n\nView it in your project management app.`
+        });
+      }
     }
-
-    // Get assignee's settings
-    const users = await base44.asServiceRole.entities.User.filter({ email: assignee });
-    const assigneeSettings = users[0];
-
-    if (!assigneeSettings?.notify_comments) {
-      return Response.json({ success: true });
-    }
-
-    await base44.asServiceRole.entities.Notification.create({
-      user_email: assignee,
-      type: 'comment',
-      title: 'New Comment',
-      message: `${currentUser?.full_name || 'Someone'} commented on: ${issue[0].title}`,
-      issue_id: comment.issue_id,
-      issue_title: issue[0].title,
-      action_url: `/MyIssues?issue=${comment.issue_id}`,
-      is_read: false
-    });
 
     return Response.json({ success: true });
   } catch (error) {

@@ -22,7 +22,7 @@ export default function CreateTaskModal({
   open,
   onClose,
   onSubmit,
-  stories,
+  epics,
 }) {
   const [formData, setFormData] = useState({
     title: "",

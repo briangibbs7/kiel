@@ -92,6 +92,13 @@ export default function ProjectDetail() {
           <HealthBadge health={project.health} />
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowBurndown(!showBurndown)}
+            title="Toggle burndown chart"
+            className={`transition-colors ${showBurndown ? "text-[#5E6AD2]" : "text-[#6B6B6B] hover:text-white"}`}
+          >
+            <BarChart2 size={16} />
+          </button>
           <button onClick={() => setShowCreate(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
             <Plus size={16} />
           </button>

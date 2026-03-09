@@ -66,15 +66,16 @@ export default function CreateTaskModal({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-[#1A1A1A] border-[#333]">
+      <DialogContent className="bg-[#1A1A1A] border-[#333] max-w-md">
         <DialogHeader>
           <DialogTitle className="text-white">Create Task</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto">
+          {/* Story Selection */}
           <div>
-            <label className="text-xs font-medium text-[#999] block mb-1">
-              Story
+            <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
+              Story *
             </label>
             <Select
               value={formData.story_id}
@@ -82,11 +83,11 @@ export default function CreateTaskModal({
                 setFormData({ ...formData, story_id: value })
               }
             >
-              <SelectTrigger className="bg-[#111] border-[#333] text-white">
+              <SelectTrigger className="bg-[#111] border-[#333] text-white hover:border-[#444] transition-colors">
                 <SelectValue placeholder="Select a story..." />
               </SelectTrigger>
               <SelectContent className="bg-[#1A1A1A] border-[#333]">
-                {stories.map((story) => (
+                {stories && stories.map((story) => (
                   <SelectItem key={story.id} value={story.id}>
                     {story.title}
                   </SelectItem>
@@ -95,38 +96,41 @@ export default function CreateTaskModal({
             </Select>
           </div>
 
+          {/* Title */}
           <div>
-            <label className="text-xs font-medium text-[#999] block mb-1">
-              Title
+            <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
+              Title *
             </label>
             <Input
               required
-              placeholder="Task title..."
+              placeholder="What needs to be done?"
               value={formData.title}
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
               }
-              className="bg-[#111] border-[#333] text-white placeholder-[#555]"
+              className="bg-[#111] border-[#333] text-white placeholder-[#555] focus:border-[#5E6AD2]"
             />
           </div>
 
+          {/* Description */}
           <div>
-            <label className="text-xs font-medium text-[#999] block mb-1">
+            <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
               Description
             </label>
             <Textarea
-              placeholder="Task details..."
+              placeholder="Add details about this task..."
               value={formData.description}
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
-              className="bg-[#111] border-[#333] text-white placeholder-[#555] h-20"
+              className="bg-[#111] border-[#333] text-white placeholder-[#555] h-20 resize-none focus:border-[#5E6AD2]"
             />
           </div>
 
+          {/* Priority & Status */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium text-[#999] block mb-1">
+              <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
                 Priority
               </label>
               <Select
@@ -135,7 +139,7 @@ export default function CreateTaskModal({
                   setFormData({ ...formData, priority: value })
                 }
               >
-                <SelectTrigger className="bg-[#111] border-[#333] text-white">
+                <SelectTrigger className="bg-[#111] border-[#333] text-white hover:border-[#444] transition-colors">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-[#1A1A1A] border-[#333]">
@@ -148,7 +152,7 @@ export default function CreateTaskModal({
             </div>
 
             <div>
-              <label className="text-xs font-medium text-[#999] block mb-1">
+              <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
                 Status
               </label>
               <Select
@@ -157,7 +161,7 @@ export default function CreateTaskModal({
                   setFormData({ ...formData, status: value })
                 }
               >
-                <SelectTrigger className="bg-[#111] border-[#333] text-white">
+                <SelectTrigger className="bg-[#111] border-[#333] text-white hover:border-[#444] transition-colors">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-[#1A1A1A] border-[#333]">
@@ -170,10 +174,11 @@ export default function CreateTaskModal({
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          {/* Assignee & Due Date */}
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium text-[#999] block mb-1">
-                Assignee Email
+              <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
+                Assignee
               </label>
               <Input
                 type="email"
@@ -182,41 +187,61 @@ export default function CreateTaskModal({
                 onChange={(e) =>
                   setFormData({ ...formData, assignee: e.target.value })
                 }
-                className="bg-[#111] border-[#333] text-white placeholder-[#555]"
+                className="bg-[#111] border-[#333] text-white placeholder-[#555] focus:border-[#5E6AD2]"
               />
             </div>
 
             <div>
-              <label className="text-xs font-medium text-[#999] block mb-1">
+              <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
+                Due Date
+              </label>
+              <div className="relative">
+                <Calendar size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555] pointer-events-none" />
+                <Input
+                  type="date"
+                  value={formData.due_date}
+                  onChange={(e) =>
+                    setFormData({ ...formData, due_date: e.target.value })
+                  }
+                  className="bg-[#111] border-[#333] text-white placeholder-[#555] pl-9 focus:border-[#5E6AD2]"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Estimation */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
                 Est. Hours
               </label>
               <Input
                 type="number"
                 min="0"
                 step="0.5"
-                placeholder="8"
+                placeholder="e.g. 8"
                 value={formData.estimated_hours}
                 onChange={(e) =>
                   setFormData({ ...formData, estimated_hours: e.target.value })
                 }
-                className="bg-[#111] border-[#333] text-white placeholder-[#555]"
+                className="bg-[#111] border-[#333] text-white placeholder-[#555] focus:border-[#5E6AD2]"
               />
             </div>
 
             <div>
-              <label className="text-xs font-medium text-[#999] block mb-1">
+              <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
                 Story Points
               </label>
               <Input
                 type="number"
                 min="0"
                 step="1"
-                placeholder="5"
+                placeholder="e.g. 5"
                 value={formData.story_points}
                 onChange={(e) =>
                   setFormData({ ...formData, story_points: e.target.value })
                 }
-                className="bg-[#111] border-[#333] text-white placeholder-[#555]"
+                className="bg-[#111] border-[#333] text-white placeholder-[#555] focus:border-[#5E6AD2]"
               />
             </div>
           </div>

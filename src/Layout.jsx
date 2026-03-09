@@ -289,9 +289,29 @@ export default function Layout({ children, currentPageName }) {
                   </div>
                   <span className="text-xs text-[#999] truncate">{user.full_name || user.email}</span>
                 </div>
-                <button onClick={() => navigate(createPageUrl("NotificationSettings"))} className="text-[#555] hover:text-white transition-colors" title="Notification settings">
-                  <Settings size={13} />
-                </button>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button className="text-[#555] hover:text-white transition-colors" title="Settings">
+                      <Settings size={13} />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className={`w-48 bg-[#1A1A1A] border-[#333] p-0 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
+                    <div className="space-y-1">
+                      <button
+                        onClick={() => navigate(createPageUrl("AdminPortal"))}
+                        className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors"
+                      >
+                        Admin Portal
+                      </button>
+                      <button
+                        onClick={() => navigate(createPageUrl("NotificationSettings"))}
+                        className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors"
+                      >
+                        Notification Settings
+                      </button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
           }
           </>

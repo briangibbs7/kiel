@@ -250,7 +250,18 @@ export default function Projects() {
             <div className="grid grid-cols-2 gap-3">
                <div>
                  <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Lead</Label>
-                 <Input value={form.lead} onChange={(e) => setForm({ ...form, lead: e.target.value })} className="bg-[#111] border-[#333] text-white" placeholder="Name" />
+                 <Select value={form.lead} onValueChange={(v) => setForm({ ...form, lead: v })}>
+                   <SelectTrigger className="bg-[#111] border-[#333] text-white">
+                     <SelectValue placeholder="Select lead" />
+                   </SelectTrigger>
+                   <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                     {users.map((user) => (
+                       <SelectItem key={user.id} value={user.email} className="text-white focus:bg-[#252525] focus:text-white">
+                         {user.full_name}
+                       </SelectItem>
+                     ))}
+                   </SelectContent>
+                 </Select>
                </div>
                <div>
                  <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Health</Label>

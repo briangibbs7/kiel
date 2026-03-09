@@ -16,6 +16,7 @@ export default function Tasks() {
   const [expandedTasks, setExpandedTasks] = useState({});
   const [selectedStory, setSelectedStory] = useState(null);
   const [view, setView] = useState("list");
+  const [showDependencyMap, setShowDependencyMap] = useState(false);
 
   const queryClient = useQueryClient();
 

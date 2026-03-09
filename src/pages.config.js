@@ -48,6 +48,7 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AdminPortal from './pages/AdminPortal';
+import Automations from './pages/Automations';
 import Backlog from './pages/Backlog';
 import DirectMessages from './pages/DirectMessages';
 import Inbox from './pages/Inbox';
@@ -56,6 +57,7 @@ import KanbanBoard from './pages/KanbanBoard';
 import MyIssues from './pages/MyIssues';
 import NotificationSettings from './pages/NotificationSettings';
 import ProjectDetail from './pages/ProjectDetail';
+import ProjectOverview from './pages/ProjectOverview';
 import ProjectTemplates from './pages/ProjectTemplates';
 import Projects from './pages/Projects';
 import Reports from './pages/Reports';
@@ -64,13 +66,12 @@ import RoleManagement from './pages/RoleManagement';
 import Security from './pages/Security';
 import Tasks from './pages/Tasks';
 import UserManagement from './pages/UserManagement';
-import ProjectOverview from './pages/ProjectOverview';
-import Automations from './pages/Automations';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AdminPortal": AdminPortal,
+    "Automations": Automations,
     "Backlog": Backlog,
     "DirectMessages": DirectMessages,
     "Inbox": Inbox,
@@ -79,6 +80,7 @@ export const PAGES = {
     "MyIssues": MyIssues,
     "NotificationSettings": NotificationSettings,
     "ProjectDetail": ProjectDetail,
+    "ProjectOverview": ProjectOverview,
     "ProjectTemplates": ProjectTemplates,
     "Projects": Projects,
     "Reports": Reports,
@@ -87,8 +89,6 @@ export const PAGES = {
     "Security": Security,
     "Tasks": Tasks,
     "UserManagement": UserManagement,
-    "ProjectOverview": ProjectOverview,
-    "Automations": Automations,
 }
 
 export const pagesConfig = {

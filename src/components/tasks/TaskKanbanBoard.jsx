@@ -55,7 +55,7 @@ export default function TaskKanbanBoard({ tasks, onStatusChange }) {
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="flex gap-4 h-full overflow-x-auto pb-4">
         {COLUMNS.map((col) => {
-          const colTasks = getTasksByStatus(col.id);
+          const colTasks = ordered[col.id] || [];
           return (
             <div key={col.id} className="flex-shrink-0 w-64 flex flex-col">
               {/* Column header */}

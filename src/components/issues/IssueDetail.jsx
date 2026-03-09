@@ -120,6 +120,11 @@ export default function IssueDetail({ issue, comments, onClose, onStatusChange, 
           </div>
         )}
 
+        {/* Attachments */}
+        <div className="pt-4 border-t border-[#252525]">
+          <IssueAttachments issue={issue} />
+        </div>
+
         {/* Activity */}
         <div className="pt-4 border-t border-[#252525]">
           <h3 className="text-sm font-medium text-[#999] mb-4">Activity</h3>

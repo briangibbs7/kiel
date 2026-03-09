@@ -21,6 +21,7 @@ export default function ProjectDetail() {
   const [showCreate, setShowCreate] = useState(false);
   const [showBurndown, setShowBurndown] = useState(false);
   const [view, setView] = useState("list"); // "list" | "kanban" | "backlog"
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],

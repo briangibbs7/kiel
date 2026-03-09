@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import SubTaskManager from "@/components/tasks/SubTaskManager";
 import TaskDependencyManager from "@/components/tasks/TaskDependencyManager";
 import CommentThread from "@/components/comments/CommentThread";
+import TaskAttachments from "@/components/tasks/TaskAttachments";
 import CreateTaskModal from "@/components/tasks/CreateTaskModal";
 import TaskKanbanBoard from "@/components/tasks/TaskKanbanBoard";
 

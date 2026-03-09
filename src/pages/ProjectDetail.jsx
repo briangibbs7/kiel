@@ -32,6 +32,16 @@ export default function ProjectDetail() {
     enabled: !!projectId,
   });
 
+  const { data: tasks = [] } = useQuery({
+    queryKey: ["project-tasks", projectId],
+    queryFn: () => base44.entities.Task.filter({ project_id: projectId }),
+    enabled: !!projectId,
+  });
+
+  // Derive sprint window: use project start_date + 14 days, or last 14 days as fallback
+  const sprintStart = project?.start_date || new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+  const sprintEnd = project?.target_date || new Date().toISOString().split("T")[0];
+
   const { data: comments = [] } = useQuery({
     queryKey: ["comments", selectedIssue?.id],
     queryFn: () => base44.entities.Comment.filter({ issue_id: selectedIssue.id }),

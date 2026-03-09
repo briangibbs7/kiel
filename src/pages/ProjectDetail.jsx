@@ -148,6 +148,28 @@ export default function ProjectDetail() {
         </div>
       )}
 
+      {/* Search Bar */}
+      <div className="px-5 py-2.5 border-b border-[#1E1E1E] bg-[#0D0D0D]">
+        <div className="relative">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]" />
+          <input
+            type="text"
+            placeholder="Search issues by title or description..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-[#161616] border border-[#252525] rounded-lg pl-9 pr-9 py-2 text-xs text-white placeholder-[#555] focus:outline-none focus:border-[#5E6AD2]"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] hover:text-white transition-colors"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* Content */}
       <div className="flex-1 flex overflow-hidden">
         {view === "backlog" ? (

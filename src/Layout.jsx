@@ -57,6 +57,8 @@ const navSections = [
   label: "Insights",
   items: [
   { name: "Reports", icon: BarChart3, page: "Reports" },
+  { name: "Custom Reports", icon: BarChart3, page: "CustomReports" },
+  { name: "Custom Boards", icon: LayoutGrid, page: "CustomProjectBoards" },
   { name: "Templates", icon: FileText, page: "ProjectTemplates" },
   { name: "Automations", icon: Settings, page: "Automations" }]
 

@@ -83,6 +83,7 @@ export default function Projects() {
   });
 
   const getIssueCount = (projectId) => issues.filter((i) => i.project_id === projectId).length;
+  const getCompletedIssueCount = (projectId) => issues.filter((i) => i.project_id === projectId && i.status === "done").length;
 
   const handleProjectClick = (project) => {
     navigate(createPageUrl("ProjectDetail") + `?id=${project.id}`);

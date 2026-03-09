@@ -26,6 +26,7 @@ import {
   PopoverTrigger } from
 "@/components/ui/popover";
 import NotificationBell from "@/components/notifications/NotificationBell";
+import GlobalSearch from "@/components/search/GlobalSearch";
 
 const navItems = [
 { name: "Inbox", icon: Inbox, page: "Inbox" },

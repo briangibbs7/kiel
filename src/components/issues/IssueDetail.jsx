@@ -7,6 +7,7 @@ import { X, Send, MessageSquare, Link2 } from "lucide-react";
 import { format } from "date-fns";
 import DependencyManager from "../shared/DependencyManager";
 import DependencyViewer from "../shared/DependencyViewer";
+import IssueAttachments from "./IssueAttachments";
 
 export default function IssueDetail({ issue, comments, onClose, onStatusChange, onAddComment, allIssues = [], onUpdateIssue }) {
   const [commentText, setCommentText] = useState("");

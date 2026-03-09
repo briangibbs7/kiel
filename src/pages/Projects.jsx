@@ -15,6 +15,7 @@ import { HealthBadge } from "../components/shared/StatusBadge";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ProjectTemplates, { TEMPLATE_ICONS, BUILT_IN_TEMPLATES } from "./ProjectTemplates";
+import IconPicker from "../components/projects/IconPicker";
 
 export default function Projects() {
   const [activeTab, setActiveTab] = useState("active");
@@ -240,25 +241,26 @@ export default function Projects() {
               <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Description</Label>
               <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="bg-[#111] border-[#333] text-white min-h-[60px]" placeholder="Optional" />
             </div>
+            <IconPicker value={form.icon} onChange={(icon) => setForm({ ...form, icon })} />
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Lead</Label>
-                <Input value={form.lead} onChange={(e) => setForm({ ...form, lead: e.target.value })} className="bg-[#111] border-[#333] text-white" placeholder="Name" />
-              </div>
-              <div>
-                <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Health</Label>
-                <Select value={form.health} onValueChange={(v) => setForm({ ...form, health: v })}>
-                  <SelectTrigger className="bg-[#111] border-[#333] text-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="bg-[#1A1A1A] border-[#333]">
-                    <SelectItem value="on_track" className="text-white focus:bg-[#252525] focus:text-white">On track</SelectItem>
-                    <SelectItem value="at_risk" className="text-white focus:bg-[#252525] focus:text-white">At risk</SelectItem>
-                    <SelectItem value="off_track" className="text-white focus:bg-[#252525] focus:text-white">Off track</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+               <div>
+                 <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Lead</Label>
+                 <Input value={form.lead} onChange={(e) => setForm({ ...form, lead: e.target.value })} className="bg-[#111] border-[#333] text-white" placeholder="Name" />
+               </div>
+               <div>
+                 <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Health</Label>
+                 <Select value={form.health} onValueChange={(v) => setForm({ ...form, health: v })}>
+                   <SelectTrigger className="bg-[#111] border-[#333] text-white">
+                     <SelectValue />
+                   </SelectTrigger>
+                   <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                     <SelectItem value="on_track" className="text-white focus:bg-[#252525] focus:text-white">On track</SelectItem>
+                     <SelectItem value="at_risk" className="text-white focus:bg-[#252525] focus:text-white">At risk</SelectItem>
+                     <SelectItem value="off_track" className="text-white focus:bg-[#252525] focus:text-white">Off track</SelectItem>
+                   </SelectContent>
+                 </Select>
+               </div>
+             </div>
             <div className="flex justify-end gap-2 pt-2">
               <Button type="button" variant="ghost" onClick={() => setShowCreate(false)} className="text-[#6B6B6B] hover:text-white hover:bg-[#252525]">Cancel</Button>
               <Button type="submit" className="bg-[#5E6AD2] hover:bg-[#4F5ABF] text-white">Create</Button>

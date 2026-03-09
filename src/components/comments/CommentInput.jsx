@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import EmojiPicker from "./EmojiPicker";
 
 export default function CommentInput({ onSubmit, isLoading }) {
   const [content, setContent] = useState("");
@@ -71,6 +72,11 @@ export default function CommentInput({ onSubmit, isLoading }) {
     setSuggestions([]);
   };
 
+  const handleEmojiInsert = (emoji) => {
+    const newContent = content + emoji;
+    setContent(newContent);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!content.trim()) return;
@@ -121,8 +127,8 @@ export default function CommentInput({ onSubmit, isLoading }) {
         )}
       </div>
 
-      <div className="flex items-center justify-between">
-        <div className="flex gap-1 flex-wrap">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex gap-1 flex-wrap flex-1">
           {mentions.map((mention) => (
             <span
               key={mention}
@@ -141,15 +147,18 @@ export default function CommentInput({ onSubmit, isLoading }) {
             </span>
           ))}
         </div>
-        <Button
-          type="submit"
-          size="sm"
-          disabled={!content.trim() || isLoading}
-          className="bg-[#5E6AD2] hover:bg-[#5E6AD2]/90"
-        >
-          <Send size={14} className="mr-1" />
-          Comment
-        </Button>
+        <div className="flex items-center gap-1">
+          <EmojiPicker onEmojiSelect={handleEmojiInsert} />
+          <Button
+            type="submit"
+            size="sm"
+            disabled={!content.trim() || isLoading}
+            className="bg-[#5E6AD2] hover:bg-[#5E6AD2]/90"
+          >
+            <Send size={14} className="mr-1" />
+            Comment
+          </Button>
+        </div>
       </div>
     </form>
   );

@@ -27,7 +27,7 @@ export default function CreateTaskModal({
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    story_id: "",
+    epic_id: "",
     priority: "medium",
     status: "todo",
     assignee: "",

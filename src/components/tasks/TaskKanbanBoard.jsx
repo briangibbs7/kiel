@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const COLUMNS = [
@@ -16,13 +16,39 @@ const priorityColors = {
 };
 
 export default function TaskKanbanBoard({ tasks, onStatusChange }) {
-  const getTasksByStatus = (status) => tasks.filter((t) => t.status === status);
+  const [ordered, setOrdered] = useState({});
+
+  useEffect(() => {
+    const grouped = {};
+    COLUMNS.forEach((col) => {
+      grouped[col.id] = tasks.filter((t) => t.status === col.id);
+    });
+    setOrdered(grouped);
+  }, [tasks]);
 
   const handleDragEnd = (result) => {
     const { destination, source, draggableId } = result;
     if (!destination) return;
-    if (destination.droppableId === source.droppableId) return;
-    onStatusChange(draggableId, destination.droppableId);
+
+    const srcCol = source.droppableId;
+    const dstCol = destination.droppableId;
+
+    const next = { ...ordered };
+    const srcItems = Array.from(next[srcCol] || []);
+    const [moved] = srcItems.splice(source.index, 1);
+
+    if (srcCol === dstCol) {
+      srcItems.splice(destination.index, 0, moved);
+      next[srcCol] = srcItems;
+    } else {
+      const dstItems = Array.from(next[dstCol] || []);
+      dstItems.splice(destination.index, 0, { ...moved, status: dstCol });
+      next[srcCol] = srcItems;
+      next[dstCol] = dstItems;
+      onStatusChange(draggableId, dstCol);
+    }
+
+    setOrdered(next);
   };
 
   return (

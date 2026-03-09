@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Plus, MoreHorizontal, BarChart2 } from "lucide-react";
+import { ArrowLeft, Plus, MoreHorizontal, BarChart2, List, LayoutGrid } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { HealthBadge } from "../components/shared/StatusBadge";
@@ -9,6 +9,7 @@ import IssueRow from "../components/issues/IssueRow";
 import IssueDetail from "../components/issues/IssueDetail";
 import CreateIssueModal from "../components/shared/CreateIssueModal";
 import SprintBurndownChart from "../components/projects/SprintBurndownChart";
+import ProjectKanban from "../components/projects/ProjectKanban";
 
 export default function ProjectDetail() {
   const params = new URLSearchParams(window.location.search);
@@ -18,6 +19,7 @@ export default function ProjectDetail() {
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
   const [showBurndown, setShowBurndown] = useState(false);
+  const [view, setView] = useState("list"); // "list" | "kanban"
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],

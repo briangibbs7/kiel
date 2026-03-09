@@ -286,6 +286,8 @@ export default function Layout({ children, currentPageName }) {
       <main className={`${isSidebarVertical ? "flex-1" : "flex-1"} overflow-hidden`}>
         {children}
       </main>
+
+      <GlobalSearch open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>);
 
 }

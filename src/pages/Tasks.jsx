@@ -35,6 +35,11 @@ export default function Tasks() {
     },
   });
 
+  const updateStatusMutation = useMutation({
+    mutationFn: ({ taskId, status }) => base44.entities.Task.update(taskId, { status }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["all-tasks"] }),
+  });
+
   const toggleTask = (taskId) => {
     setExpandedTasks((prev) => ({
       ...prev,

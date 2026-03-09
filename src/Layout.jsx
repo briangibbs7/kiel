@@ -58,6 +58,7 @@ const navSections = [
     items: [
       { name: "Reports", icon: BarChart3, page: "Reports" },
       { name: "Templates", icon: FileText, page: "ProjectTemplates" },
+      { name: "Admin Portal", icon: Settings, page: "AdminPortal" },
     ],
   },
 ];

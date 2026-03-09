@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Shield, Settings } from "lucide-react";
+import { Plus, Settings, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -20,9 +20,17 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import UserDashboard from "@/components/admin/UserDashboard";
+import UserCard from "@/components/admin/UserCard";
+import UserEditModal from "@/components/admin/UserEditModal";
 
 export default function UserManagement() {
   const [showInvite, setShowInvite] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterRole, setFilterRole] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
   const [inviteData, setInviteData] = useState({ email: "", role: "user" });
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -47,11 +55,45 @@ export default function UserManagement() {
     },
   });
 
+  const updateUserMutation = useMutation({
+    mutationFn: (data) =>
+      base44.asServiceRole.entities.User.update(selectedUser.id, {
+        role: data.role,
+        status: data.status,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["all-users"] });
+      setShowEditModal(false);
+      setSelectedUser(null);
+    },
+  });
+
+  const deleteUserMutation = useMutation({
+    mutationFn: () =>
+      base44.asServiceRole.entities.User.delete(selectedUser.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["all-users"] });
+      setShowEditModal(false);
+      setSelectedUser(null);
+    },
+  });
+
   const handleInvite = (e) => {
     e.preventDefault();
     if (!inviteData.email || !inviteData.role) return;
     inviteMutation.mutate(inviteData);
   };
+
+  const filteredUsers = useMemo(() => {
+    return users.filter((user) => {
+      const matchesSearch =
+        user.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email?.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesRole = filterRole === "all" || user.role === filterRole;
+      const matchesStatus = filterStatus === "all" || user.status === filterStatus;
+      return matchesSearch && matchesRole && matchesStatus;
+    });
+  }, [users, searchQuery, filterRole, filterStatus]);
 
   const isAdmin = currentUser?.role === "admin";
 
@@ -89,52 +131,69 @@ export default function UserManagement() {
         </div>
       </div>
 
-      <div className="p-6 max-w-4xl mx-auto">
-        {users.length === 0 ? (
-          <div className="text-center py-12 text-[#555]">
-            <p className="text-sm">No users yet</p>
+      <div className="p-6 max-w-6xl mx-auto">
+        {/* Dashboard Stats */}
+        <UserDashboard users={users} />
+
+        {/* Search and Filters */}
+        <div className="mb-6 space-y-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#666] w-4 h-4" />
+            <Input
+              placeholder="Search by name or email..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-[#111] border-[#252525] text-white placeholder-[#666] pl-10"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-2">
+            <Select value={filterRole} onValueChange={setFilterRole}>
+              <SelectTrigger className="bg-[#111] border-[#252525] text-white">
+                <SelectValue placeholder="Filter by role" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                <SelectItem value="all">All Roles</SelectItem>
+                <SelectItem value="admin">Admin</SelectItem>
+                <SelectItem value="user">User</SelectItem>
+                <SelectItem value="editor">Editor</SelectItem>
+                <SelectItem value="viewer">Viewer</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="bg-[#111] border-[#252525] text-white">
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="inactive">Inactive</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Users Grid */}
+        {filteredUsers.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-sm text-[#555]">
+              {searchQuery || filterRole !== "all" || filterStatus !== "all"
+                ? "No users match your filters"
+                : "No users yet"}
+            </p>
           </div>
         ) : (
-          <div className="space-y-2">
-            {users.map((user) => (
-              <div
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredUsers.map((user) => (
+              <UserCard
                 key={user.id}
-                className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg flex items-center justify-between group hover:border-[#252525] transition-colors"
-              >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="w-10 h-10 rounded-full bg-[#5E6AD2] flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
-                    {user.full_name?.[0]?.toUpperCase() ||
-                      user.email?.[0]?.toUpperCase()}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-medium text-white truncate">
-                      {user.full_name || "Unnamed User"}
-                    </h3>
-                    <p className="text-sm text-[#999] truncate">{user.email}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 flex-shrink-0 ml-4">
-                  <div className="flex items-center gap-1">
-                    {user.role === "admin" && (
-                      <Shield size={14} className="text-[#FACC15]" />
-                    )}
-                    <span className="text-sm text-[#999] min-w-fit">
-                      {user.role}
-                    </span>
-                  </div>
-                  {isAdmin && user.id !== currentUser?.id && (
-                    <button
-                      onClick={() => {
-                        // TODO: Implement role change/user removal
-                      }}
-                      className="text-[#555] hover:text-[#F87171] transition-colors opacity-0 group-hover:opacity-100"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  )}
-                </div>
-              </div>
+                user={user}
+                onClick={() => {
+                  setSelectedUser(user);
+                  setShowEditModal(true);
+                }}
+              />
             ))}
           </div>
         )}
@@ -187,7 +246,11 @@ export default function UserManagement() {
             </div>
 
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowInvite(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowInvite(false)}
+                className="border-[#333]"
+              >
                 Cancel
               </Button>
               <Button
@@ -201,6 +264,16 @@ export default function UserManagement() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Edit User Modal */}
+      <UserEditModal
+        open={showEditModal}
+        onOpenChange={setShowEditModal}
+        user={selectedUser}
+        onUpdate={(data) => updateUserMutation.mutate(data)}
+        onDelete={() => deleteUserMutation.mutate()}
+        isLoading={updateUserMutation.isPending || deleteUserMutation.isPending}
+      />
     </div>
   );
 }

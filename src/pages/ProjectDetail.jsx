@@ -94,6 +94,20 @@ export default function ProjectDetail() {
           <HealthBadge health={project.health} />
         </div>
         <div className="flex items-center gap-2">
+          <div className="flex items-center bg-[#161616] border border-[#252525] rounded-lg p-0.5">
+            <button
+              onClick={() => setView("list")}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${view === "list" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+            >
+              <List size={13} /> List
+            </button>
+            <button
+              onClick={() => setView("kanban")}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${view === "kanban" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+            >
+              <LayoutGrid size={13} /> Kanban
+            </button>
+          </div>
           <button
             onClick={() => setShowBurndown(!showBurndown)}
             title="Toggle burndown chart"

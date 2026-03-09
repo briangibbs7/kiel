@@ -23,6 +23,7 @@ import {
 import UserDashboard from "@/components/admin/UserDashboard";
 import UserCard from "@/components/admin/UserCard";
 import UserEditModal from "@/components/admin/UserEditModal";
+import GroupList from "@/components/admin/GroupList";
 
 export default function UserManagement() {
   const [showInvite, setShowInvite] = useState(false);
@@ -43,6 +44,16 @@ export default function UserManagement() {
   const { data: users = [] } = useQuery({
     queryKey: ["all-users"],
     queryFn: () => base44.entities.User.list(),
+  });
+
+  const { data: groups = [] } = useQuery({
+    queryKey: ["groups"],
+    queryFn: () => base44.asServiceRole.entities.Group.list(),
+  });
+
+  const { data: projects = [] } = useQuery({
+    queryKey: ["all-projects"],
+    queryFn: () => base44.asServiceRole.entities.Project.list(),
   });
 
   const inviteMutation = useMutation({
@@ -75,6 +86,33 @@ export default function UserManagement() {
       queryClient.invalidateQueries({ queryKey: ["all-users"] });
       setShowEditModal(false);
       setSelectedUser(null);
+    },
+  });
+
+  const createGroupMutation = useMutation({
+    mutationFn: (data) => base44.asServiceRole.entities.Group.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
+    },
+  });
+
+  const updateGroupMutation = useMutation({
+    mutationFn: (data) =>
+      base44.asServiceRole.entities.Group.update(data.id, {
+        name: data.name,
+        description: data.description,
+        roles: data.roles,
+        project_ids: data.project_ids,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
+    },
+  });
+
+  const deleteGroupMutation = useMutation({
+    mutationFn: (id) => base44.asServiceRole.entities.Group.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["groups"] });
     },
   });
 
@@ -132,6 +170,24 @@ export default function UserManagement() {
       </div>
 
       <div className="p-6 max-w-6xl mx-auto">
+        {/* Groups Section */}
+        {isAdmin && (
+          <GroupList
+            groups={groups}
+            projects={projects}
+            onCreateGroup={(data) => createGroupMutation.mutate(data)}
+            onUpdateGroup={(id, data) =>
+              updateGroupMutation.mutate({ id, ...data })
+            }
+            onDeleteGroup={(id) => deleteGroupMutation.mutate(id)}
+            isLoading={
+              createGroupMutation.isPending ||
+              updateGroupMutation.isPending ||
+              deleteGroupMutation.isPending
+            }
+          />
+        )}
+
         {/* Dashboard Stats */}
         <UserDashboard users={users} />
 

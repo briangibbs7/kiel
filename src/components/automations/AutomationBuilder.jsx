@@ -11,6 +11,7 @@ const entityTypes = ["task", "issue", "epic"];
 const actionTypes = [
   { value: "notify_reporter", label: "Notify Reporter" },
   { value: "notify_user", label: "Notify User" },
+  { value: "slack_notify", label: "Slack Notification" },
   { value: "update_epic_health", label: "Update Epic Health" },
   { value: "send_email", label: "Send Email" },
   { value: "update_field", label: "Update Field" },
@@ -188,6 +189,20 @@ export default function AutomationBuilder({ open, onClose, onSubmit, projects })
                     setNewAction({
                       ...newAction,
                       config: { ...newAction.config, user_email: e.target.value },
+                    })
+                  }
+                  className="bg-[#111] border-[#333] text-white text-xs"
+                />
+              )}
+
+              {newAction.type === "slack_notify" && (
+                <Input
+                  placeholder="Optional: override channel (e.g., #alerts)"
+                  value={newAction.config.channel || ""}
+                  onChange={(e) =>
+                    setNewAction({
+                      ...newAction,
+                      config: { ...newAction.config, channel: e.target.value },
                     })
                   }
                   className="bg-[#111] border-[#333] text-white text-xs"

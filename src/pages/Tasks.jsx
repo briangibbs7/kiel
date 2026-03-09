@@ -92,6 +92,12 @@ export default function Tasks() {
               >
                 <Columns size={13} /> Board
               </button>
+              <button
+                onClick={() => setShowDependencyMap(!showDependencyMap)}
+                className={`px-3 py-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${showDependencyMap ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+              >
+                <Network size={13} /> Dependencies
+              </button>
             </div>
             <Button
               onClick={() => setShowCreateTask(true)}

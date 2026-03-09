@@ -66,6 +66,8 @@ import RoleManagement from './pages/RoleManagement';
 import Security from './pages/Security';
 import Tasks from './pages/Tasks';
 import UserManagement from './pages/UserManagement';
+import CustomReports from './pages/CustomReports';
+import CustomProjectBoards from './pages/CustomProjectBoards';
 import __Layout from './Layout.jsx';
 
 
@@ -89,6 +91,8 @@ export const PAGES = {
     "Security": Security,
     "Tasks": Tasks,
     "UserManagement": UserManagement,
+    "CustomReports": CustomReports,
+    "CustomProjectBoards": CustomProjectBoards,
 }
 
 export const pagesConfig = {

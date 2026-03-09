@@ -134,10 +134,12 @@ export default function UserEditModal({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-[#1A1A1A] border-[#333]">
-                  <SelectItem value="user">User (Standard)</SelectItem>
-                  <SelectItem value="admin">Admin (Full Access)</SelectItem>
+                  <SelectItem value="site_admin">Site Admin (Full Access)</SelectItem>
+                  <SelectItem value="organization_admin">Organization Admin (Full Org Access)</SelectItem>
+                  <SelectItem value="admin">Admin (Project Access)</SelectItem>
                   <SelectItem value="editor">Editor (Content)</SelectItem>
                   <SelectItem value="viewer">Viewer (Read-Only)</SelectItem>
+                  <SelectItem value="user">User (Standard)</SelectItem>
                 </SelectContent>
               </Select>
             </div>

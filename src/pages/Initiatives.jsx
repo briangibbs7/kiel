@@ -21,12 +21,12 @@ export default function Initiatives() {
 
   const { data: initiatives = [] } = useQuery({
     queryKey: ["initiatives"],
-    queryFn: () => base44.entities.Initiative.list("-created_date"),
+    queryFn: () => base44.entities.Initiative.list("-created_date")
   });
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],
-    queryFn: () => base44.entities.Project.list(),
+    queryFn: () => base44.entities.Project.list()
   });
 
   const createMutation = useMutation({
@@ -35,10 +35,10 @@ export default function Initiatives() {
       queryClient.invalidateQueries({ queryKey: ["initiatives"] });
       setShowCreate(false);
       setForm({ name: "", description: "", health: "on_track", target: "", lead: "", icon: "🚀" });
-    },
+    }
   });
 
-  const filtered = initiatives.filter(i => {
+  const filtered = initiatives.filter((i) => {
     if (activeTab === "active") return i.status === "active";
     if (activeTab === "planned") return i.status === "planned";
     if (activeTab === "completed") return i.status === "completed";
@@ -68,42 +68,42 @@ export default function Initiatives() {
         </div>
         <div className="flex items-center gap-2">
           <button onClick={() => setShowCreate(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
-            <Plus size={16} />
+            <Plus size={16} className="text-slate-50 lucide lucide-plus" />
           </button>
           <button className="text-[#555] hover:text-white transition-colors">
-            <Filter size={14} />
+            <Filter size={14} className="text-slate-50 lucide lucide-filter" />
           </button>
           <button className="text-[#555] hover:text-white transition-colors">
-            <Settings2 size={14} />
+            <Settings2 size={14} className="text-slate-50 lucide lucide-settings2" />
           </button>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto">
         {activeView === "feed" ? (
-          /* Feed view - like the Pulse/Initiatives feed */
-          <div className="max-w-2xl mx-auto py-6">
-            {filtered.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20 text-[#555]">
+        /* Feed view - like the Pulse/Initiatives feed */
+        <div className="max-w-2xl mx-auto py-6">
+            {filtered.length === 0 ?
+          <div className="flex flex-col items-center justify-center py-20 text-[#555]">
                 <p className="text-sm">No initiatives yet</p>
                 <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
                   Create an initiative
                 </button>
-              </div>
-            ) : (
-              <>
+              </div> :
+
+          <>
                 <div className="px-5 mb-4">
                   <span className="text-xs text-[#555] font-medium">Today</span>
                 </div>
-                {filtered.map(initiative => (
-                  <InitiativeCard key={initiative.id} initiative={initiative} />
-                ))}
-              </>
+                {filtered.map((initiative) =>
+            <InitiativeCard key={initiative.id} initiative={initiative} />
             )}
-          </div>
-        ) : (
-          /* Table view */
-          <div>
+              </>
+          }
+          </div>) : (
+
+        /* Table view */
+        <div>
             <div className="flex items-center gap-4 px-4 py-2 border-b border-[#1E1E1E] text-[10px] text-[#555] uppercase tracking-wider font-semibold">
               <span className="flex-1">Name</span>
               <span className="w-20 text-center">Target</span>
@@ -111,8 +111,8 @@ export default function Initiatives() {
               <span className="w-20 text-center">Projects</span>
               <span className="w-16 text-center">Lead</span>
             </div>
-            {filtered.map(initiative => (
-              <div key={initiative.id} className="flex items-center gap-4 px-4 py-3 border-b border-[#1E1E1E] hover:bg-[#1A1A1A] cursor-pointer transition-colors">
+            {filtered.map((initiative) =>
+          <div key={initiative.id} className="flex items-center gap-4 px-4 py-3 border-b border-[#1E1E1E] hover:bg-[#1A1A1A] cursor-pointer transition-colors">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   {initiative.icon && <span>{initiative.icon}</span>}
                   <span className="text-sm text-[#E5E5E5] truncate">{initiative.name}</span>
@@ -126,9 +126,9 @@ export default function Initiatives() {
                 </span>
                 <span className="text-xs text-[#6B6B6B] w-16 text-center truncate">{initiative.lead || "—"}</span>
               </div>
-            ))}
-          </div>
-        )}
+          )}
+          </div>)
+        }
       </div>
 
       {/* Create Initiative Modal */}
@@ -137,7 +137,7 @@ export default function Initiatives() {
           <DialogHeader>
             <DialogTitle className="text-[#E5E5E5]">New Initiative</DialogTitle>
           </DialogHeader>
-          <form onSubmit={(e) => { e.preventDefault(); createMutation.mutate(form); }} className="space-y-4">
+          <form onSubmit={(e) => {e.preventDefault();createMutation.mutate(form);}} className="space-y-4">
             <div>
               <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Name</Label>
               <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="bg-[#111] border-[#333] text-white" placeholder="Initiative name" />
@@ -176,6 +176,6 @@ export default function Initiatives() {
           </form>
         </DialogContent>
       </Dialog>
-    </div>
-  );
+    </div>);
+
 }

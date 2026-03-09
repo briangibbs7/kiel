@@ -30,38 +30,38 @@ import NotificationBell from "@/components/notifications/NotificationBell";
 import GlobalSearch from "@/components/search/GlobalSearch";
 
 const navSections = [
-  {
-    label: "My Work",
-    items: [
-      { name: "Inbox", icon: Inbox, page: "Inbox" },
-      { name: "My Issues", icon: ListTodo, page: "MyIssues" },
-      { name: "Messages", icon: MessageCircle, page: "DirectMessages" },
-    ],
-  },
-  {
-    label: "Work",
-    items: [
-      { name: "Tasks", icon: ListTodo, page: "Tasks" },
-      { name: "Backlog", icon: FileText, page: "Backlog" },
-    ],
-  },
-  {
-    label: "Planning",
-    items: [
-      { name: "Projects", icon: Folder, page: "Projects" },
-      { name: "Roadmap", icon: Rocket, page: "Roadmap" },
-      { name: "Initiatives", icon: Rocket, page: "Initiatives" },
-    ],
-  },
-  {
-    label: "Insights",
-    items: [
-      { name: "Reports", icon: BarChart3, page: "Reports" },
-      { name: "Templates", icon: FileText, page: "ProjectTemplates" },
-      { name: "Admin Portal", icon: Settings, page: "AdminPortal" },
-    ],
-  },
-];
+{
+  label: "My Work",
+  items: [
+  { name: "Inbox", icon: Inbox, page: "Inbox" },
+  { name: "My Issues", icon: ListTodo, page: "MyIssues" },
+  { name: "Messages", icon: MessageCircle, page: "DirectMessages" }]
+
+},
+{
+  label: "Work",
+  items: [
+  { name: "Tasks", icon: ListTodo, page: "Tasks" },
+  { name: "Backlog", icon: FileText, page: "Backlog" }]
+
+},
+{
+  label: "Planning",
+  items: [
+  { name: "Projects", icon: Folder, page: "Projects" },
+  { name: "Roadmap", icon: Rocket, page: "Roadmap" },
+  { name: "Initiatives", icon: Rocket, page: "Initiatives" }]
+
+},
+{
+  label: "Insights",
+  items: [
+  { name: "Reports", icon: BarChart3, page: "Reports" },
+  { name: "Templates", icon: FileText, page: "ProjectTemplates" },
+  { name: "Admin Portal", icon: Settings, page: "AdminPortal" }]
+
+}];
+
 
 // Flat list for top bar
 const navItems = navSections.flatMap((s) => s.items);
@@ -182,28 +182,28 @@ export default function Layout({ children, currentPageName }) {
                 <PopoverContent className={`w-48 bg-[#1A1A1A] border-[#333] p-0 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
                   <div className="space-y-1">
                     <button
-                      onClick={() => navigate(createPageUrl("UserManagement"))}
-                      className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors"
-                    >
+                    onClick={() => navigate(createPageUrl("UserManagement"))}
+                    className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors">
+
                       User Management
                     </button>
                     <button
-                      onClick={() => navigate(createPageUrl("RoleManagement"))}
-                      className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors"
-                    >
+                    onClick={() => navigate(createPageUrl("RoleManagement"))}
+                    className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors">
+
                       Role Management
                     </button>
                     <button
-                      onClick={() => navigate(createPageUrl("Security"))}
-                      className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors"
-                    >
+                    onClick={() => navigate(createPageUrl("Security"))}
+                    className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors">
+
                       Security
                     </button>
                     <div className="border-t border-[#252525]" />
                     <button
-                      onClick={() => base44.auth.logout()}
-                      className="w-full text-left text-sm px-4 py-2.5 text-[#F87171] hover:bg-[#252525] transition-colors"
-                    >
+                    onClick={() => base44.auth.logout()}
+                    className="w-full text-left text-sm px-4 py-2.5 text-[#F87171] hover:bg-[#252525] transition-colors">
+
                       Logout
                     </button>
                   </div>
@@ -212,19 +212,19 @@ export default function Layout({ children, currentPageName }) {
 
               <div className="flex items-center gap-1">
                 <button className="p-1 text-[#6B6B6B] hover:text-white transition-colors" onClick={() => setSearchOpen(true)}>
-                  <Search size={14} />
+                  <Search size={14} className="text-slate-50 lucide lucide-search" />
                 </button>
                 <button
                 onClick={() => navigate(createPageUrl("MyIssues") + "?create=true")}
                 className="p-1 text-[#6B6B6B] hover:text-white transition-colors">
 
-                  <PenSquare size={14} />
+                  <PenSquare size={14} className="text-slate-50 lucide lucide-square-pen" />
                 </button>
                 <NotificationBell />
                 <Popover>
                   <PopoverTrigger asChild>
                     <button className="p-1 text-[#6B6B6B] hover:text-white transition-colors">
-                      <LayoutList size={14} />
+                      <LayoutList size={14} className="text-slate-50 lucide lucide-layout-list" />
                     </button>
                   </PopoverTrigger>
                   <PopoverContent className={`w-40 bg-[#1A1A1A] border-[#333] p-2 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
@@ -252,30 +252,30 @@ export default function Layout({ children, currentPageName }) {
 
         {/* Navigation */}
         <nav className="flex-1 py-2 overflow-y-auto">
-          {navSections.map((section) => (
-            <div key={section.label} className="mb-4">
+          {navSections.map((section) =>
+          <div key={section.label} className="mb-4">
               <div className="px-4 mb-1">
                 <span className="text-[10px] font-semibold text-[#444] uppercase tracking-wider">{section.label}</span>
               </div>
               <div className="px-2 space-y-0.5">
                 {section.items.map((item) => {
-                  const isActive = currentPageName === item.page;
-                  return (
-                    <Link
-                      key={item.page}
-                      to={createPageUrl(item.page)}
-                      className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors ${
-                        isActive ? "bg-[#1E1E1E] text-white" : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"
-                      }`}
-                    >
+                const isActive = currentPageName === item.page;
+                return (
+                  <Link
+                    key={item.page}
+                    to={createPageUrl(item.page)}
+                    className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors ${
+                    isActive ? "bg-[#1E1E1E] text-white" : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"}`
+                    }>
+
                       <item.icon size={15} className="flex-shrink-0" />
                       {item.name}
-                    </Link>
-                  );
-                })}
+                    </Link>);
+
+              })}
               </div>
             </div>
-          ))}
+          )}
         </nav>
 
         {isSidebarVertical &&
@@ -298,15 +298,15 @@ export default function Layout({ children, currentPageName }) {
                   <PopoverContent className={`w-48 bg-[#1A1A1A] border-[#333] p-0 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
                     <div className="space-y-1">
                       <button
-                        onClick={() => navigate(createPageUrl("AdminPortal"))}
-                        className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors"
-                      >
+                    onClick={() => navigate(createPageUrl("AdminPortal"))}
+                    className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors">
+
                         Admin Portal
                       </button>
                       <button
-                        onClick={() => navigate(createPageUrl("NotificationSettings"))}
-                        className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors"
-                      >
+                    onClick={() => navigate(createPageUrl("NotificationSettings"))}
+                    className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors">
+
                         Notification Settings
                       </button>
                     </div>

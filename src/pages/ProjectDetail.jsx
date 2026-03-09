@@ -133,25 +133,35 @@ export default function ProjectDetail() {
 
       {/* Content */}
       <div className="flex-1 flex overflow-hidden">
-        <div className={`${selectedIssue ? "w-[420px] flex-shrink-0" : "flex-1"} border-r border-[#1E1E1E] overflow-y-auto`}>
-          {issues.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-[#555]">
-              <p className="text-sm">No issues in this project</p>
-              <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
-                Create an issue
-              </button>
-            </div>
-          ) : (
-            issues.map(issue => (
-              <IssueRow
-                key={issue.id}
-                issue={issue}
-                projectPrefix={project.prefix}
-                onClick={setSelectedIssue}
-              />
-            ))
-          )}
-        </div>
+        {view === "kanban" ? (
+          <div className="flex-1 overflow-auto">
+            <ProjectKanban
+              issues={issues}
+              projectId={projectId}
+              onIssueClick={setSelectedIssue}
+            />
+          </div>
+        ) : (
+          <div className={`${selectedIssue ? "w-[420px] flex-shrink-0" : "flex-1"} border-r border-[#1E1E1E] overflow-y-auto`}>
+            {issues.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-[#555]">
+                <p className="text-sm">No issues in this project</p>
+                <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
+                  Create an issue
+                </button>
+              </div>
+            ) : (
+              issues.map(issue => (
+                <IssueRow
+                  key={issue.id}
+                  issue={issue}
+                  projectPrefix={project.prefix}
+                  onClick={setSelectedIssue}
+                />
+              ))
+            )}
+          </div>
+        )}
 
         {selectedIssue && (
           <div className="flex-1">

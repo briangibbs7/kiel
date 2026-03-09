@@ -156,7 +156,7 @@ export default function ProjectDetail() {
               onIssueClick={setSelectedIssue}
             />
           </div>
-        ) : (
+        ) : view === "list" ? (
           <div className={`${selectedIssue ? "w-[420px] flex-shrink-0" : "flex-1"} border-r border-[#1E1E1E] overflow-y-auto`}>
             {issues.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-[#555]">

@@ -18,7 +18,8 @@ import {
   Bell,
   Settings,
   BarChart3,
-  MessageCircle } from
+  MessageCircle,
+  LayoutGrid } from
 "lucide-react";
 import {
   Popover,

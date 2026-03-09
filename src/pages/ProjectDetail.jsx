@@ -108,6 +108,12 @@ export default function ProjectDetail() {
             >
               <LayoutGrid size={13} /> Kanban
             </button>
+            <button
+              onClick={() => setView("backlog")}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${view === "backlog" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+            >
+              <Layers size={13} /> Backlog
+            </button>
           </div>
           <button
             onClick={() => setShowBurndown(!showBurndown)}

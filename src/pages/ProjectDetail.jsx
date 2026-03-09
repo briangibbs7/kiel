@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Plus, MoreHorizontal } from "lucide-react";
+import { ArrowLeft, Plus, MoreHorizontal, BarChart2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { HealthBadge } from "../components/shared/StatusBadge";
 import IssueRow from "../components/issues/IssueRow";
 import IssueDetail from "../components/issues/IssueDetail";
 import CreateIssueModal from "../components/shared/CreateIssueModal";
+import SprintBurndownChart from "../components/projects/SprintBurndownChart";
 
 export default function ProjectDetail() {
   const params = new URLSearchParams(window.location.search);

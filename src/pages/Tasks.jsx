@@ -81,14 +81,20 @@ export default function Tasks() {
           <div className="flex items-center gap-2">
             <div className="flex bg-[#1A1A1A] border border-[#333] rounded-lg p-0.5">
               <button
-                onClick={() => setView("list")}
-                className={`px-3 py-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${view === "list" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+                onClick={() => {
+                  setView("list");
+                  setShowDependencyMap(false);
+                }}
+                className={`px-3 py-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${view === "list" && !showDependencyMap ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
               >
                 <List size={13} /> List
               </button>
               <button
-                onClick={() => setView("board")}
-                className={`px-3 py-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${view === "board" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+                onClick={() => {
+                  setView("board");
+                  setShowDependencyMap(false);
+                }}
+                className={`px-3 py-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${view === "board" && !showDependencyMap ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
               >
                 <Columns size={13} /> Board
               </button>

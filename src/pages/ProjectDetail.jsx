@@ -11,6 +11,7 @@ import CreateIssueModal from "../components/shared/CreateIssueModal";
 import SprintBurndownChart from "../components/projects/SprintBurndownChart";
 import ProjectKanban from "../components/projects/ProjectKanban";
 import ProjectBacklog from "../components/projects/ProjectBacklog";
+import GanttChart from "../components/gantt/GanttChart";
 
 export default function ProjectDetail() {
   const params = new URLSearchParams(window.location.search);
@@ -20,7 +21,7 @@ export default function ProjectDetail() {
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
   const [showBurndown, setShowBurndown] = useState(false);
-  const [view, setView] = useState("list"); // "list" | "kanban" | "backlog"
+  const [view, setView] = useState("list"); // "list" | "kanban" | "backlog" | "gantt"
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data: projects = [] } = useQuery({
@@ -67,6 +68,17 @@ export default function ProjectDetail() {
     await base44.entities.Issue.update(issueId, data);
     setSelectedIssue(prev => ({ ...prev, ...data }));
     queryClient.invalidateQueries({ queryKey: ["project-issues", projectId] });
+  };
+
+  const handleDateChange = async (itemId, dates) => {
+    const isTask = tasks.find(t => t.id === itemId);
+    if (isTask) {
+      await base44.entities.Task.update(itemId, dates);
+      queryClient.invalidateQueries({ queryKey: ["project-tasks", projectId] });
+    } else {
+      await base44.entities.Issue.update(itemId, dates);
+      queryClient.invalidateQueries({ queryKey: ["project-issues", projectId] });
+    }
   };
 
   const handleAddComment = async (content) => {
@@ -124,6 +136,12 @@ export default function ProjectDetail() {
             >
               <Layers size={13} /> Backlog
             </button>
+            <button
+              onClick={() => setView("gantt")}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${view === "gantt" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+            >
+              <BarChart2 size={13} /> Timeline
+            </button>
           </div>
           <button
             onClick={() => setShowBurndown(!showBurndown)}
@@ -172,7 +190,14 @@ export default function ProjectDetail() {
 
       {/* Content */}
       <div className="flex-1 flex overflow-hidden">
-        {view === "backlog" ? (
+        {view === "gantt" ? (
+          <div className="flex-1 overflow-auto p-5">
+            <GanttChart
+              items={[...filteredIssues, ...tasks]}
+              onDateChange={handleDateChange}
+            />
+          </div>
+        ) : view === "backlog" ? (
           <div className="flex-1 overflow-hidden">
             <ProjectBacklog
               projectId={projectId}

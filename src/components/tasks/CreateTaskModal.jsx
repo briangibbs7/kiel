@@ -38,8 +38,8 @@ export default function CreateTaskModal({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.story_id) {
-      alert("Please select a story");
+    if (!formData.epic_id) {
+      alert("Please select an epic");
       return;
     }
     onSubmit({

@@ -36,28 +36,28 @@ export default function Projects() {
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],
-    queryFn: () => base44.entities.Project.list("-created_date"),
+    queryFn: () => base44.entities.Project.list("-created_date")
   });
 
   const { data: issues = [] } = useQuery({
     queryKey: ["all-issues"],
-    queryFn: () => base44.entities.Issue.list("-created_date", 200),
+    queryFn: () => base44.entities.Issue.list("-created_date", 200)
   });
 
   const createMutation = useMutation({
     mutationFn: async (data) => {
       const project = await base44.entities.Project.create(data);
-      
+
       // Create default epics from template
       if (selectedTemplate?.default_epics) {
         for (const epicData of selectedTemplate.default_epics) {
           await base44.entities.Epic.create({
             ...epicData,
-            project_id: project.id,
+            project_id: project.id
           });
         }
       }
-      
+
       return project;
     },
     onSuccess: () => {
@@ -67,17 +67,17 @@ export default function Projects() {
       setShowTemplateSelect(false);
       setSelectedTemplate(null);
       setForm({ name: "", prefix: "", description: "", health: "on_track", target_date: "", start_date: "", icon: "📁", lead: "" });
-    },
+    }
   });
 
-  const filtered = projects.filter(p => {
+  const filtered = projects.filter((p) => {
     if (activeTab === "active") return p.status === "active";
     if (activeTab === "planned") return p.status === "planned";
     if (activeTab === "completed") return p.status === "completed";
     return true;
   });
 
-  const getIssueCount = (projectId) => issues.filter(i => i.project_id === projectId).length;
+  const getIssueCount = (projectId) => issues.filter((i) => i.project_id === projectId).length;
 
   const handleProjectClick = (project) => {
     navigate(createPageUrl("ProjectDetail") + `?id=${project.id}`);
@@ -88,41 +88,41 @@ export default function Projects() {
       <div className="px-5 py-2.5 border-b border-[#1E1E1E] flex items-center justify-between">
         <Tabs defaultValue="active" onValueChange={setActiveTab}>
           <TabsList className="bg-transparent h-8 p-0 gap-0">
-            {["all", "active", "planned", "completed"].map(tab => (
-              <TabsTrigger
-                key={tab}
-                value={tab}
-                className="data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none text-[#6B6B6B] text-xs px-3 h-8 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-white capitalize"
-              >
+            {["all", "active", "planned", "completed"].map((tab) =>
+            <TabsTrigger
+              key={tab}
+              value={tab}
+              className="data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none text-[#6B6B6B] text-xs px-3 h-8 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-white capitalize">
+
                 {tab}
               </TabsTrigger>
-            ))}
+            )}
           </TabsList>
         </Tabs>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setView(view === "list" ? "timeline" : "list")}
             className={`p-1 rounded transition-colors ${
-              view === "timeline" ? "text-white bg-[#252525]" : "text-[#6B6B6B] hover:text-white"
-            }`}
-            title={view === "list" ? "Switch to timeline" : "Switch to list"}
-          >
-            <BarChart3 size={16} />
+            view === "timeline" ? "text-white bg-[#252525]" : "text-[#6B6B6B] hover:text-white"}`
+            }
+            title={view === "list" ? "Switch to timeline" : "Switch to list"}>
+
+            <BarChart3 size={16} className="text-slate-50 lucide lucide-chart-column" />
           </button>
           <button onClick={() => setShowTemplateSelect(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
-            <Plus size={16} />
+            <Plus size={16} className="text-slate-50 lucide lucide-plus" />
           </button>
           <button className="text-[#555] hover:text-white transition-colors">
-            <Filter size={14} />
+            <Filter size={14} className="text-slate-50 lucide lucide-filter" />
           </button>
           <button className="text-[#555] hover:text-white transition-colors">
-            <Settings2 size={14} />
+            <Settings2 size={14} className="text-slate-50 lucide lucide-settings2" />
           </button>
         </div>
       </div>
 
-      {view === "list" ? (
-        <>
+      {view === "list" ?
+      <>
           {/* Table header */}
           <div className="flex items-center gap-4 px-4 py-2 border-b border-[#1E1E1E] text-[10px] text-[#555] uppercase tracking-wider font-semibold">
             <span className="flex-1">Name</span>
@@ -133,28 +133,28 @@ export default function Projects() {
           </div>
 
           <div className="flex-1 overflow-y-auto">
-            {filtered.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-[#555]">
+            {filtered.length === 0 ?
+          <div className="flex flex-col items-center justify-center h-full text-[#555]">
                 <p className="text-sm">No projects found</p>
                 <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
                   Create a project
                 </button>
-              </div>
-            ) : (
-              filtered.map(project => (
-                <ProjectRow
-                  key={project.id}
-                  project={project}
-                  issueCount={getIssueCount(project.id)}
-                  onClick={handleProjectClick}
-                />
-              ))
-            )}
+              </div> :
+
+          filtered.map((project) =>
+          <ProjectRow
+            key={project.id}
+            project={project}
+            issueCount={getIssueCount(project.id)}
+            onClick={handleProjectClick} />
+
+          )
+          }
           </div>
-        </>
-      ) : (
-        <ProjectTimeline projects={filtered} />
-      )}
+        </> :
+
+      <ProjectTimeline projects={filtered} />
+      }
 
       {/* Template Selection Modal */}
       <Dialog open={showTemplateSelect} onOpenChange={setShowTemplateSelect}>
@@ -173,8 +173,8 @@ export default function Projects() {
                     setShowTemplateSelect(false);
                     setShowCreate(true);
                   }}
-                  className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg hover:border-[#5E6AD2] transition-colors text-left"
-                >
+                  className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg hover:border-[#5E6AD2] transition-colors text-left">
+
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded bg-[#1E1E1E] flex items-center justify-center flex-shrink-0">
                       <IconComponent size={20} className="text-[#5E6AD2]" />
@@ -184,8 +184,8 @@ export default function Projects() {
                       <p className="text-xs text-[#999] mt-1">{template.default_epics.length} epics</p>
                     </div>
                   </div>
-                </button>
-              );
+                </button>);
+
             })}
           </div>
           <div className="flex justify-end gap-2 pt-2">
@@ -196,8 +196,8 @@ export default function Projects() {
                 setShowTemplateSelect(false);
                 setShowCreate(true);
               }}
-              className="text-[#6B6B6B] hover:text-white hover:bg-[#252525]"
-            >
+              className="text-[#6B6B6B] hover:text-white hover:bg-[#252525]">
+
               Skip & Create Blank
             </Button>
           </div>
@@ -209,24 +209,24 @@ export default function Projects() {
         <DialogContent className="bg-[#1A1A1A] border-[#333] text-[#E5E5E5] max-w-md">
           <DialogHeader>
             <div className="flex items-center gap-2">
-              {selectedTemplate && (
-                <button
-                  onClick={() => {
-                    setShowCreate(false);
-                    setSelectedTemplate(null);
-                    setShowTemplateSelect(true);
-                  }}
-                  className="text-[#6B6B6B] hover:text-white transition-colors"
-                >
+              {selectedTemplate &&
+              <button
+                onClick={() => {
+                  setShowCreate(false);
+                  setSelectedTemplate(null);
+                  setShowTemplateSelect(true);
+                }}
+                className="text-[#6B6B6B] hover:text-white transition-colors">
+
                   <ChevronLeft size={20} />
                 </button>
-              )}
+              }
               <DialogTitle className="text-[#E5E5E5]">
                 {selectedTemplate ? `New ${selectedTemplate.name} Project` : "New Project"}
               </DialogTitle>
             </div>
           </DialogHeader>
-          <form onSubmit={(e) => { e.preventDefault(); if (form.name && form.prefix) createMutation.mutate(form); }} className="space-y-4">
+          <form onSubmit={(e) => {e.preventDefault();if (form.name && form.prefix) createMutation.mutate(form);}} className="space-y-4">
             <div className="grid grid-cols-3 gap-3">
               <div className="col-span-2">
                 <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Name</Label>
@@ -268,6 +268,6 @@ export default function Projects() {
           </form>
         </DialogContent>
       </Dialog>
-    </div>
-  );
+    </div>);
+
 }

@@ -60,6 +60,18 @@ export default function Layout({ children, currentPageName }) {
     }).catch(() => {});
   }, []);
 
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+      if (e.key === "Escape") setSearchOpen(false);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
   const handlePositionChange = async (position) => {
     setSidebarPos(position);
     await base44.auth.updateMe({ sidebar_position: position });

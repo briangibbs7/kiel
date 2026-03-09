@@ -176,7 +176,7 @@ export default function ProjectDetail() {
               ))
             )}
           </div>
-        )}
+        ) : null}
 
         {selectedIssue && view === "list" && (
           <div className="flex-1">

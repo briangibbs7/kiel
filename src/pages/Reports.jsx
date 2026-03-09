@@ -117,6 +117,12 @@ export default function Reports() {
           <ProjectProgressChart issues={issues} projects={projects} />
         </div>
 
+        {/* Project Burndown Dashboard */}
+        <div>
+          <h2 className="text-lg font-semibold text-white mb-4">Project Progress & Burndown</h2>
+          <ProjectBurndownDashboard projects={projects} tasks={tasks} sprints={sprints} />
+        </div>
+
         {/* Project Summary */}
         <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-6">
           <h3 className="text-sm font-semibold text-white mb-4">

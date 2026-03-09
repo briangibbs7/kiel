@@ -42,7 +42,6 @@ const navSections = [
     label: "Work",
     items: [
       { name: "Tasks", icon: ListTodo, page: "Tasks" },
-      { name: "Kanban", icon: LayoutGrid, page: "KanbanBoard" },
       { name: "Backlog", icon: FileText, page: "Backlog" },
     ],
   },

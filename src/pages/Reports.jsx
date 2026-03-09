@@ -17,6 +17,16 @@ export default function Reports() {
     queryFn: () => base44.asServiceRole.entities.Project.list(),
   });
 
+  const { data: tasks = [] } = useQuery({
+    queryKey: ["all-tasks"],
+    queryFn: () => base44.asServiceRole.entities.Task.list("-updated_date", 500),
+  });
+
+  const { data: sprints = [] } = useQuery({
+    queryKey: ["all-sprints"],
+    queryFn: () => base44.asServiceRole.entities.Sprint.list(),
+  });
+
   const calculateMetrics = () => {
     const totalIssues = issues.length;
     const completedIssues = issues.filter((i) => i.status === "done").length;

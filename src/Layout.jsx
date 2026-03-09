@@ -36,6 +36,7 @@ const navItems = [
 { name: "Templates", icon: FileText, page: "ProjectTemplates" },
 { name: "Backlog", icon: FileText, page: "Backlog" },
 { name: "Tasks", icon: ListTodo, page: "Tasks" },
+{ name: "Kanban", icon: LayoutGrid, page: "KanbanBoard" },
 { name: "Messages", icon: MessageCircle, page: "DirectMessages" },
 { name: "Roadmap", icon: Rocket, page: "Roadmap" },
 { name: "Reports", icon: BarChart3, page: "Reports" },

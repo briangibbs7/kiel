@@ -9,6 +9,7 @@ import IssueRow from "../components/issues/IssueRow";
 import IssueDetail from "../components/issues/IssueDetail";
 import CreateIssueModal from "../components/shared/CreateIssueModal";
 import SprintBurndownChart from "../components/projects/SprintBurndownChart";
+import ProjectBurnupChart from "../components/projects/ProjectBurnupChart";
 import ProjectKanban from "../components/projects/ProjectKanban";
 import ProjectBacklog from "../components/projects/ProjectBacklog";
 import GanttChart from "../components/gantt/GanttChart";
@@ -161,7 +162,13 @@ export default function ProjectDetail() {
 
       {/* Burndown Chart */}
       {showBurndown && (
-        <div className="px-5 py-4 border-b border-[#1E1E1E]">
+        <div className="px-5 py-4 border-b border-[#1E1E1E] space-y-4">
+          <ProjectBurnupChart
+            tasks={tasks}
+            issues={issues}
+            targetDate={project?.target_date}
+            startDate={project?.start_date}
+          />
           <SprintBurndownChart tasks={tasks} sprintStart={sprintStart} sprintEnd={sprintEnd} />
         </div>
       )}

@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import ResolutionTimeChart from "@/components/reports/ResolutionTimeChart";
 import WorkloadChart from "@/components/reports/WorkloadChart";
 import ProjectProgressChart from "@/components/reports/ProjectProgressChart";
+import ProjectBurndownDashboard from "@/components/reports/ProjectBurndownDashboard";
 
 export default function Reports() {
   const { data: issues = [] } = useQuery({

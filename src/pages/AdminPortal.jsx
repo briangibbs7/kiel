@@ -12,7 +12,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Rocket, FolderPlus } from "lucide-react";
+import { Plus, Rocket, FolderPlus, Slack } from "lucide-react";
+import SlackIntegrationSettings from "@/components/admin/SlackIntegrationSettings";
 
 export default function AdminPortal() {
   const queryClient = useQueryClient();
@@ -85,6 +86,15 @@ export default function AdminPortal() {
       </div>
 
       <div className="p-6 max-w-7xl mx-auto">
+        {/* Slack Integration */}
+        <div className="mb-8 bg-[#111] border border-[#1E1E1E] rounded-lg p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Slack className="w-5 h-5 text-[#36C5F0]" />
+            <h2 className="text-lg font-semibold text-white">Slack Integration</h2>
+          </div>
+          <SlackIntegrationSettings />
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Create Epic Section */}
           <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-6">

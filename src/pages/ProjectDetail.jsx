@@ -108,6 +108,13 @@ export default function ProjectDetail() {
         </div>
       </div>
 
+      {/* Burndown Chart */}
+      {showBurndown && (
+        <div className="px-5 py-4 border-b border-[#1E1E1E]">
+          <SprintBurndownChart tasks={tasks} sprintStart={sprintStart} sprintEnd={sprintEnd} />
+        </div>
+      )}
+
       {/* Content */}
       <div className="flex-1 flex overflow-hidden">
         <div className={`${selectedIssue ? "w-[420px] flex-shrink-0" : "flex-1"} border-r border-[#1E1E1E] overflow-y-auto`}>

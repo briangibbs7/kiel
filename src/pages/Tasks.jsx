@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, ChevronDown, ChevronRight } from "lucide-react";
+import { Plus, ChevronDown, ChevronRight, List, Columns } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SubTaskManager from "@/components/tasks/SubTaskManager";
 import TaskDependencyManager from "@/components/tasks/TaskDependencyManager";
 import CommentThread from "@/components/comments/CommentThread";
 import CreateTaskModal from "@/components/tasks/CreateTaskModal";
+import TaskKanbanBoard from "@/components/tasks/TaskKanbanBoard";
 
 export default function Tasks() {
   const [showCreateTask, setShowCreateTask] = useState(false);

@@ -54,6 +54,7 @@ import Initiatives from './pages/Initiatives';
 import MyIssues from './pages/MyIssues';
 import NotificationSettings from './pages/NotificationSettings';
 import ProjectDetail from './pages/ProjectDetail';
+import ProjectTemplates from './pages/ProjectTemplates';
 import Projects from './pages/Projects';
 import Reports from './pages/Reports';
 import Roadmap from './pages/Roadmap';
@@ -61,7 +62,6 @@ import RoleManagement from './pages/RoleManagement';
 import Security from './pages/Security';
 import Tasks from './pages/Tasks';
 import UserManagement from './pages/UserManagement';
-import ProjectTemplates from './pages/ProjectTemplates';
 import __Layout from './Layout.jsx';
 
 
@@ -73,6 +73,7 @@ export const PAGES = {
     "MyIssues": MyIssues,
     "NotificationSettings": NotificationSettings,
     "ProjectDetail": ProjectDetail,
+    "ProjectTemplates": ProjectTemplates,
     "Projects": Projects,
     "Reports": Reports,
     "Roadmap": Roadmap,
@@ -80,7 +81,6 @@ export const PAGES = {
     "Security": Security,
     "Tasks": Tasks,
     "UserManagement": UserManagement,
-    "ProjectTemplates": ProjectTemplates,
 }
 
 export const pagesConfig = {

@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { X } from "lucide-react";
 
-const roleOptions = ["admin", "editor", "viewer", "user"];
+const roleOptions = ["site_admin", "organization_admin", "admin", "editor", "viewer", "user"];
 
 export default function GroupModal({
   open,

@@ -17,6 +17,7 @@ export default function ProjectDetail() {
   const queryClient = useQueryClient();
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
+  const [showBurndown, setShowBurndown] = useState(false);
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],

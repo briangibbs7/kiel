@@ -101,16 +101,15 @@ export default function Tasks() {
         </div>
       </div>
 
-      {view === "board" && (
+      {view === "board" ? (
         <div className="p-6 overflow-x-auto h-[calc(100%-80px)]">
           <TaskKanbanBoard
             tasks={tasks}
             onStatusChange={(taskId, status) => updateStatusMutation.mutate({ taskId, status })}
           />
         </div>
-      )}
-
-      {view === "list" && <div className="p-6 max-w-6xl mx-auto space-y-4">
+      ) : (
+        <div className="p-6 max-w-6xl mx-auto space-y-4">
         {stories.length === 0 ? (
           <div className="text-center py-12 text-[#555]">
             <p className="text-sm">No stories yet. Create a story first.</p>

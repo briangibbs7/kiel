@@ -232,6 +232,23 @@ export default function Projects() {
             </div>
           </DialogHeader>
           <form onSubmit={(e) => {e.preventDefault();if (form.name && form.prefix) createMutation.mutate(form);}} className="space-y-4">
+            {!selectedTemplate && (
+              <div>
+                <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Template</Label>
+                <Select value={selectedTemplate?.id || ""} onValueChange={(templateId) => setSelectedTemplate(BUILT_IN_TEMPLATES.find(t => t.id === templateId))}>
+                  <SelectTrigger className="bg-[#111] border-[#333] text-white">
+                    <SelectValue placeholder="Select a template" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                    {BUILT_IN_TEMPLATES.map((template) => (
+                      <SelectItem key={template.id} value={template.id} className="text-white focus:bg-[#252525] focus:text-white">
+                        {template.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div className="grid grid-cols-3 gap-3">
               <div className="col-span-2">
                 <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Name</Label>

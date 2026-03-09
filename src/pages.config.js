@@ -51,6 +51,7 @@ import Backlog from './pages/Backlog';
 import DirectMessages from './pages/DirectMessages';
 import Inbox from './pages/Inbox';
 import Initiatives from './pages/Initiatives';
+import KanbanBoard from './pages/KanbanBoard';
 import MyIssues from './pages/MyIssues';
 import NotificationSettings from './pages/NotificationSettings';
 import ProjectDetail from './pages/ProjectDetail';
@@ -62,7 +63,6 @@ import RoleManagement from './pages/RoleManagement';
 import Security from './pages/Security';
 import Tasks from './pages/Tasks';
 import UserManagement from './pages/UserManagement';
-import KanbanBoard from './pages/KanbanBoard';
 import __Layout from './Layout.jsx';
 
 
@@ -71,6 +71,7 @@ export const PAGES = {
     "DirectMessages": DirectMessages,
     "Inbox": Inbox,
     "Initiatives": Initiatives,
+    "KanbanBoard": KanbanBoard,
     "MyIssues": MyIssues,
     "NotificationSettings": NotificationSettings,
     "ProjectDetail": ProjectDetail,
@@ -82,7 +83,6 @@ export const PAGES = {
     "Security": Security,
     "Tasks": Tasks,
     "UserManagement": UserManagement,
-    "KanbanBoard": KanbanBoard,
 }
 
 export const pagesConfig = {

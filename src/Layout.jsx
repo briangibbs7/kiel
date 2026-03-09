@@ -29,18 +29,42 @@ import {
 import NotificationBell from "@/components/notifications/NotificationBell";
 import GlobalSearch from "@/components/search/GlobalSearch";
 
-const navItems = [
-{ name: "Inbox", icon: Inbox, page: "Inbox" },
-{ name: "My Issues", icon: ListTodo, page: "MyIssues" },
-{ name: "Projects", icon: Folder, page: "Projects" },
-{ name: "Templates", icon: FileText, page: "ProjectTemplates" },
-{ name: "Backlog", icon: FileText, page: "Backlog" },
-{ name: "Tasks", icon: ListTodo, page: "Tasks" },
-{ name: "Kanban", icon: LayoutGrid, page: "KanbanBoard" },
-{ name: "Messages", icon: MessageCircle, page: "DirectMessages" },
-{ name: "Roadmap", icon: Rocket, page: "Roadmap" },
-{ name: "Reports", icon: BarChart3, page: "Reports" },
-{ name: "Initiatives", icon: Rocket, page: "Initiatives" }];
+const navSections = [
+  {
+    label: "My Work",
+    items: [
+      { name: "Inbox", icon: Inbox, page: "Inbox" },
+      { name: "My Issues", icon: ListTodo, page: "MyIssues" },
+      { name: "Messages", icon: MessageCircle, page: "DirectMessages" },
+    ],
+  },
+  {
+    label: "Work",
+    items: [
+      { name: "Tasks", icon: ListTodo, page: "Tasks" },
+      { name: "Kanban", icon: LayoutGrid, page: "KanbanBoard" },
+      { name: "Backlog", icon: FileText, page: "Backlog" },
+    ],
+  },
+  {
+    label: "Planning",
+    items: [
+      { name: "Projects", icon: Folder, page: "Projects" },
+      { name: "Roadmap", icon: Rocket, page: "Roadmap" },
+      { name: "Initiatives", icon: Rocket, page: "Initiatives" },
+    ],
+  },
+  {
+    label: "Insights",
+    items: [
+      { name: "Reports", icon: BarChart3, page: "Reports" },
+      { name: "Templates", icon: FileText, page: "ProjectTemplates" },
+    ],
+  },
+];
+
+// Flat list for top bar
+const navItems = navSections.flatMap((s) => s.items);
 
 
 const sidebarPositions = [

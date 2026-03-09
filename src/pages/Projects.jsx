@@ -44,6 +44,11 @@ export default function Projects() {
     queryFn: () => base44.entities.Issue.list("-created_date", 200)
   });
 
+  const { data: users = [] } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => base44.entities.User.list()
+  });
+
   const createMutation = useMutation({
     mutationFn: async (data) => {
       const project = await base44.entities.Project.create(data);

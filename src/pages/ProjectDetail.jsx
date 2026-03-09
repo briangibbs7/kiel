@@ -140,7 +140,15 @@ export default function ProjectDetail() {
 
       {/* Content */}
       <div className="flex-1 flex overflow-hidden">
-        {view === "kanban" ? (
+        {view === "backlog" ? (
+          <div className="flex-1 overflow-hidden">
+            <ProjectBacklog
+              projectId={projectId}
+              issues={issues}
+              onIssueClick={(issue) => { setSelectedIssue(issue); setView("list"); }}
+            />
+          </div>
+        ) : view === "kanban" ? (
           <div className="flex-1 overflow-auto">
             <ProjectKanban
               issues={issues}

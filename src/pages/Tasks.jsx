@@ -207,6 +207,8 @@ export default function Tasks() {
                               storyId={story.id}
                             />
 
+                            <TaskAttachments task={task} />
+
                             <CommentThread taskId={task.id} />
                           </div>
                         )}

@@ -74,6 +74,15 @@ export default function ProjectDetail() {
     queryClient.invalidateQueries({ queryKey: ["comments", selectedIssue?.id] });
   };
 
+  const filteredIssues = useMemo(() => {
+    if (!searchQuery.trim()) return issues;
+    const query = searchQuery.toLowerCase();
+    return issues.filter(issue =>
+      issue.title?.toLowerCase().includes(query) ||
+      issue.description?.toLowerCase().includes(query)
+    );
+  }, [issues, searchQuery]);
+
   if (!project) {
     return (
       <div className="h-full flex items-center justify-center text-[#555]">

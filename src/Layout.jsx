@@ -173,7 +173,7 @@ export default function Layout({ children, currentPageName }) {
               </Popover>
 
               <div className="flex items-center gap-1">
-                <button className="p-1 text-[#6B6B6B] hover:text-white transition-colors">
+                <button className="p-1 text-[#6B6B6B] hover:text-white transition-colors" onClick={() => setSearchOpen(true)}>
                   <Search size={14} />
                 </button>
                 <button

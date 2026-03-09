@@ -75,13 +75,29 @@ export default function Tasks() {
               Manage tasks with subtasks and dependencies
             </p>
           </div>
-          <Button
-            onClick={() => setShowCreateTask(true)}
-            className="bg-[#5E6AD2] hover:bg-[#5E6AD2]/90"
-          >
-            <Plus size={16} className="mr-2" />
-            New Task
-          </Button>
+          <div className="flex items-center gap-2">
+            <div className="flex bg-[#1A1A1A] border border-[#333] rounded-lg p-0.5">
+              <button
+                onClick={() => setView("list")}
+                className={`px-3 py-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${view === "list" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+              >
+                <List size={13} /> List
+              </button>
+              <button
+                onClick={() => setView("board")}
+                className={`px-3 py-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${view === "board" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+              >
+                <Columns size={13} /> Board
+              </button>
+            </div>
+            <Button
+              onClick={() => setShowCreateTask(true)}
+              className="bg-[#5E6AD2] hover:bg-[#5E6AD2]/90"
+            >
+              <Plus size={16} className="mr-2" />
+              New Task
+            </Button>
+          </div>
         </div>
       </div>
 

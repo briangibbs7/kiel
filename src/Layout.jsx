@@ -50,6 +50,7 @@ const sidebarPositions = [
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [sidebarPos, setSidebarPos] = useState("left");
+  const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {

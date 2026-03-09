@@ -252,49 +252,30 @@ export default function Layout({ children, currentPageName }) {
 
         {/* Navigation */}
         <nav className="flex-1 py-2 overflow-y-auto">
-          <div className="px-2 space-y-0.5">
-            {navItems.map((item) => {
-              const isActive = currentPageName === item.page;
-              return (
-                <Link
-                  key={item.page}
-                  to={createPageUrl(item.page)}
-                  className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors ${
-                  isActive ?
-                  "bg-[#1E1E1E] text-white" :
-                  "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"}`
-                  }>
-
-                  <item.icon size={15} className="flex-shrink-0" />
-                  {item.name}
-                </Link>);
-
-            })}
-          </div>
-
-          <div className="px-4 mt-6 mb-2">
-            <span className="text-[10px] font-semibold text-[#444] uppercase tracking-wider">Workspace</span>
-          </div>
-          <div className="px-2 space-y-0.5">
-            <Link
-              to={createPageUrl("Initiatives")}
-              className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors ${
-              currentPageName === "Initiatives" ? "text-white" : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"}`
-              }>
-
-              <Rocket size={15} />
-              Initiatives
-            </Link>
-            <Link
-              to={createPageUrl("Projects")}
-              className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors ${
-              currentPageName === "Projects" ? "text-white" : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"}`
-              }>
-
-              <Folder size={15} />
-              Projects
-            </Link>
-          </div>
+          {navSections.map((section) => (
+            <div key={section.label} className="mb-4">
+              <div className="px-4 mb-1">
+                <span className="text-[10px] font-semibold text-[#444] uppercase tracking-wider">{section.label}</span>
+              </div>
+              <div className="px-2 space-y-0.5">
+                {section.items.map((item) => {
+                  const isActive = currentPageName === item.page;
+                  return (
+                    <Link
+                      key={item.page}
+                      to={createPageUrl(item.page)}
+                      className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors ${
+                        isActive ? "bg-[#1E1E1E] text-white" : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"
+                      }`}
+                    >
+                      <item.icon size={15} className="flex-shrink-0" />
+                      {item.name}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
         {isSidebarVertical &&

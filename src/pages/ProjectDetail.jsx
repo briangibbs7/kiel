@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Plus, MoreHorizontal, BarChart2, List, LayoutGrid, Layers } from "lucide-react";
+import { ArrowLeft, Plus, MoreHorizontal, BarChart2, List, LayoutGrid, Layers, Search, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { HealthBadge } from "../components/shared/StatusBadge";

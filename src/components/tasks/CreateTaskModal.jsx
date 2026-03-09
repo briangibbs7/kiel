@@ -246,11 +246,11 @@ export default function CreateTaskModal({
             </div>
           </div>
 
-          <DialogFooter>
-            <Button variant="outline" onClick={onClose}>
+          <DialogFooter className="gap-2 pt-4 border-t border-[#252525]">
+            <Button variant="outline" onClick={onClose} className="border-[#333] text-[#999] hover:bg-[#111]">
               Cancel
             </Button>
-            <Button type="submit" className="bg-[#5E6AD2]">
+            <Button type="submit" className="bg-[#5E6AD2] hover:bg-[#5E6AD2]/90 text-white">
               Create Task
             </Button>
           </DialogFooter>

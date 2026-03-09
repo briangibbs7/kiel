@@ -62,6 +62,7 @@ import RoleManagement from './pages/RoleManagement';
 import Security from './pages/Security';
 import Tasks from './pages/Tasks';
 import UserManagement from './pages/UserManagement';
+import KanbanBoard from './pages/KanbanBoard';
 import __Layout from './Layout.jsx';
 
 
@@ -81,6 +82,7 @@ export const PAGES = {
     "Security": Security,
     "Tasks": Tasks,
     "UserManagement": UserManagement,
+    "KanbanBoard": KanbanBoard,
 }
 
 export const pagesConfig = {

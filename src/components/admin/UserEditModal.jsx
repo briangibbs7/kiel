@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
 import {
   Dialog,
   DialogContent,
@@ -29,15 +31,64 @@ export default function UserEditModal({
     role: user?.role || "user",
     status: user?.status || "active",
   });
+  const [showReassignDialog, setShowReassignDialog] = useState(false);
+  const [reassignUser, setReassignUser] = useState(null);
+
+  const { data: allUsers = [] } = useQuery({
+    queryKey: ["all-users-reassign"],
+    queryFn: () => base44.entities.User.list(),
+    enabled: open,
+  });
+
+  const activeUsers = allUsers.filter(
+    (u) => u.id !== user?.id && u.status === "active"
+  );
 
   const handleUpdate = () => {
     onUpdate(form);
   };
 
   const handleDelete = () => {
-    if (window.confirm(`Remove ${user?.full_name || user?.email}?`)) {
-      onDelete();
+    if (activeUsers.length > 0) {
+      setShowReassignDialog(true);
+    } else {
+      if (window.confirm(`Remove ${user?.full_name || user?.email}?`)) {
+        onDelete();
+      }
     }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (reassignUser) {
+      // Reassign issues and tasks to new user
+      const [issues, tasks] = await Promise.all([
+        base44.asServiceRole.entities.Issue.filter({
+          assignee: user?.email,
+        }),
+        base44.asServiceRole.entities.Task.filter({
+          assignee: user?.email,
+        }),
+      ]);
+
+      // Update all issues
+      for (const issue of issues) {
+        await base44.asServiceRole.entities.Issue.update(issue.id, {
+          assignee: reassignUser.email,
+        });
+      }
+
+      // Update all tasks
+      for (const task of tasks) {
+        await base44.asServiceRole.entities.Task.update(task.id, {
+          assignee: reassignUser.email,
+        });
+      }
+    }
+
+    // Delete user
+    onDelete();
+    setShowReassignDialog(false);
+    setReassignUser(null);
   };
 
   return (
@@ -104,6 +155,7 @@ export default function UserEditModal({
                 </SelectTrigger>
                 <SelectContent className="bg-[#1A1A1A] border-[#333]">
                   <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="paused">Paused</SelectItem>
                   <SelectItem value="inactive">Inactive</SelectItem>
                 </SelectContent>
               </Select>
@@ -139,6 +191,54 @@ export default function UserEditModal({
           </div>
         </DialogFooter>
       </DialogContent>
+
+      {/* Reassign Issues Dialog */}
+      <Dialog open={showReassignDialog} onOpenChange={setShowReassignDialog}>
+        <DialogContent className="bg-[#111] border-[#333] max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white">
+              Reassign Issues & Tasks
+            </DialogTitle>
+          </DialogHeader>
+
+          <p className="text-sm text-[#999] mb-4">
+            This user has active issues and tasks. Select an active user to reassign them to:
+          </p>
+
+          <Select value={reassignUser?.id || ""} onValueChange={(userId) => {
+            const selected = activeUsers.find((u) => u.id === userId);
+            setReassignUser(selected);
+          }}>
+            <SelectTrigger className="bg-[#0D0D0D] border-[#333] text-white mb-4">
+              <SelectValue placeholder="Select user..." />
+            </SelectTrigger>
+            <SelectContent className="bg-[#1A1A1A] border-[#333]">
+              {activeUsers.map((u) => (
+                <SelectItem key={u.id} value={u.id}>
+                  {u.full_name || u.email}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setShowReassignDialog(false)}
+              className="border-[#333] text-[#CCC]"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmDelete}
+              disabled={!reassignUser || isLoading}
+              className="bg-[#F87171] hover:bg-[#E85C5C]"
+            >
+              {isLoading ? "Removing..." : "Delete & Reassign"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Dialog>
   );
 }

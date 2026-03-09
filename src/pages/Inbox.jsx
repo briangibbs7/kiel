@@ -159,23 +159,70 @@ export default function Inbox() {
       </div>
 
       {/* Detail panel */}
-      {selectedIssue &&
       <div className="flex-1">
+        {selectedNotification ? (
+          <div className="h-full flex flex-col">
+            <div className="px-5 py-3 border-b border-[#1E1E1E] flex items-center justify-between">
+              <span className="text-sm font-semibold text-white">Notification</span>
+              <button
+                onClick={() => {
+                  setSelectedNotification(null);
+                  if (!selectedNotification.is_read) {
+                    markNotificationAsReadMutation.mutate(selectedNotification.id);
+                  }
+                }}
+                className="text-[#555] hover:text-white transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-5">
+              <div className="space-y-4">
+                <div>
+                  <h2 className="text-lg font-semibold text-white mb-2">{selectedNotification.title}</h2>
+                  <p className="text-sm text-[#999]">{selectedNotification.message}</p>
+                </div>
+                {selectedNotification.type === 'deadline' && (
+                  <div className="bg-[#161616] border border-yellow-500/20 rounded-lg p-3">
+                    <p className="text-xs text-yellow-400">⏰ Deadline approaching - check project status</p>
+                  </div>
+                )}
+                {selectedNotification.type === 'status_change' && (
+                  <div className="bg-[#161616] border border-orange-500/20 rounded-lg p-3">
+                    <p className="text-xs text-orange-400">⚠️ Project health has changed - review and adjust plan</p>
+                  </div>
+                )}
+                {selectedNotification.action_url && (
+                  <button
+                    onClick={() => window.location.href = `/${selectedNotification.action_url}`}
+                    className="w-full mt-4 px-4 py-2 bg-[#5E6AD2] hover:bg-[#6B78E5] text-white rounded-lg text-sm font-medium transition-colors"
+                  >
+                    View Project
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : selectedIssue ? (
           <IssueDetail
-          issue={selectedIssue}
-          comments={comments}
-          onClose={() => setSelectedIssue(null)}
-          onStatusChange={handleStatusChange}
-          onAddComment={handleAddComment}
-          allIssues={issues}
-          onUpdateIssue={async (issueId, data) => {
-            await base44.entities.Issue.update(issueId, data);
-            setSelectedIssue((prev) => ({ ...prev, ...data }));
-            queryClient.invalidateQueries({ queryKey: ["inbox-issues"] });
-          }} />
+            issue={selectedIssue}
+            comments={comments}
+            onClose={() => setSelectedIssue(null)}
+            onStatusChange={handleStatusChange}
+            onAddComment={handleAddComment}
+            allIssues={issues}
+            onUpdateIssue={async (issueId, data) => {
+              await base44.entities.Issue.update(issueId, data);
+              setSelectedIssue((prev) => ({ ...prev, ...data }));
+              queryClient.invalidateQueries({ queryKey: ["inbox-issues"] });
+            }}
+          />
+        ) : (
+          <div className="h-full flex items-center justify-center text-[#555]">
+            <p className="text-sm">Select an issue or notification</p>
+          </div>
+        )}
+      </div>
+      </div>);
 
-        </div>
       }
-    </div>);
-
-}

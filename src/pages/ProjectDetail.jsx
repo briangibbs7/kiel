@@ -178,7 +178,7 @@ export default function ProjectDetail() {
           </div>
         )}
 
-        {selectedIssue && (
+        {selectedIssue && view === "list" && (
           <div className="flex-1">
             <IssueDetail
               issue={selectedIssue}

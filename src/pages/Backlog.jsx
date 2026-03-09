@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import EpicCard from "@/components/backlog/EpicCard";
-import TaskCard from "@/components/backlog/TaskCard";
+import TaskCard from "@/components/backlog/TaskCard.jsx";
 import CreateEpicModal from "@/components/backlog/CreateEpicModal";
 
 export default function Backlog() {

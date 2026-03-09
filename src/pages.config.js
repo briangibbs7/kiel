@@ -65,6 +65,7 @@ import Security from './pages/Security';
 import Tasks from './pages/Tasks';
 import UserManagement from './pages/UserManagement';
 import ProjectOverview from './pages/ProjectOverview';
+import Automations from './pages/Automations';
 import __Layout from './Layout.jsx';
 
 
@@ -87,6 +88,7 @@ export const PAGES = {
     "Tasks": Tasks,
     "UserManagement": UserManagement,
     "ProjectOverview": ProjectOverview,
+    "Automations": Automations,
 }
 
 export const pagesConfig = {

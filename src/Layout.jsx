@@ -220,7 +220,7 @@ export default function Layout({ children, currentPageName }) {
                   <Search size={14} className="text-slate-50 lucide lucide-search" />
                 </button>
                 <button
-                onClick={() => navigate(createPageUrl("MyIssues") + "?create=true")}
+                onClick={() => navigate(createPageUrl("Tasks") + "?create=true")}
                 className="p-1 text-[#6B6B6B] hover:text-white transition-colors">
 
                   <PenSquare size={14} className="text-slate-50 lucide lucide-square-pen" />

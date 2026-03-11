@@ -5,7 +5,6 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, L
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import EpicBurndownChart from "@/components/epics/EpicBurndownChart";
-import { base44 } from "@/api/base44Client";
 
 export default function EpicAnalyticsPage() {
   const [selectedEpicId, setSelectedEpicId] = useState("");

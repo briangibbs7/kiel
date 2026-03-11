@@ -57,6 +57,7 @@ export const BUILT_IN_TEMPLATES = [
       { title: "Client Onboarding", priority: "medium" },
       { title: "Revenue Tracking", priority: "high" },
     ],
+    allowed_entity_types: ["epic", "story", "task", "issue"],
   },
   {
     id: "hr",
@@ -70,6 +71,7 @@ export const BUILT_IN_TEMPLATES = [
       { title: "Compliance", priority: "high" },
       { title: "Employee Engagement", priority: "medium" },
     ],
+    allowed_entity_types: ["epic", "story", "task", "issue"],
   },
   {
     id: "business",
@@ -83,6 +85,7 @@ export const BUILT_IN_TEMPLATES = [
       { title: "Vendor Management", priority: "medium" },
       { title: "Growth Metrics", priority: "high" },
     ],
+    allowed_entity_types: ["epic", "story", "task", "issue"],
   },
   {
     id: "finance",
@@ -96,6 +99,7 @@ export const BUILT_IN_TEMPLATES = [
       { title: "Audit & Compliance", priority: "high" },
       { title: "Forecasting", priority: "medium" },
     ],
+    allowed_entity_types: ["epic", "story", "task", "issue"],
   },
   {
     id: "software",
@@ -109,6 +113,7 @@ export const BUILT_IN_TEMPLATES = [
       { title: "Integration & Testing", priority: "high" },
       { title: "Performance Optimization", priority: "medium" },
     ],
+    allowed_entity_types: ["epic", "story", "task", "issue"],
   },
   {
     id: "systems",
@@ -122,6 +127,7 @@ export const BUILT_IN_TEMPLATES = [
       { title: "Backup & Recovery", priority: "high" },
       { title: "Maintenance & Updates", priority: "medium" },
     ],
+    allowed_entity_types: ["epic", "story", "task", "issue"],
   },
   {
     id: "manufacturing",
@@ -135,6 +141,7 @@ export const BUILT_IN_TEMPLATES = [
       { title: "Production Planning", priority: "high" },
       { title: "Supply Chain", priority: "medium" },
     ],
+    allowed_entity_types: ["epic", "story", "task", "issue"],
   },
   {
     id: "facilities",
@@ -148,6 +155,7 @@ export const BUILT_IN_TEMPLATES = [
       { title: "Operations & Scheduling", priority: "high" },
       { title: "Vendor Management", priority: "medium" },
     ],
+    allowed_entity_types: ["epic", "story", "task", "issue"],
   },
 ];
 

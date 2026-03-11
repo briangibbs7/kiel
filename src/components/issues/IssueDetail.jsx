@@ -44,10 +44,8 @@ export default function IssueDetail({ issue, comments, onClose, onStatusChange, 
               onClick={async () => {
                 if (confirm('Are you sure you want to delete this issue?')) {
                   try {
-                    const response = await base44.functions.invoke('deleteIssue', { issueId: issue.id });
-                    if (response.data.success) {
-                      onDelete?.(issue.id);
-                    }
+                    await base44.entities.Issue.delete(issue.id);
+                    onDelete?.(issue.id);
                   } catch (error) {
                     alert('Failed to delete issue: ' + error.message);
                   }

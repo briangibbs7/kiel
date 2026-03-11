@@ -350,6 +350,7 @@ export default function ProjectDetail() {
         onClose={() => setShowCreate(false)}
         onSubmit={(data) => createMutation.mutate(data)}
         epics={epics}
+        users={users}
       />
     </div>
   );

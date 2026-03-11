@@ -21,10 +21,24 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 
-const boardTypes = ["kanban", "list", "timeline", "calendar"];
-const groupingOptions = ["status", "assignee", "priority", "label", "epic", "none"];
-const sortingOptions = ["priority", "due_date", "created", "updated", "title"];
-const fieldOptions = ["assignee", "due_date", "priority", "labels", "story_points"];
+const boardTypes = [
+  { id: "kanban", label: "Kanban", icon: "📋" },
+  { id: "list", label: "List", icon: "📝" },
+  { id: "timeline", label: "Timeline", icon: "📅" },
+  { id: "calendar", label: "Calendar", icon: "🗓️" },
+  { id: "table", label: "Table", icon: "📊" },
+];
+const groupingOptions = ["status", "assignee", "priority", "label", "epic", "sprint", "none"];
+const sortingOptions = ["priority", "due_date", "created", "updated", "title", "assignee"];
+const fieldOptions = [
+  { id: "assignee", label: "Assignee" },
+  { id: "due_date", label: "Due Date" },
+  { id: "priority", label: "Priority" },
+  { id: "labels", label: "Labels" },
+  { id: "story_points", label: "Story Points" },
+  { id: "status", label: "Status" },
+  { id: "sprint", label: "Sprint" },
+];
 
 export default function CustomProjectBoards() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);

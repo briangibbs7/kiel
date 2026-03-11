@@ -18,18 +18,21 @@ export default function ForYou() {
   });
 
   const { data: issues = [] } = useQuery({
-    queryKey: ['my-issues'],
-    queryFn: () => base44.entities.Issue.filter({ assignee: user?.email }, "-updated_date", 20)
+    queryKey: ['my-issues', user?.email],
+    queryFn: () => base44.entities.Issue.filter({ assignee: user?.email }, "-updated_date", 20),
+    enabled: !!user?.email
   });
 
   const { data: tasks = [] } = useQuery({
-    queryKey: ['my-tasks'],
-    queryFn: () => base44.entities.Task.filter({ assignee: user?.email }, "-updated_date", 20)
+    queryKey: ['my-tasks', user?.email],
+    queryFn: () => base44.entities.Task.filter({ assignee: user?.email }, "-updated_date", 20),
+    enabled: !!user?.email
   });
 
   const { data: customBoards = [] } = useQuery({
-    queryKey: ['my-boards'],
-    queryFn: () => base44.entities.CustomProjectBoard.filter({ created_by: user?.email }, "-updated_date", 10)
+    queryKey: ['my-boards', user?.email],
+    queryFn: () => base44.entities.CustomProjectBoard.filter({ created_by: user?.email }, "-updated_date", 10),
+    enabled: !!user?.email
   });
 
   const recentProjects = projects.slice(0, 5);

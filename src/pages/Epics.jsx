@@ -47,6 +47,11 @@ export default function EpicsPage() {
     queryFn: () => base44.entities.Issue.list(),
   });
 
+  const { data: tasks = [] } = useQuery({
+    queryKey: ["all-tasks"],
+    queryFn: () => base44.entities.Task.list(),
+  });
+
   const filteredEpics = useMemo(() => {
     return epics.filter((epic) => {
       const matchSearch = epic.title?.toLowerCase().includes(search.toLowerCase());
@@ -58,6 +63,15 @@ export default function EpicsPage() {
 
   const getEpicIssues = (epicId) => {
     return issues.filter((issue) => issue.epic_id === epicId);
+  };
+
+  const getEpicTasks = (epicId) => {
+    return tasks.filter((task) => task.epic_id === epicId);
+  };
+
+  const getEpicStoryPoints = (epicId) => {
+    const epicTasks = getEpicTasks(epicId);
+    return epicTasks.reduce((sum, task) => sum + (task.story_points || 0), 0);
   };
 
   const getProjectName = (projectId) => {
@@ -162,7 +176,11 @@ export default function EpicsPage() {
                 </div>
                 <div className="text-xs text-[#666]">
                   <p>{getProjectName(epic.project_id)}</p>
-                  <p className="mt-1">{getEpicIssues(epic.id).length} issues</p>
+                  <div className="mt-2 space-y-1">
+                    <p>{getEpicIssues(epic.id).length} issues</p>
+                    <p>{getEpicTasks(epic.id).length} tasks</p>
+                    <p>{getEpicStoryPoints(epic.id)} story points</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -184,7 +202,7 @@ export default function EpicsPage() {
                   <p className="text-sm text-[#999]">{getProjectName(epic.project_id)}</p>
                 </div>
                 <div className="text-right mr-4">
-                  <p className="text-sm text-[#666]">{getEpicIssues(epic.id).length} issues</p>
+                  <p className="text-sm text-[#666]">{getEpicIssues(epic.id).length} issues • {getEpicTasks(epic.id).length} tasks • {getEpicStoryPoints(epic.id)} pts</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#666]" />
               </div>
@@ -225,9 +243,24 @@ export default function EpicsPage() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-3 gap-4 p-3 bg-[#0D0D0D] border border-[#252525] rounded">
+                <div>
+                  <p className="text-xs text-[#666]">Issues</p>
+                  <p className="text-lg font-semibold text-white">{getEpicIssues(selectedEpic.id).length}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-[#666]">Tasks</p>
+                  <p className="text-lg font-semibold text-white">{getEpicTasks(selectedEpic.id).length}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-[#666]">Story Points</p>
+                  <p className="text-lg font-semibold text-white">{getEpicStoryPoints(selectedEpic.id)}</p>
+                </div>
+              </div>
+
               <div>
                 <h3 className="text-sm font-semibold text-[#CCC] mb-3">Linked Issues ({getEpicIssues(selectedEpic.id).length})</h3>
-                <div className="space-y-2 max-h-64 overflow-y-auto">
+                <div className="space-y-2 max-h-48 overflow-y-auto">
                   {getEpicIssues(selectedEpic.id).length === 0 ? (
                     <p className="text-sm text-[#666]">No issues linked to this epic</p>
                   ) : (
@@ -241,6 +274,32 @@ export default function EpicsPage() {
                           <Badge className={statusColors[issue.status] || statusColors.backlog} size="sm">
                             {issue.status}
                           </Badge>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold text-[#CCC] mb-3">Linked Tasks ({getEpicTasks(selectedEpic.id).length})</h3>
+                <div className="space-y-2 max-h-48 overflow-y-auto">
+                  {getEpicTasks(selectedEpic.id).length === 0 ? (
+                    <p className="text-sm text-[#666]">No tasks linked to this epic</p>
+                  ) : (
+                    getEpicTasks(selectedEpic.id).map((task) => (
+                      <div key={task.id} className="p-3 bg-[#0D0D0D] border border-[#252525] rounded">
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <p className="font-medium text-white text-sm">{task.title}</p>
+                            <p className="text-xs text-[#666] mt-1">{task.description}</p>
+                          </div>
+                          <div className="flex gap-2">
+                            {task.story_points && <Badge className="bg-[#5E6AD2] text-white text-xs">{task.story_points} pts</Badge>}
+                            <Badge className={statusColors[task.status] || statusColors.backlog} size="sm">
+                              {task.status}
+                            </Badge>
+                          </div>
                         </div>
                       </div>
                     ))

@@ -45,6 +45,11 @@ export default function ProjectDetail() {
     enabled: !!projectId,
   });
 
+  const { data: epics = [] } = useQuery({
+    queryKey: ["all-epics"],
+    queryFn: () => base44.entities.Epic.list(),
+  });
+
   // Derive sprint window: use project start_date + 14 days, or last 14 days as fallback
   const sprintStart = project?.start_date || new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
   const sprintEnd = project?.target_date || new Date().toISOString().split("T")[0];

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, ChevronDown, ChevronRight, List, Columns, Network } from "lucide-react";
+import { Plus, ChevronDown, ChevronRight, List, Columns, Network, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SubTaskManager from "@/components/tasks/SubTaskManager";
 import TaskDependencyManager from "@/components/tasks/TaskDependencyManager";
@@ -40,6 +40,11 @@ export default function Tasks() {
 
   const updateStatusMutation = useMutation({
     mutationFn: ({ taskId, status }) => base44.entities.Task.update(taskId, { status }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["all-tasks"] }),
+  });
+
+  const deleteTaskMutation = useMutation({
+    mutationFn: (taskId) => base44.entities.Task.delete(taskId),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["all-tasks"] }),
   });
 
@@ -153,17 +158,17 @@ export default function Tasks() {
 
                     return (
                       <div key={task.id} className="border border-[#1E1E1E] rounded-lg overflow-hidden bg-[#0D0D0D]">
-                        <button
-                          onClick={() => toggleTask(task.id)}
-                          className="w-full px-4 py-3 flex items-center gap-3 hover:bg-[#111] transition-colors group"
-                        >
-                          <div className="text-[#999]">
+                        <div className="w-full px-4 py-3 flex items-center gap-3 group">
+                          <button
+                            onClick={() => toggleTask(task.id)}
+                            className="text-[#999] hover:text-white transition-colors"
+                          >
                             {isExpanded ? (
                               <ChevronDown size={16} />
                             ) : (
                               <ChevronRight size={16} />
                             )}
-                          </div>
+                          </button>
 
                           <div className="flex-1 text-left min-w-0">
                             <h4 className="font-medium text-white truncate">
@@ -203,7 +208,19 @@ export default function Tasks() {
                               {task.assignee.split("@")[0]}
                             </span>
                           )}
-                        </button>
+
+                          <button
+                            onClick={() => {
+                              if (confirm('Are you sure you want to delete this task?')) {
+                                deleteTaskMutation.mutate(task.id);
+                              }
+                            }}
+                            className="text-[#6B6B6B] hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+                            title="Delete task"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
 
                         {isExpanded && (
                           <div className="border-t border-[#1E1E1E] bg-[#0D0D0D] p-4 space-y-6">

@@ -115,6 +115,12 @@ export default function Projects() {
 
             <BarChart3 size={16} className="text-slate-50 lucide lucide-chart-column" />
           </button>
+          <button 
+            onClick={() => navigate(createPageUrl("Tasks") + "?create=true")}
+            className="text-[#6B6B6B] hover:text-white transition-colors text-xs font-medium gap-1 flex items-center px-2">
+            <Plus size={16} className="text-slate-50 lucide lucide-plus" />
+            Task
+          </button>
           <button onClick={() => setShowTemplateSelect(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
             <Plus size={16} className="text-slate-50 lucide lucide-plus" />
           </button>

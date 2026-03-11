@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, Trash2, LayoutGrid } from "lucide-react";
+import { Plus, Edit, Trash2, LayoutGrid, Search, Filter, Copy, Star, Eye } from "lucide-react";
 import {
   Dialog,
   DialogContent,

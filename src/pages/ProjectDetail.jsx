@@ -170,7 +170,6 @@ export default function ProjectDetail() {
             <div className="space-y-4">
               <ProjectBurnupChart
                 tasks={tasks}
-                issues={issues}
                 targetDate={project?.target_date}
                 startDate={project?.start_date}
               />

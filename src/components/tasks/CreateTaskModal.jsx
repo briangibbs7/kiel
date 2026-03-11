@@ -181,15 +181,23 @@ export default function CreateTaskModal({
               <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
                 Assignee
               </label>
-              <Input
-                type="email"
-                placeholder="dev@example.com"
+              <Select
                 value={formData.assignee}
-                onChange={(e) =>
-                  setFormData({ ...formData, assignee: e.target.value })
+                onValueChange={(value) =>
+                  setFormData({ ...formData, assignee: value })
                 }
-                className="bg-[#111] border-[#333] text-white placeholder-[#555] focus:border-[#5E6AD2]"
-              />
+              >
+                <SelectTrigger className="bg-[#111] border-[#333] text-white hover:border-[#444] transition-colors">
+                  <SelectValue placeholder="Select user..." />
+                </SelectTrigger>
+                <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                  {users && users.map((user) => (
+                    <SelectItem key={user.id} value={user.email} className="text-white">
+                      {user.full_name || user.email}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div>

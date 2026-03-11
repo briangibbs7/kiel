@@ -10,7 +10,7 @@ import DependencyViewer from "../shared/DependencyViewer";
 import IssueAttachments from "./IssueAttachments";
 import CommentThread from "../comments/CommentThread";
 import GitHubPanel from "./GitHubPanel";
-import TimeTrackingPanel from "./TimeTrackingPanel";
+import TimeTrackingPanel from "@/components/issues/TimeTrackingPanel";
 
 export default function IssueDetail({ issue, comments, onClose, onStatusChange, onAddComment, allIssues = [], onUpdateIssue }) {
   const [commentText, setCommentText] = useState("");

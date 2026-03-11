@@ -35,9 +35,23 @@ export default function ForYou() {
     enabled: !!user?.email
   });
 
+  const { data: sprints = [] } = useQuery({
+    queryKey: ['all-sprints'],
+    queryFn: () => base44.entities.Sprint.list("-updated_date", 50)
+  });
+
   const recentProjects = projects.slice(0, 5);
   const watchedItems = [...issues.filter(i => i.status !== 'done'), ...tasks.filter(t => t.status !== 'done')].slice(0, 10);
   const recommendedProjects = projects.slice(0, 4);
+
+  // Calculate dashboard metrics
+  const assignedProjects = projects.length;
+  const assignedTasks = tasks.length;
+  const assignedIssues = issues.length;
+  
+  const currentSprint = sprints.find(s => s.status === 'active');
+  const currentSprintTasks = currentSprint ? tasks.filter(t => t.project_id === currentSprint.project_id) : [];
+  const totalStoryPoints = currentSprintTasks.reduce((sum, t) => sum + (t.story_points || 0), 0);
 
   return (
     <div className="h-full bg-[#0D0D0D] overflow-y-auto">

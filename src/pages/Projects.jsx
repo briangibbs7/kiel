@@ -186,7 +186,7 @@ export default function Projects() {
             {filtered.length === 0 ?
           <div className="flex flex-col items-center justify-center h-full text-[#555]">
                 <p className="text-sm">No projects found</p>
-                <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
+                <button onClick={() => setShowTemplateSelect(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
                   Create a project
                 </button>
               </div> :

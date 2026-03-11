@@ -14,18 +14,11 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Rocket, FolderPlus, Slack, Github, Settings2, RotateCcw, Trash2 } from "lucide-react";
 import SlackIntegrationSettings from "@/components/admin/SlackIntegrationSettings";
+import CreateEpicModal from "@/components/admin/CreateEpicModal";
 
 export default function AdminPortal() {
   const queryClient = useQueryClient();
-  const [epicOpen, setEpicOpen] = useState(false);
   const [projectOpen, setProjectOpen] = useState(false);
-  const [epicForm, setEpicForm] = useState({
-    title: "",
-    description: "",
-    project_id: "",
-    priority: "none",
-    status: "backlog",
-  });
   const [projectForm, setProjectForm] = useState({
     name: "",
     description: "",
@@ -69,15 +62,6 @@ export default function AdminPortal() {
     queryFn: () => base44.asServiceRole.entities.CustomField.list("-created_date", 100),
   });
 
-  const createEpicMutation = useMutation({
-    mutationFn: (data) => base44.asServiceRole.entities.Epic.create(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["all-epics"] });
-      setEpicForm({ title: "", description: "", project_id: "", priority: "none", status: "backlog" });
-      setEpicOpen(false);
-    },
-  });
-
   const createProjectMutation = useMutation({
     mutationFn: (data) => base44.asServiceRole.entities.Project.create(data),
     onSuccess: () => {
@@ -111,18 +95,6 @@ export default function AdminPortal() {
       queryClient.invalidateQueries({ queryKey: ["deleted-projects"] });
     }
   });
-
-  const handleCreateEpic = () => {
-    if (!epicForm.title.trim()) {
-      alert("Epic title is required");
-      return;
-    }
-    const data = { ...epicForm };
-    if (!data.project_id) {
-      delete data.project_id;
-    }
-    createEpicMutation.mutate(data);
-  };
 
   const handleCreateProject = () => {
     if (!projectForm.name.trim() || !projectForm.prefix.trim()) {

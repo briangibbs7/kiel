@@ -66,26 +66,43 @@ export default function ForYou() {
       {/* Dashboard Metrics */}
       <div className="px-6 py-6 border-b border-[#1E1E1E] bg-[#0D0D0D]">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg">
+          <button
+            onClick={() => navigate(createPageUrl("Projects"))}
+            className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg hover:border-[#333] hover:bg-[#161616] transition-colors cursor-pointer text-left"
+          >
             <p className="text-[11px] text-[#999] uppercase tracking-wider mb-2">Assigned Projects</p>
             <p className="text-2xl font-bold text-white">{assignedProjects}</p>
-          </div>
-          <div className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg">
+          </button>
+          <button
+            onClick={() => navigate(createPageUrl("Tasks"))}
+            className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg hover:border-[#333] hover:bg-[#161616] transition-colors cursor-pointer text-left"
+          >
             <p className="text-[11px] text-[#999] uppercase tracking-wider mb-2">Assigned Tasks</p>
             <p className="text-2xl font-bold text-[#60A5FA]">{assignedTasks}</p>
-          </div>
-          <div className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg">
+          </button>
+          <button
+            onClick={() => navigate(createPageUrl("MyIssues"))}
+            className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg hover:border-[#333] hover:bg-[#161616] transition-colors cursor-pointer text-left"
+          >
             <p className="text-[11px] text-[#999] uppercase tracking-wider mb-2">Assigned Issues</p>
             <p className="text-2xl font-bold text-[#FB923C]">{assignedIssues}</p>
-          </div>
-          <div className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg">
+          </button>
+          <button
+            onClick={() => currentSprint && navigate(createPageUrl("ProjectDetail") + `?id=${currentSprint.project_id}`)}
+            disabled={!currentSprint}
+            className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg hover:border-[#333] hover:bg-[#161616] transition-colors cursor-pointer text-left disabled:opacity-50 disabled:cursor-default"
+          >
             <p className="text-[11px] text-[#999] uppercase tracking-wider mb-2">Current Sprint</p>
             <p className="text-sm font-semibold text-white">{currentSprint?.name || 'None'}</p>
-          </div>
-          <div className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg">
+          </button>
+          <button
+            onClick={() => currentSprint && navigate(createPageUrl("ProjectDetail") + `?id=${currentSprint.project_id}`)}
+            disabled={!currentSprint}
+            className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg hover:border-[#333] hover:bg-[#161616] transition-colors cursor-pointer text-left disabled:opacity-50 disabled:cursor-default"
+          >
             <p className="text-[11px] text-[#999] uppercase tracking-wider mb-2">Story Points</p>
             <p className="text-2xl font-bold text-[#A78BFA]">{totalStoryPoints}</p>
-          </div>
+          </button>
         </div>
       </div>
 

@@ -33,12 +33,6 @@ export default function ProjectDetail() {
 
   const project = projects.find(p => p.id === projectId);
 
-  const { data: issues = [] } = useQuery({
-    queryKey: ["project-issues", projectId],
-    queryFn: () => base44.entities.Issue.filter({ project_id: projectId }, "-created_date"),
-    enabled: !!projectId,
-  });
-
   const { data: tasks = [] } = useQuery({
     queryKey: ["project-tasks", projectId],
     queryFn: () => base44.entities.Task.filter({ project_id: projectId }),

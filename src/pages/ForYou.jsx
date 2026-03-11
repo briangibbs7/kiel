@@ -61,6 +61,32 @@ export default function ForYou() {
         <p className="text-sm text-[#999] mt-1">Your personalized workspace dashboard</p>
       </div>
 
+      {/* Dashboard Metrics */}
+      <div className="px-6 py-6 border-b border-[#1E1E1E] bg-[#0D0D0D]">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg">
+            <p className="text-[11px] text-[#999] uppercase tracking-wider mb-2">Assigned Projects</p>
+            <p className="text-2xl font-bold text-white">{assignedProjects}</p>
+          </div>
+          <div className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg">
+            <p className="text-[11px] text-[#999] uppercase tracking-wider mb-2">Assigned Tasks</p>
+            <p className="text-2xl font-bold text-[#60A5FA]">{assignedTasks}</p>
+          </div>
+          <div className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg">
+            <p className="text-[11px] text-[#999] uppercase tracking-wider mb-2">Assigned Issues</p>
+            <p className="text-2xl font-bold text-[#FB923C]">{assignedIssues}</p>
+          </div>
+          <div className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg">
+            <p className="text-[11px] text-[#999] uppercase tracking-wider mb-2">Current Sprint</p>
+            <p className="text-sm font-semibold text-white">{currentSprint?.name || 'None'}</p>
+          </div>
+          <div className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg">
+            <p className="text-[11px] text-[#999] uppercase tracking-wider mb-2">Story Points</p>
+            <p className="text-2xl font-bold text-[#A78BFA]">{totalStoryPoints}</p>
+          </div>
+        </div>
+      </div>
+
       <div className="p-6 max-w-7xl mx-auto space-y-8">
         {/* Recommended Projects */}
         <section>

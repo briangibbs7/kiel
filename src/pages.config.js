@@ -73,6 +73,7 @@ import Security from './pages/Security';
 import Tasks from './pages/Tasks';
 import TimeTracking from './pages/TimeTracking';
 import UserManagement from './pages/UserManagement';
+import Epics from './pages/Epics';
 import __Layout from './Layout.jsx';
 
 
@@ -103,6 +104,7 @@ export const PAGES = {
     "Tasks": Tasks,
     "TimeTracking": TimeTracking,
     "UserManagement": UserManagement,
+    "Epics": Epics,
 }
 
 export const pagesConfig = {

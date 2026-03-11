@@ -51,7 +51,8 @@ const navSections = [
   items: [
   { name: "Projects", icon: Folder, page: "Projects" },
   { name: "Roadmap", icon: Rocket, page: "Roadmap" },
-  { name: "Initiatives", icon: Rocket, page: "Initiatives" }]
+  { name: "Initiatives", icon: Rocket, page: "Initiatives" },
+  { name: "Epics", icon: Rocket, page: "Epics" }]
 
 },
 {

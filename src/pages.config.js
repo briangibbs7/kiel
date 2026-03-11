@@ -55,6 +55,8 @@ import CustomFields from './pages/CustomFields';
 import CustomProjectBoards from './pages/CustomProjectBoards';
 import CustomReports from './pages/CustomReports';
 import DirectMessages from './pages/DirectMessages';
+import EpicAnalytics from './pages/EpicAnalytics';
+import Epics from './pages/Epics';
 import ForYou from './pages/ForYou';
 import GitHubIntegration from './pages/GitHubIntegration';
 import Inbox from './pages/Inbox';
@@ -71,11 +73,9 @@ import Roadmap from './pages/Roadmap';
 import RoleManagement from './pages/RoleManagement';
 import Security from './pages/Security';
 import Tasks from './pages/Tasks';
+import TeamDashboard from './pages/TeamDashboard';
 import TimeTracking from './pages/TimeTracking';
 import UserManagement from './pages/UserManagement';
-import Epics from './pages/Epics';
-import EpicAnalytics from './pages/EpicAnalytics';
-import TeamDashboard from './pages/TeamDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -88,6 +88,8 @@ export const PAGES = {
     "CustomProjectBoards": CustomProjectBoards,
     "CustomReports": CustomReports,
     "DirectMessages": DirectMessages,
+    "EpicAnalytics": EpicAnalytics,
+    "Epics": Epics,
     "ForYou": ForYou,
     "GitHubIntegration": GitHubIntegration,
     "Inbox": Inbox,
@@ -104,11 +106,9 @@ export const PAGES = {
     "RoleManagement": RoleManagement,
     "Security": Security,
     "Tasks": Tasks,
+    "TeamDashboard": TeamDashboard,
     "TimeTracking": TimeTracking,
     "UserManagement": UserManagement,
-    "Epics": Epics,
-    "EpicAnalytics": EpicAnalytics,
-    "TeamDashboard": TeamDashboard,
 }
 
 export const pagesConfig = {

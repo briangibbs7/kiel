@@ -13,6 +13,7 @@ import {
   PenSquare,
   Star,
   ChevronDown,
+  ChevronRight,
   LogOut,
   LayoutList,
   Bell,

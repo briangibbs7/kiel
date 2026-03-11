@@ -382,8 +382,8 @@ export default function CustomProjectBoards() {
                   </SelectTrigger>
                   <SelectContent className="bg-[#1A1A1A] border-[#333]">
                     {boardTypes.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                      <SelectItem key={type.id} value={type.id}>
+                        {type.icon} {type.label}
                       </SelectItem>
                     ))}
                   </SelectContent>

@@ -377,5 +377,6 @@ export default function Tasks() {
           users={users}
         />
       </div>
-  );
+    );
+  }
 }

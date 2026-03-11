@@ -85,46 +85,36 @@ export default function ProjectDetail() {
 
   const allAssignees = useMemo(() => {
     const assignees = new Map();
-    [...issues, ...tasks].forEach(item => {
-      if (item.assignee) {
-        if (!assignees.has(item.assignee)) {
-          assignees.set(item.assignee, {
-            email: item.assignee,
-            initial: item.assignee[0]?.toUpperCase() || "?"
+    tasks.forEach(task => {
+      if (task.assignee) {
+        if (!assignees.has(task.assignee)) {
+          assignees.set(task.assignee, {
+            email: task.assignee,
+            initial: task.assignee[0]?.toUpperCase() || "?"
           });
         }
       }
     });
     return Array.from(assignees.values());
-  }, [issues, tasks]);
-
-  const filteredIssues = useMemo(() => {
-    let filtered = issues;
-    
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(issue =>
-        issue.title?.toLowerCase().includes(query) ||
-        issue.description?.toLowerCase().includes(query)
-      );
-    }
-    
-    if (selectedAssignees.length > 0) {
-      filtered = filtered.filter(issue => selectedAssignees.includes(issue.assignee));
-    }
-    
-    return filtered;
-  }, [issues, searchQuery, selectedAssignees]);
+  }, [tasks]);
 
   const filteredTasks = useMemo(() => {
     let filtered = tasks;
+    
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(task =>
+        task.title?.toLowerCase().includes(query) ||
+        task.description?.toLowerCase().includes(query)
+      );
+    }
     
     if (selectedAssignees.length > 0) {
       filtered = filtered.filter(task => selectedAssignees.includes(task.assignee));
     }
     
     return filtered;
-  }, [tasks, selectedAssignees]);
+  }, [tasks, searchQuery, selectedAssignees]);
 
   if (!project) {
     return (

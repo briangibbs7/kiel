@@ -443,21 +443,21 @@ export default function CustomProjectBoards() {
               </label>
               <div className="space-y-2 bg-[#0D0D0D] border border-[#333] rounded p-3">
                 {fieldOptions.map((field) => (
-                  <div key={field} className="flex items-center gap-2">
+                  <div key={field.id} className="flex items-center gap-2">
                     <Checkbox
-                      checked={form.visible_fields.includes(field)}
+                      checked={form.visible_fields.includes(field.id)}
                       onCheckedChange={(checked) => {
                         setForm({
                           ...form,
                           visible_fields: checked
-                            ? [...form.visible_fields, field]
-                            : form.visible_fields.filter((f) => f !== field),
+                            ? [...form.visible_fields, field.id]
+                            : form.visible_fields.filter((f) => f !== field.id),
                         });
                       }}
                       className="border-[#555]"
                     />
                     <span className="text-sm text-[#CCC]">
-                      {field.replace(/_/g, " ").toUpperCase()}
+                      {field.label}
                     </span>
                   </div>
                 ))}

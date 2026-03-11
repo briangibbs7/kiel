@@ -272,7 +272,8 @@ export default function Tasks() {
         open={showCreateTask}
         onClose={() => setShowCreateTask(false)}
         onSubmit={(data) => createTaskMutation.mutate(data)}
-        stories={stories}
+        epics={epics}
+        users={users}
       />
     </div>
   );

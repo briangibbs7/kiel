@@ -89,7 +89,7 @@ export default function CreateTaskModal({
               </SelectTrigger>
               <SelectContent className="bg-[#1A1A1A] border-[#333]">
                 {epics && epics.map((epic) => (
-                  <SelectItem key={epic.id} value={epic.id}>
+                  <SelectItem key={epic.id} value={epic.id} className="text-white">
                     {epic.title}
                   </SelectItem>
                 ))}

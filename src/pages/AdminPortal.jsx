@@ -24,6 +24,7 @@ export default function AdminPortal() {
     description: "",
     project_id: "",
     priority: "none",
+    status: "backlog",
   });
   const [projectForm, setProjectForm] = useState({
     name: "",
@@ -72,7 +73,7 @@ export default function AdminPortal() {
     mutationFn: (data) => base44.asServiceRole.entities.Epic.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["all-epics"] });
-      setEpicForm({ title: "", description: "", project_id: "", priority: "none" });
+      setEpicForm({ title: "", description: "", project_id: "", priority: "none", status: "backlog" });
       setEpicOpen(false);
     },
   });
@@ -116,7 +117,11 @@ export default function AdminPortal() {
       alert("Epic title is required");
       return;
     }
-    createEpicMutation.mutate(epicForm);
+    const data = { ...epicForm };
+    if (!data.project_id) {
+      delete data.project_id;
+    }
+    createEpicMutation.mutate(data);
   };
 
   const handleCreateProject = () => {

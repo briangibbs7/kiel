@@ -60,7 +60,11 @@ const navSections = [
   { name: "Custom Reports", icon: BarChart3, page: "CustomReports" },
   { name: "Custom Boards", icon: LayoutGrid, page: "CustomProjectBoards" },
   { name: "Templates", icon: FileText, page: "ProjectTemplates" },
-  { name: "Automations", icon: Settings, page: "Automations" }]
+  { name: "Automations", icon: Settings, page: "Automations" },
+  { name: "Time Tracking", icon: BarChart3, page: "TimeTracking" },
+  { name: "Advanced Search", icon: FileText, page: "AdvancedSearch" },
+  { name: "Custom Fields", icon: Settings, page: "CustomFields" },
+  { name: "GitHub", icon: FileText, page: "GitHubIntegration" }]
 
 }];
 

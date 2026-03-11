@@ -28,9 +28,6 @@ function BacklogIssueRow({ issue, index, onIssueClick }) {
           }`}
         >
           <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: statusColors[issue.status] || "#555" }} />
-          {issue.issue_number && (
-            <span className="text-[10px] font-mono text-[#444] flex-shrink-0">#{issue.issue_number}</span>
-          )}
           <span className="flex-1 text-[#CCC] group-hover:text-white truncate text-sm">{issue.title}</span>
           {issue.priority && issue.priority !== "none" && (
             <span

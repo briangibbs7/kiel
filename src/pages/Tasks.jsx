@@ -367,16 +367,15 @@ export default function Tasks() {
             );
           })}
           </>
-          )}
-          </div>
+        )}
 
-          <CreateTaskModal
-        open={showCreateTask}
-        onClose={() => setShowCreateTask(false)}
-        onSubmit={(data) => createTaskMutation.mutate(data)}
-        epics={epics}
-        users={users}
-      />
-    </div>
+        <CreateTaskModal
+          open={showCreateTask}
+          onClose={() => setShowCreateTask(false)}
+          onSubmit={(data) => createTaskMutation.mutate(data)}
+          epics={epics}
+          users={users}
+        />
+      </div>
   );
 }

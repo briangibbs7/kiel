@@ -41,9 +41,16 @@ export default function IssueDetail({ issue, comments, onClose, onStatusChange, 
         <div className="flex items-center gap-2">
           {canDelete && (
             <button
-              onClick={() => {
+              onClick={async () => {
                 if (confirm('Are you sure you want to delete this issue?')) {
-                  onDelete?.(issue.id);
+                  try {
+                    const response = await base44.functions.invoke('deleteIssue', { issueId: issue.id });
+                    if (response.data.success) {
+                      onDelete?.(issue.id);
+                    }
+                  } catch (error) {
+                    alert('Failed to delete issue: ' + error.message);
+                  }
                 }
               }}
               className="text-[#6B6B6B] hover:text-red-400 transition-colors"

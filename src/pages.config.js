@@ -48,11 +48,15 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AdminPortal from './pages/AdminPortal';
+import AdvancedSearch from './pages/AdvancedSearch';
 import Automations from './pages/Automations';
 import Backlog from './pages/Backlog';
+import CustomFields from './pages/CustomFields';
 import CustomProjectBoards from './pages/CustomProjectBoards';
 import CustomReports from './pages/CustomReports';
 import DirectMessages from './pages/DirectMessages';
+import ForYou from './pages/ForYou';
+import GitHubIntegration from './pages/GitHubIntegration';
 import Inbox from './pages/Inbox';
 import Initiatives from './pages/Initiatives';
 import KanbanBoard from './pages/KanbanBoard';
@@ -67,22 +71,22 @@ import Roadmap from './pages/Roadmap';
 import RoleManagement from './pages/RoleManagement';
 import Security from './pages/Security';
 import Tasks from './pages/Tasks';
-import UserManagement from './pages/UserManagement';
 import TimeTracking from './pages/TimeTracking';
-import AdvancedSearch from './pages/AdvancedSearch';
-import CustomFields from './pages/CustomFields';
-import GitHubIntegration from './pages/GitHubIntegration';
-import ForYou from './pages/ForYou';
+import UserManagement from './pages/UserManagement';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AdminPortal": AdminPortal,
+    "AdvancedSearch": AdvancedSearch,
     "Automations": Automations,
     "Backlog": Backlog,
+    "CustomFields": CustomFields,
     "CustomProjectBoards": CustomProjectBoards,
     "CustomReports": CustomReports,
     "DirectMessages": DirectMessages,
+    "ForYou": ForYou,
+    "GitHubIntegration": GitHubIntegration,
     "Inbox": Inbox,
     "Initiatives": Initiatives,
     "KanbanBoard": KanbanBoard,
@@ -97,12 +101,8 @@ export const PAGES = {
     "RoleManagement": RoleManagement,
     "Security": Security,
     "Tasks": Tasks,
-    "UserManagement": UserManagement,
     "TimeTracking": TimeTracking,
-    "AdvancedSearch": AdvancedSearch,
-    "CustomFields": CustomFields,
-    "GitHubIntegration": GitHubIntegration,
-    "ForYou": ForYou,
+    "UserManagement": UserManagement,
 }
 
 export const pagesConfig = {

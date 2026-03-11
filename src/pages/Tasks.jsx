@@ -210,9 +210,16 @@ export default function Tasks() {
                           )}
 
                           <button
-                            onClick={() => {
+                            onClick={async () => {
                               if (confirm('Are you sure you want to delete this task?')) {
-                                deleteTaskMutation.mutate(task.id);
+                                try {
+                                  const response = await base44.functions.invoke('deleteTask', { taskId: task.id });
+                                  if (response.data.success) {
+                                    deleteTaskMutation.mutate(task.id);
+                                  }
+                                } catch (error) {
+                                  alert('Failed to delete task: ' + error.message);
+                                }
                               }
                             }}
                             className="text-[#6B6B6B] hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"

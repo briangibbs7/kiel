@@ -96,6 +96,16 @@ export default function CustomProjectBoards() {
     },
   });
 
+  const filteredBoards = useMemo(() => {
+    return boards.filter(board => {
+      const matchesSearch = board.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           board.description?.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesProject = !filterProject || board.project_id === filterProject;
+      const matchesFavorites = !showFavoritesOnly || favorites.has(board.id);
+      return matchesSearch && matchesProject && matchesFavorites;
+    });
+  }, [boards, searchQuery, filterProject, showFavoritesOnly, favorites]);
+
   const handleCreateClick = () => {
     setEditingBoard(null);
     setForm({
@@ -106,8 +116,19 @@ export default function CustomProjectBoards() {
       grouping: "status",
       sorting: "priority",
       visible_fields: [],
+      filters: {},
       is_default: false,
       is_shared: false,
+    });
+    setIsCreateOpen(true);
+  };
+
+  const handleDuplicateBoard = (board) => {
+    setEditingBoard(null);
+    setForm({
+      ...board,
+      name: `${board.name} (Copy)`,
+      is_default: false,
     });
     setIsCreateOpen(true);
   };

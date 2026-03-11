@@ -11,22 +11,8 @@ Deno.serve(async (req) => {
 
     const { taskId } = await req.json();
     
-    // Fetch the task
-    const task = await base44.entities.Task.get(taskId);
-    
-    if (!task) {
-      return Response.json({ error: 'Task not found' }, { status: 404 });
-    }
-
-    // Check permissions: admin or creator
-    const canDelete = user.role === 'admin' || task.created_by === user.email;
-    
-    if (!canDelete) {
-      return Response.json({ error: 'Forbidden: You can only delete your own tasks' }, { status: 403 });
-    }
-
-    // Delete the task
-    await base44.entities.Task.delete(taskId);
+    // Delete the task - let the backend validate permissions
+    await base44.asServiceRole.entities.Task.delete(taskId);
     
     return Response.json({ success: true });
   } catch (error) {

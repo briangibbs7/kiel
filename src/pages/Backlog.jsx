@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, ChevronDown, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import EpicCard from "@/components/backlog/EpicCard";
 import TaskCard from "@/components/backlog/TaskCard.jsx";
-import CreateEpicModal from "@/components/backlog/CreateEpicModal";
 
 export default function Backlog() {
-  const [showCreateEpic, setShowCreateEpic] = useState(false);
   const [expandedEpics, setExpandedEpics] = useState({});
-  const [selectedProject, setSelectedProject] = useState(null);
-
-  const queryClient = useQueryClient();
 
   const { data: projects = [] } = useQuery({
     queryKey: ["backlog-projects"],
@@ -20,39 +14,13 @@ export default function Backlog() {
   });
 
   const { data: epics = [] } = useQuery({
-    queryKey: ["epics", selectedProject],
-    queryFn: () =>
-      selectedProject
-        ? base44.entities.Epic.filter(
-            { project_id: selectedProject },
-            "-created_date"
-          )
-        : Promise.resolve([]),
-    enabled: !!selectedProject,
+    queryKey: ["all-epics"],
+    queryFn: () => base44.entities.Epic.list("-created_date"),
   });
 
   const { data: tasks = [] } = useQuery({
-    queryKey: ["tasks", selectedProject],
-    queryFn: () =>
-      selectedProject
-        ? base44.entities.Task.filter(
-            { project_id: selectedProject },
-            "-created_date"
-          )
-        : Promise.resolve([]),
-    enabled: !!selectedProject,
-  });
-
-  const createEpicMutation = useMutation({
-    mutationFn: (data) =>
-      base44.entities.Epic.create({
-        ...data,
-        project_id: selectedProject,
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["epics"] });
-      setShowCreateEpic(false);
-    },
+    queryKey: ["all-backlog-tasks"],
+    queryFn: () => base44.entities.Task.list("-created_date"),
   });
 
   const toggleEpic = (epicId) => {
@@ -70,29 +38,9 @@ export default function Backlog() {
    return tasks.filter((t) => !t.epic_id);
   };
 
-  if (!selectedProject) {
-    return (
-      <div className="h-full bg-[#0D0D0D] p-6 flex items-center justify-center">
-        <div className="max-w-md text-center">
-          <h2 className="text-lg font-semibold text-white mb-4">
-            Select a Project
-          </h2>
-          <div className="grid gap-2">
-            {projects.map((project) => (
-              <button
-                key={project.id}
-                onClick={() => setSelectedProject(project.id)}
-                className="p-4 bg-[#111] border border-[#1E1E1E] rounded hover:border-[#5E6AD2] transition-colors text-left"
-              >
-                <p className="font-medium text-white">{project.name}</p>
-                <p className="text-xs text-[#999] mt-1">{project.description}</p>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const getProjectName = (projectId) => {
+    return projects.find((p) => p.id === projectId)?.name || "Unknown Project";
+  };
 
   return (
     <div className="h-full bg-[#0D0D0D] overflow-y-auto">

@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
+import EpicBurndownChart from "@/components/epics/EpicBurndownChart";
+import { base44 } from "@/api/base44Client";
 
 export default function EpicAnalyticsPage() {
   const [selectedEpicId, setSelectedEpicId] = useState("");
@@ -23,7 +25,13 @@ export default function EpicAnalyticsPage() {
     queryFn: () => base44.entities.Issue.list(),
   });
 
+  const { data: projects = [] } = useQuery({
+    queryKey: ["all-projects"],
+    queryFn: () => base44.entities.Project.list(),
+  });
+
   const selectedEpic = epics.find((e) => e.id === selectedEpicId) || epics[0];
+  const epicProject = projects.find((p) => p.id === selectedEpic?.project_id);
 
   const epicData = useMemo(() => {
     if (!selectedEpic) return null;
@@ -31,6 +39,9 @@ export default function EpicAnalyticsPage() {
     const epicTasks = tasks.filter((t) => t.epic_id === selectedEpic.id);
     const epicIssues = issues.filter((i) => i.epic_id === selectedEpic.id);
     const storyPoints = epicTasks.reduce((sum, t) => sum + (t.story_points || 0), 0);
+
+    // Return both tasks and epicTasks for burndown chart
+    const returnData = { tasks: epicTasks };
 
     // Simulate time-series data based on created dates
     const timeSeriesData = [];
@@ -74,6 +85,7 @@ export default function EpicAnalyticsPage() {
       taskCount: epicTasks.length,
       storyPoints,
       timeSeriesData,
+      tasks: epicTasks,
     };
   }, [selectedEpic, tasks, issues]);
 
@@ -116,6 +128,18 @@ export default function EpicAnalyticsPage() {
           <p className="text-xl font-bold text-white">{epicData.storyPoints}</p>
         </Card>
       </div>
+
+      {/* Burndown Chart */}
+      {epicProject && (
+        <div className="mb-6">
+          <EpicBurndownChart 
+            epic={selectedEpic}
+            tasks={epicData.tasks}
+            projectStartDate={epicProject.start_date}
+            projectTargetDate={epicProject.target_date}
+          />
+        </div>
+      )}
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

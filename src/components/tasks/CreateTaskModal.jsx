@@ -75,7 +75,7 @@ export default function CreateTaskModal({
           {/* Epic Selection */}
           <div>
             <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
-              Epic *
+              Epic
             </label>
             <Select
               value={formData.epic_id}

@@ -36,6 +36,7 @@ export default function CreateTaskModal({
     estimated_hours: "",
     story_points: "",
     due_date: "",
+    sprint_id: null,
   });
 
   const handleSubmit = (e) => {

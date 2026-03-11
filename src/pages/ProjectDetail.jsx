@@ -7,7 +7,7 @@ import { createPageUrl } from "@/utils";
 import { HealthBadge } from "../components/shared/StatusBadge";
 import IssueRow from "../components/issues/IssueRow";
 import IssueDetail from "../components/issues/IssueDetail";
-import CreateIssueModal from "../components/shared/CreateIssueModal";
+import CreateTaskModal from "../components/tasks/CreateTaskModal";
 import SprintBurndownChart from "../components/projects/SprintBurndownChart";
 import ProjectBurnupChart from "../components/projects/ProjectBurnupChart";
 import ProjectKanban from "../components/projects/ProjectKanban";
@@ -55,12 +55,9 @@ export default function ProjectDetail() {
   });
 
   const createMutation = useMutation({
-    mutationFn: async (data) => {
-      const maxNum = issues.reduce((max, i) => Math.max(max, i.issue_number || 0), 0);
-      return base44.entities.Issue.create({ ...data, project_id: projectId, issue_number: maxNum + 1 });
-    },
+    mutationFn: (data) => base44.entities.Task.create({ ...data, project_id: projectId }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["project-issues", projectId] });
+      queryClient.invalidateQueries({ queryKey: ["project-tasks", projectId] });
       setShowCreate(false);
     },
   });
@@ -279,11 +276,10 @@ export default function ProjectDetail() {
         </div>
       )}
 
-      <CreateIssueModal
+      <CreateTaskModal
         open={showCreate}
         onClose={() => setShowCreate(false)}
         onSubmit={(data) => createMutation.mutate(data)}
-        projects={projects}
       />
     </div>
   );

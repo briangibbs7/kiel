@@ -267,30 +267,45 @@ export default function Layout({ children, currentPageName }) {
 
         {/* Navigation */}
         <nav className="flex-1 py-2 overflow-y-auto">
-          {navSections.map((section) =>
-          <div key={section.label} className="mb-4">
-              <div className="px-4 mb-1">
-                <span className="text-[10px] font-semibold text-[#444] uppercase tracking-wider">{section.label}</span>
+          {navSections.map((section) => {
+            const isCollapsible = ["Planning", "Insights", "Reports"].includes(section.label);
+            const isCollapsed = collapsedSections[section.label];
+            
+            return (
+              <div key={section.label} className="mb-4">
+                <div className="px-4 mb-1 flex items-center justify-between">
+                  <span className="text-[10px] font-semibold text-[#444] uppercase tracking-wider">{section.label}</span>
+                  {isCollapsible && (
+                    <button
+                      onClick={() => setCollapsedSections(prev => ({ ...prev, [section.label]: !prev[section.label] }))}
+                      className="text-[#666] hover:text-white transition-colors p-0.5"
+                    >
+                      {isCollapsed ? <ChevronRight size={14} /> : <ChevronDown size={14} />}
+                    </button>
+                  )}
+                </div>
+                {!isCollapsed && (
+                  <div className="px-2 space-y-0.5">
+                    {section.items.map((item) => {
+                      const isActive = currentPageName === item.page;
+                      return (
+                        <Link
+                          key={item.page}
+                          to={createPageUrl(item.page)}
+                          className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors ${
+                            isActive ? "bg-[#1E1E1E] text-white" : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"
+                          }`}
+                        >
+                          <item.icon size={15} className="flex-shrink-0" />
+                          {item.name}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-              <div className="px-2 space-y-0.5">
-                {section.items.map((item) => {
-                const isActive = currentPageName === item.page;
-                return (
-                  <Link
-                    key={item.page}
-                    to={createPageUrl(item.page)}
-                    className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors ${
-                    isActive ? "bg-[#1E1E1E] text-white" : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"}`
-                    }>
-
-                      <item.icon size={15} className="flex-shrink-0" />
-                      {item.name}
-                    </Link>);
-
-              })}
-              </div>
-            </div>
-          )}
+            );
+          })}
         </nav>
 
         {isSidebarVertical &&

@@ -33,6 +33,7 @@ const navSections = [
 {
   label: "My Work",
   items: [
+  { name: "Team Dashboard", icon: LayoutGrid, page: "TeamDashboard" },
   { name: "Inbox", icon: Inbox, page: "Inbox" },
   { name: "My Issues", icon: ListTodo, page: "MyIssues" },
   { name: "Messages", icon: MessageCircle, page: "DirectMessages" }]

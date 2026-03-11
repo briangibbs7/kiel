@@ -166,11 +166,11 @@ export default function CreateTaskModal({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-[#1A1A1A] border-[#333]">
-                  <SelectItem value="todo">To Do</SelectItem>
-                  <SelectItem value="in_progress">In Progress</SelectItem>
-                  <SelectItem value="in_review">In Review</SelectItem>
-                  <SelectItem value="done">Done</SelectItem>
-                </SelectContent>
+                   <SelectItem value="todo" className="text-white">To Do</SelectItem>
+                   <SelectItem value="in_progress" className="text-white">In Progress</SelectItem>
+                   <SelectItem value="in_review" className="text-white">In Review</SelectItem>
+                   <SelectItem value="done" className="text-white">Done</SelectItem>
+                 </SelectContent>
               </Select>
             </div>
           </div>

@@ -76,6 +76,14 @@ export default function MyIssues() {
     }
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: (issueId) => base44.entities.Issue.delete(issueId),
+    onSuccess: () => {
+      setSelectedIssue(null);
+      queryClient.invalidateQueries({ queryKey: ["my-issues"] });
+    }
+  });
+
   const getPrefix = (projectId) => {
     const p = projects.find((p) => p.id === projectId);
     return p?.prefix || "ISS";
@@ -222,6 +230,7 @@ export default function MyIssues() {
             onStatusChange={handleStatusChange}
             onAddComment={handleAddComment}
             allIssues={issues}
+            onDelete={(issueId) => deleteMutation.mutate(issueId)}
             onUpdateIssue={async (issueId, data) => {
               await base44.entities.Issue.update(issueId, data);
               setSelectedIssue((prev) => ({ ...prev, ...data }));

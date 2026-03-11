@@ -69,6 +69,10 @@ export default function Tasks() {
     return tasks.filter((t) => t.story_id === storyId);
   };
 
+  const getTasksWithoutStory = () => {
+    return tasks.filter((t) => !t.story_id);
+  };
+
   const statusColors = {
     todo: "#6B6B6B",
     in_progress: "#FACC15",

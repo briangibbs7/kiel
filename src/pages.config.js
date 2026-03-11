@@ -50,6 +50,8 @@
 import AdminPortal from './pages/AdminPortal';
 import Automations from './pages/Automations';
 import Backlog from './pages/Backlog';
+import CustomProjectBoards from './pages/CustomProjectBoards';
+import CustomReports from './pages/CustomReports';
 import DirectMessages from './pages/DirectMessages';
 import Inbox from './pages/Inbox';
 import Initiatives from './pages/Initiatives';
@@ -66,8 +68,9 @@ import RoleManagement from './pages/RoleManagement';
 import Security from './pages/Security';
 import Tasks from './pages/Tasks';
 import UserManagement from './pages/UserManagement';
-import CustomReports from './pages/CustomReports';
-import CustomProjectBoards from './pages/CustomProjectBoards';
+import TimeTracking from './pages/TimeTracking';
+import AdvancedSearch from './pages/AdvancedSearch';
+import CustomFields from './pages/CustomFields';
 import __Layout from './Layout.jsx';
 
 
@@ -75,6 +78,8 @@ export const PAGES = {
     "AdminPortal": AdminPortal,
     "Automations": Automations,
     "Backlog": Backlog,
+    "CustomProjectBoards": CustomProjectBoards,
+    "CustomReports": CustomReports,
     "DirectMessages": DirectMessages,
     "Inbox": Inbox,
     "Initiatives": Initiatives,
@@ -91,8 +96,9 @@ export const PAGES = {
     "Security": Security,
     "Tasks": Tasks,
     "UserManagement": UserManagement,
-    "CustomReports": CustomReports,
-    "CustomProjectBoards": CustomProjectBoards,
+    "TimeTracking": TimeTracking,
+    "AdvancedSearch": AdvancedSearch,
+    "CustomFields": CustomFields,
 }
 
 export const pagesConfig = {

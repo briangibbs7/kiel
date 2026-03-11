@@ -8,7 +8,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Plus, Filter, Settings2, BarChart3, ChevronLeft } from "lucide-react";
+import { Plus, Filter, Settings2, BarChart3, ChevronLeft, MoreHorizontal, Trash2 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import ProjectRow from "../components/projects/ProjectRow";
 import ProjectTimeline from "../components/projects/ProjectTimeline";
 import { HealthBadge } from "../components/shared/StatusBadge";
@@ -24,8 +39,14 @@ export default function Projects() {
   const [showTemplateSelect, setShowTemplateSelect] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [form, setForm] = useState({ name: "", prefix: "", description: "", health: "on_track", target_date: "", start_date: "", icon: "📁", lead: "" });
+  const [projectToDelete, setProjectToDelete] = useState(null);
+  const [user, setUser] = useState(null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => {});
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -75,7 +96,21 @@ export default function Projects() {
     }
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: (projectId) => 
+      base44.entities.Project.update(projectId, { 
+        deleted_at: new Date().toISOString() 
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      setProjectToDelete(null);
+    }
+  });
+
+  const canDeleteProject = user?.role === "admin";
+
   const filtered = projects.filter((p) => {
+    if (p.deleted_at) return false;
     if (activeTab === "active") return p.status === "active";
     if (activeTab === "planned") return p.status === "planned";
     if (activeTab === "completed") return p.status === "completed";
@@ -124,6 +159,24 @@ export default function Projects() {
           <button onClick={() => setShowTemplateSelect(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
             <Plus size={16} className="text-slate-50 lucide lucide-plus" />
           </button>
+          {canDeleteProject && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="text-[#555] hover:text-white transition-colors">
+                  <MoreHorizontal size={16} className="text-slate-50 lucide lucide-more-horizontal" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-[#1A1A1A] border-[#333]">
+                <DropdownMenuItem 
+                  className="text-[#F87171] focus:text-[#F87171] focus:bg-[#252525]"
+                  onClick={() => navigate(createPageUrl("AdminPortal") + "#deleted-projects")}
+                >
+                  <Trash2 size={14} className="mr-2" />
+                  Restore Deleted
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
           <button className="text-[#555] hover:text-white transition-colors">
             <Filter size={14} className="text-slate-50 lucide lucide-filter" />
           </button>
@@ -154,13 +207,24 @@ export default function Projects() {
               </div> :
 
           filtered.map((project) =>
-          <ProjectRow
-            key={project.id}
-            project={project}
-            issueCount={getIssueCount(project.id)}
-            completedIssueCount={getCompletedIssueCount(project.id)}
-            onClick={handleProjectClick} />
-
+          <div key={project.id} className="flex items-center">
+            <ProjectRow
+              project={project}
+              issueCount={getIssueCount(project.id)}
+              completedIssueCount={getCompletedIssueCount(project.id)}
+              onClick={handleProjectClick} />
+            {canDeleteProject && (
+              <div className="w-12 flex justify-center pr-2">
+                <button
+                  onClick={() => setProjectToDelete(project)}
+                  className="text-[#555] hover:text-[#F87171] transition-colors p-1"
+                  title="Delete project"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            )}
+          </div>
           )
           }
           </div>
@@ -216,6 +280,30 @@ export default function Projects() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Project Confirmation */}
+      <AlertDialog open={!!projectToDelete} onOpenChange={(open) => !open && setProjectToDelete(null)}>
+        <AlertDialogContent className="bg-[#1A1A1A] border-[#333] text-[#E5E5E5]">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white">Delete Project?</AlertDialogTitle>
+            <AlertDialogDescription className="text-[#999]">
+              "{projectToDelete?.name}" will be moved to trash. You can restore it from the Admin Portal within 30 days.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex gap-2 pt-2">
+            <AlertDialogCancel className="border-[#333] text-[#CCC] hover:bg-[#252525]">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-[#F87171] hover:bg-[#FF7A7A] text-white"
+              onClick={() => projectToDelete && deleteMutation.mutate(projectToDelete.id)}
+              disabled={deleteMutation.isPending}
+            >
+              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Create Project Modal */}
       <Dialog open={showCreate} onOpenChange={setShowCreate}>

@@ -38,7 +38,7 @@ export default function Projects() {
   const [showCreate, setShowCreate] = useState(false);
   const [showTemplateSelect, setShowTemplateSelect] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const [form, setForm] = useState({ name: "", prefix: "", description: "", health: "on_track", target_date: "", start_date: "", icon: "📁", lead: "" });
+  const [form, setForm] = useState({ name: "", prefix: "", description: "", health: "planning", target_date: "", start_date: "", icon: "📁", lead: "" });
   const [projectToDelete, setProjectToDelete] = useState(null);
   const [user, setUser] = useState(null);
   const queryClient = useQueryClient();
@@ -77,7 +77,7 @@ export default function Projects() {
       setShowCreate(false);
       setShowTemplateSelect(false);
       setSelectedTemplate(null);
-      setForm({ name: "", prefix: "", description: "", health: "on_track", target_date: "", start_date: "", icon: "📁", lead: "" });
+      setForm({ name: "", prefix: "", description: "", health: "planning", target_date: "", start_date: "", icon: "📁", lead: "" });
     }
   });
 
@@ -368,9 +368,9 @@ export default function Projects() {
                      <SelectValue />
                    </SelectTrigger>
                    <SelectContent className="bg-[#1A1A1A] border-[#333]">
-                     <SelectItem value="on_track" className="text-white focus:bg-[#252525] focus:text-white">On track</SelectItem>
-                     <SelectItem value="at_risk" className="text-white focus:bg-[#252525] focus:text-white">At risk</SelectItem>
-                     <SelectItem value="off_track" className="text-white focus:bg-[#252525] focus:text-white">Off track</SelectItem>
+                     <SelectItem value="planning" className="text-white focus:bg-[#252525] focus:text-white">Planning</SelectItem>
+                     <SelectItem value="pending" className="text-white focus:bg-[#252525] focus:text-white">Pending</SelectItem>
+                     <SelectItem value="blocked" className="text-white focus:bg-[#252525] focus:text-white">Blocked</SelectItem>
                    </SelectContent>
                  </Select>
                </div>

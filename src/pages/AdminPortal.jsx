@@ -30,6 +30,7 @@ export default function AdminPortal() {
     description: "",
     prefix: "",
     status: "active",
+    health: "planning",
     icon: "📋",
     color: "#5E6AD2",
   });
@@ -80,7 +81,7 @@ export default function AdminPortal() {
     mutationFn: (data) => base44.asServiceRole.entities.Project.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["all-projects"] });
-      setProjectForm({ name: "", description: "", prefix: "", status: "active", icon: "📋", color: "#5E6AD2" });
+      setProjectForm({ name: "", description: "", prefix: "", status: "active", health: "planning", icon: "📋", color: "#5E6AD2" });
       setProjectOpen(false);
     },
   });
@@ -392,19 +393,34 @@ export default function AdminPortal() {
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <label className="text-sm text-[#CCC] block mb-2">Status</label>
-                    <Select value={projectForm.status} onValueChange={(value) => setProjectForm({ ...projectForm, status: value })}>
-                      <SelectTrigger className="bg-[#0D0D0D] border-[#333] text-white">
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#1A1A1A] border-[#333]">
-                        <SelectItem value="planned">Planned</SelectItem>
-                        <SelectItem value="active">Active</SelectItem>
-                        <SelectItem value="paused">Paused</SelectItem>
-                        <SelectItem value="completed">Completed</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-sm text-[#CCC] block mb-2">Status</label>
+                      <Select value={projectForm.status} onValueChange={(value) => setProjectForm({ ...projectForm, status: value })}>
+                        <SelectTrigger className="bg-[#0D0D0D] border-[#333] text-white">
+                          <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                          <SelectItem value="planned">Planned</SelectItem>
+                          <SelectItem value="active">Active</SelectItem>
+                          <SelectItem value="paused">Paused</SelectItem>
+                          <SelectItem value="completed">Completed</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-sm text-[#CCC] block mb-2">Health</label>
+                      <Select value={projectForm.health} onValueChange={(value) => setProjectForm({ ...projectForm, health: value })}>
+                        <SelectTrigger className="bg-[#0D0D0D] border-[#333] text-white">
+                          <SelectValue placeholder="Select health" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                          <SelectItem value="planning">Planning</SelectItem>
+                          <SelectItem value="pending">Pending</SelectItem>
+                          <SelectItem value="blocked">Blocked</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                   <div className="flex gap-2 pt-4">
                     <Button

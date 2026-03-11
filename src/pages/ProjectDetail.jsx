@@ -54,9 +54,9 @@ export default function ProjectDetail() {
   const sprintEnd = project?.target_date || new Date().toISOString().split("T")[0];
 
   const { data: comments = [] } = useQuery({
-    queryKey: ["comments", selectedIssue?.id],
-    queryFn: () => base44.entities.Comment.filter({ issue_id: selectedIssue.id }),
-    enabled: !!selectedIssue?.id,
+    queryKey: ["comments", selectedTask?.id],
+    queryFn: () => base44.entities.Comment.filter({ task_id: selectedTask.id }),
+    enabled: !!selectedTask?.id,
   });
 
   const createMutation = useMutation({
@@ -67,26 +67,20 @@ export default function ProjectDetail() {
     },
   });
 
-  const handleStatusChange = async (issueId, data) => {
-    await base44.entities.Issue.update(issueId, data);
-    setSelectedIssue(prev => ({ ...prev, ...data }));
-    queryClient.invalidateQueries({ queryKey: ["project-issues", projectId] });
+  const handleStatusChange = async (taskId, data) => {
+    await base44.entities.Task.update(taskId, data);
+    setSelectedTask(prev => ({ ...prev, ...data }));
+    queryClient.invalidateQueries({ queryKey: ["project-tasks", projectId] });
   };
 
-  const handleDateChange = async (itemId, dates) => {
-    const isTask = tasks.find(t => t.id === itemId);
-    if (isTask) {
-      await base44.entities.Task.update(itemId, dates);
-      queryClient.invalidateQueries({ queryKey: ["project-tasks", projectId] });
-    } else {
-      await base44.entities.Issue.update(itemId, dates);
-      queryClient.invalidateQueries({ queryKey: ["project-issues", projectId] });
-    }
+  const handleDateChange = async (taskId, dates) => {
+    await base44.entities.Task.update(taskId, dates);
+    queryClient.invalidateQueries({ queryKey: ["project-tasks", projectId] });
   };
 
   const handleAddComment = async (content) => {
-    await base44.entities.Comment.create({ issue_id: selectedIssue.id, content, author: "You" });
-    queryClient.invalidateQueries({ queryKey: ["comments", selectedIssue?.id] });
+    await base44.entities.Comment.create({ task_id: selectedTask.id, content, author: "You" });
+    queryClient.invalidateQueries({ queryKey: ["comments", selectedTask?.id] });
   };
 
   const allAssignees = useMemo(() => {

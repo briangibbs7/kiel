@@ -129,6 +129,18 @@ export default function AdminPortal() {
           <SlackIntegrationSettings />
         </div>
 
+        {/* GitHub Configuration */}
+        <div className="mb-8 bg-[#111] border border-[#1E1E1E] rounded-lg p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Github className="w-5 h-5 text-[#E5E5E5]" />
+            <h2 className="text-lg font-semibold text-white">GitHub Integration</h2>
+          </div>
+          <p className="text-sm text-[#999] mb-4">Sync pull requests and manage GitHub links from issues</p>
+          <Button className="bg-[#4ADE80] hover:bg-[#5BE890] text-black font-medium">
+            Configure GitHub
+          </Button>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Create Epic Section */}
           <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-6">
@@ -354,6 +366,122 @@ export default function AdminPortal() {
                   ))
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Custom Fields Section */}
+        <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Settings2 className="w-5 h-5 text-[#F97316]" />
+            <h2 className="text-lg font-semibold text-white">Custom Fields</h2>
+          </div>
+          <p className="text-sm text-[#999] mb-4">Add custom fields to issues, tasks, and epics</p>
+
+          <Dialog open={customFieldOpen} onOpenChange={setCustomFieldOpen}>
+            <DialogTrigger asChild>
+              <Button className="w-full bg-[#F97316] hover:bg-[#FB923C] text-white">
+                <Plus className="w-4 h-4 mr-2" />
+                New Custom Field
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-[#1A1A1A] border-[#333] max-w-md">
+              <DialogHeader>
+                <DialogTitle className="text-white">Create Custom Field</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm text-[#CCC] block mb-2">Field Name *</label>
+                  <Input
+                    placeholder="e.g., Component, Environment"
+                    value={customFieldForm.name}
+                    onChange={(e) => setCustomFieldForm({ ...customFieldForm, name: e.target.value })}
+                    className="bg-[#0D0D0D] border-[#333] text-white placeholder-[#666]"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-[#CCC] block mb-2">Field Type *</label>
+                  <Select value={customFieldForm.field_type} onValueChange={(value) => setCustomFieldForm({ ...customFieldForm, field_type: value })}>
+                    <SelectTrigger className="bg-[#0D0D0D] border-[#333] text-white">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                      <SelectItem value="text">Text</SelectItem>
+                      <SelectItem value="number">Number</SelectItem>
+                      <SelectItem value="select">Select</SelectItem>
+                      <SelectItem value="multiselect">Multi-select</SelectItem>
+                      <SelectItem value="date">Date</SelectItem>
+                      <SelectItem value="checkbox">Checkbox</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-sm text-[#CCC] block mb-2">Entity Type *</label>
+                  <Select value={customFieldForm.entity_type} onValueChange={(value) => setCustomFieldForm({ ...customFieldForm, entity_type: value })}>
+                    <SelectTrigger className="bg-[#0D0D0D] border-[#333] text-white">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                      <SelectItem value="issue">Issue</SelectItem>
+                      <SelectItem value="task">Task</SelectItem>
+                      <SelectItem value="epic">Epic</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                {(customFieldForm.field_type === "select" || customFieldForm.field_type === "multiselect") && (
+                  <div>
+                    <label className="text-sm text-[#CCC] block mb-2">Options (comma-separated)</label>
+                    <Input
+                      placeholder="Option 1, Option 2, Option 3"
+                      value={customFieldForm.options}
+                      onChange={(e) => setCustomFieldForm({ ...customFieldForm, options: e.target.value })}
+                      className="bg-[#0D0D0D] border-[#333] text-white placeholder-[#666]"
+                    />
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="required"
+                    checked={customFieldForm.is_required}
+                    onChange={(e) => setCustomFieldForm({ ...customFieldForm, is_required: e.target.checked })}
+                    className="rounded"
+                  />
+                  <label htmlFor="required" className="text-sm text-[#CCC]">Make this field required</label>
+                </div>
+                <div className="flex gap-2 pt-4">
+                  <Button
+                    variant="outline"
+                    className="flex-1 border-[#333] text-[#CCC]"
+                    onClick={() => setCustomFieldOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className="flex-1 bg-[#F97316] hover:bg-[#FB923C]"
+                    onClick={handleCreateCustomField}
+                    disabled={createCustomFieldMutation.isPending}
+                  >
+                    {createCustomFieldMutation.isPending ? "Creating..." : "Create Field"}
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          <div className="mt-6">
+            <h3 className="text-sm font-medium text-[#CCC] mb-3">Existing Fields</h3>
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {customFields.length === 0 ? (
+                <p className="text-xs text-[#555]">No custom fields yet</p>
+              ) : (
+                customFields.slice(0, 5).map((field) => (
+                  <div key={field.id} className="p-2 bg-[#0D0D0D] border border-[#252525] rounded text-sm">
+                    <div className="text-[#CCC] font-medium">{field.name}</div>
+                    <div className="text-xs text-[#666]">{field.field_type} • {field.entity_type}</div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

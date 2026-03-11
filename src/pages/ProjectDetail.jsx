@@ -5,8 +5,8 @@ import { ArrowLeft, Plus, MoreHorizontal, BarChart2, List, LayoutGrid, Layers, S
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { HealthBadge } from "../components/shared/StatusBadge";
-import IssueRow from "../components/issues/IssueRow";
-import IssueDetail from "../components/issues/IssueDetail";
+import TaskRow from "../components/tasks/TaskRow";
+import TaskDetail from "../components/tasks/TaskDetail";
 import CreateTaskModal from "../components/tasks/CreateTaskModal";
 import SprintBurndownChart from "../components/projects/SprintBurndownChart";
 import ProjectBurnupChart from "../components/projects/ProjectBurnupChart";

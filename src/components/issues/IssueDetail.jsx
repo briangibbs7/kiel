@@ -9,6 +9,8 @@ import DependencyManager from "../shared/DependencyManager";
 import DependencyViewer from "../shared/DependencyViewer";
 import IssueAttachments from "./IssueAttachments";
 import CommentThread from "../comments/CommentThread";
+import GitHubPanel from "./GitHubPanel";
+import TimeTrackingPanel from "./TimeTrackingPanel";
 
 export default function IssueDetail({ issue, comments, onClose, onStatusChange, onAddComment, allIssues = [], onUpdateIssue }) {
   const [commentText, setCommentText] = useState("");
@@ -124,6 +126,16 @@ export default function IssueDetail({ issue, comments, onClose, onStatusChange, 
         {/* Attachments */}
         <div className="pt-4 border-t border-[#252525]">
           <IssueAttachments issue={issue} />
+        </div>
+
+        {/* Time Tracking */}
+        <div className="pt-4 border-t border-[#252525]">
+          <TimeTrackingPanel issueId={issue.id} />
+        </div>
+
+        {/* GitHub Integration */}
+        <div className="pt-4 border-t border-[#252525]">
+          <GitHubPanel issueId={issue.id} />
         </div>
 
         {/* Comments */}

@@ -144,11 +144,11 @@ export default function CreateTaskModal({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-[#1A1A1A] border-[#333]">
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="urgent">Urgent</SelectItem>
-                </SelectContent>
+                   <SelectItem value="low" className="text-white">Low</SelectItem>
+                   <SelectItem value="medium" className="text-white">Medium</SelectItem>
+                   <SelectItem value="high" className="text-white">High</SelectItem>
+                   <SelectItem value="urgent" className="text-white">Urgent</SelectItem>
+                 </SelectContent>
               </Select>
             </div>
 

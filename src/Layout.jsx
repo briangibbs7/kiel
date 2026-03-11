@@ -61,6 +61,7 @@ const navSections = [
   { name: "Reports", icon: BarChart3, page: "Reports" },
   { name: "Custom Reports", icon: BarChart3, page: "CustomReports" },
   { name: "Custom Boards", icon: LayoutGrid, page: "CustomProjectBoards" },
+  { name: "Epic Analytics", icon: BarChart3, page: "EpicAnalytics" },
   { name: "Templates", icon: FileText, page: "ProjectTemplates" },
   { name: "Automations", icon: Settings, page: "Automations" },
   { name: "Time Tracking", icon: BarChart3, page: "TimeTracking" },

@@ -292,6 +292,7 @@ export default function AdminPortal() {
                   </div>
                   <div className="flex gap-2 pt-4">
                     <Button
+                      type="button"
                       variant="outline"
                       className="flex-1 border-[#333] text-[#CCC]"
                       onClick={() => setEpicOpen(false)}
@@ -299,8 +300,12 @@ export default function AdminPortal() {
                       Cancel
                     </Button>
                     <Button
+                      type="button"
                       className="flex-1 bg-[#5E6AD2] hover:bg-[#6E7AE2]"
-                      onClick={handleCreateEpic}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleCreateEpic();
+                      }}
                       disabled={createEpicMutation.isPending}
                     >
                       {createEpicMutation.isPending ? "Creating..." : "Create Epic"}

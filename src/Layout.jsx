@@ -91,6 +91,7 @@ export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [sidebarPos, setSidebarPos] = useState("left");
   const [searchOpen, setSearchOpen] = useState(false);
+  const [collapsedSections, setCollapsedSections] = useState({ Planning: true, Insights: true, Reports: true });
   const navigate = useNavigate();
 
   useEffect(() => {

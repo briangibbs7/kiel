@@ -71,24 +71,9 @@ export default function Projects() {
   });
 
   const createMutation = useMutation({
-    mutationFn: async (data) => {
-      const project = await base44.entities.Project.create(data);
-
-      // Create default epics from template
-      if (selectedTemplate?.default_epics) {
-        for (const epicData of selectedTemplate.default_epics) {
-          await base44.entities.Epic.create({
-            ...epicData,
-            project_id: project.id
-          });
-        }
-      }
-
-      return project;
-    },
+    mutationFn: (data) => base44.entities.Project.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
-      queryClient.invalidateQueries({ queryKey: ["epics"] });
       setShowCreate(false);
       setShowTemplateSelect(false);
       setSelectedTemplate(null);

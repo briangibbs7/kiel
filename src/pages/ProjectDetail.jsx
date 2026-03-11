@@ -258,7 +258,7 @@ export default function ProjectDetail() {
             {view === "gantt" ? (
               <div className="flex-1 overflow-auto p-5">
                 <GanttChart
-                  items={[...filteredIssues, ...tasks]}
+                  items={filteredTasks}
                   onDateChange={handleDateChange}
                 />
               </div>
@@ -266,22 +266,21 @@ export default function ProjectDetail() {
               <div className="flex-1 overflow-hidden">
                 <ProjectBacklog
                   projectId={projectId}
-                  issues={filteredIssues}
                   tasks={filteredTasks}
-                  onIssueClick={(issue) => { setSelectedIssue(issue); setView("list"); }}
+                  onTaskClick={(task) => { setSelectedTask(task); setView("list"); }}
                 />
               </div>
             ) : view === "kanban" ? (
               <div className="flex-1 overflow-auto">
                 <ProjectKanban
-                  issues={filteredIssues}
+                  tasks={filteredTasks}
                   projectId={projectId}
-                  onIssueClick={setSelectedIssue}
+                  onTaskClick={setSelectedTask}
                 />
               </div>
             ) : view === "list" ? (
-              <div className={`${selectedIssue ? "w-[420px] flex-shrink-0" : "flex-1"} border-r border-[#1E1E1E] overflow-y-auto`}>
-                {filteredIssues.length === 0 ? (
+              <div className={`${selectedTask ? "w-[420px] flex-shrink-0" : "flex-1"} border-r border-[#1E1E1E] overflow-y-auto`}>
+                {filteredTasks.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-[#555]">
                     <p className="text-sm">{searchQuery ? "No tasks match your search" : "No tasks in this project"}</p>
                     <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
@@ -289,31 +288,31 @@ export default function ProjectDetail() {
                     </button>
                   </div>
                 ) : (
-                  filteredIssues.map(issue => (
-                    <IssueRow
-                      key={issue.id}
-                      issue={issue}
+                  filteredTasks.map(task => (
+                    <TaskRow
+                      key={task.id}
+                      task={task}
                       projectPrefix={project.prefix}
-                      onClick={setSelectedIssue}
+                      onClick={setSelectedTask}
                     />
                   ))
                 )}
               </div>
             ) : null}
 
-            {selectedIssue && view === "list" && (
+            {selectedTask && view === "list" && (
               <div className="flex-1">
-                <IssueDetail
-                  issue={selectedIssue}
+                <TaskDetail
+                  task={selectedTask}
                   comments={comments}
-                  onClose={() => setSelectedIssue(null)}
+                  onClose={() => setSelectedTask(null)}
                   onStatusChange={handleStatusChange}
                   onAddComment={handleAddComment}
-                  allIssues={issues}
-                  onUpdateIssue={async (issueId, data) => {
-                    await base44.entities.Issue.update(issueId, data);
-                    setSelectedIssue(prev => ({ ...prev, ...data }));
-                    queryClient.invalidateQueries({ queryKey: ["project-issues", projectId] });
+                  allTasks={tasks}
+                  onUpdateTask={async (taskId, data) => {
+                    await base44.entities.Task.update(taskId, data);
+                    setSelectedTask(prev => ({ ...prev, ...data }));
+                    queryClient.invalidateQueries({ queryKey: ["project-tasks", projectId] });
                   }}
                 />
               </div>

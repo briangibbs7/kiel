@@ -485,6 +485,18 @@ export default function CustomProjectBoards() {
               />
               <span className="text-sm text-[#CCC]">Share with team</span>
             </div>
+
+            <div className="border-t border-[#333] pt-4">
+              <label className="text-xs font-medium text-[#999] block mb-2">
+                Quick Filters (Optional)
+              </label>
+              <div className="space-y-2 text-xs text-[#666]">
+                <p>Filter by status, priority, assignee, or custom criteria to pre-filter board items.</p>
+                <div className="bg-[#0D0D0D] border border-[#333] rounded p-2 text-[#555]">
+                  Filters can be configured in board settings after creation.
+                </div>
+              </div>
+            </div>
           </div>
 
           <DialogFooter>

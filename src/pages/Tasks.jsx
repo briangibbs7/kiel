@@ -365,10 +365,9 @@ export default function Tasks() {
                 </div>
               </div>
             );
-          })
-          )}
+          })}
           </>
-          )}
+        )}
 
       <CreateTaskModal
         open={showCreateTask}

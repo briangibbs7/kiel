@@ -344,6 +344,7 @@ export default function ProjectDetail() {
         open={showCreate}
         onClose={() => setShowCreate(false)}
         onSubmit={(data) => createMutation.mutate(data)}
+        epics={epics}
       />
     </div>
   );

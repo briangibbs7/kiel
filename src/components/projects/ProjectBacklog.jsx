@@ -276,12 +276,12 @@ export default function ProjectBacklog({ projectId, issues, tasks, onIssueClick,
           <SprintSection
             key={sprint.id}
             sprint={sprint}
-            issues={getSprintIssues(sprint.id)}
+            issues={getSprintItems(sprint.id)}
             isExpanded={expanded[sprint.id] !== false}
             onToggle={() => toggleExpanded(sprint.id)}
             onStart={() => handleStartSprint(sprint)}
             onComplete={() => handleCompleteSprint(sprint)}
-            onIssueClick={onIssueClick}
+            onIssueClick={onIssueClick || onTaskClick}
           />
         ))}
 

@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Rocket, FolderPlus, Slack } from "lucide-react";
+import { Plus, Rocket, FolderPlus, Slack, Github, Settings2 } from "lucide-react";
 import SlackIntegrationSettings from "@/components/admin/SlackIntegrationSettings";
 
 export default function AdminPortal() {
@@ -33,6 +33,14 @@ export default function AdminPortal() {
     icon: "📋",
     color: "#5E6AD2",
   });
+  const [customFieldOpen, setCustomFieldOpen] = useState(false);
+  const [customFieldForm, setCustomFieldForm] = useState({
+    name: "",
+    field_type: "text",
+    entity_type: "issue",
+    options: "",
+    is_required: false,
+  });
 
   const { data: projects = [] } = useQuery({
     queryKey: ["all-projects"],
@@ -42,6 +50,11 @@ export default function AdminPortal() {
   const { data: epics = [] } = useQuery({
     queryKey: ["all-epics"],
     queryFn: () => base44.asServiceRole.entities.Epic.list("-created_date", 100),
+  });
+
+  const { data: customFields = [] } = useQuery({
+    queryKey: ["all-custom-fields"],
+    queryFn: () => base44.asServiceRole.entities.CustomField.list("-created_date", 100),
   });
 
   const createEpicMutation = useMutation({
@@ -62,6 +75,15 @@ export default function AdminPortal() {
     },
   });
 
+  const createCustomFieldMutation = useMutation({
+    mutationFn: (data) => base44.asServiceRole.entities.CustomField.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["all-custom-fields"] });
+      setCustomFieldForm({ name: "", field_type: "text", entity_type: "issue", options: "", is_required: false });
+      setCustomFieldOpen(false);
+    },
+  });
+
   const handleCreateEpic = () => {
     if (!epicForm.title.trim()) {
       alert("Epic title is required");
@@ -76,6 +98,18 @@ export default function AdminPortal() {
       return;
     }
     createProjectMutation.mutate(projectForm);
+  };
+
+  const handleCreateCustomField = () => {
+    if (!customFieldForm.name.trim()) {
+      alert("Field name is required");
+      return;
+    }
+    const data = { ...customFieldForm };
+    if (customFieldForm.field_type === "select" || customFieldForm.field_type === "multiselect") {
+      data.options = customFieldForm.options.split(",").map(o => o.trim()).filter(o => o);
+    }
+    createCustomFieldMutation.mutate(data);
   };
 
   return (

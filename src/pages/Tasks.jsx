@@ -367,9 +367,10 @@ export default function Tasks() {
             );
           })}
           </>
-        )}
+          )}
+          </div>
 
-      <CreateTaskModal
+          <CreateTaskModal
         open={showCreateTask}
         onClose={() => setShowCreateTask(false)}
         onSubmit={(data) => createTaskMutation.mutate(data)}

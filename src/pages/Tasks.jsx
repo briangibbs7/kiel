@@ -376,7 +376,9 @@ export default function Tasks() {
           epics={epics}
           users={users}
         />
-      </div>
+        </div>
+      )}
+    </div>
     );
   }
 }

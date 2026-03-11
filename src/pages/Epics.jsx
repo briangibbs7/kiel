@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Search, Grid, List, ChevronRight } from "lucide-react";
 import CreateEpicModal from "@/components/admin/CreateEpicModal";
+import EpicActivityFeed from "@/components/activity/EpicActivityFeed";
 
 const priorityColors = {
   urgent: "bg-red-100 text-red-800",
@@ -305,6 +306,15 @@ export default function EpicsPage() {
                     ))
                   )}
                 </div>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold text-[#CCC] mb-3">Activity</h3>
+                <EpicActivityFeed 
+                  epic={selectedEpic}
+                  issues={getEpicIssues(selectedEpic.id)}
+                  tasks={getEpicTasks(selectedEpic.id)}
+                />
               </div>
             </div>
           </DialogContent>

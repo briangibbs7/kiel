@@ -24,6 +24,7 @@ export default function ProjectDetail() {
   const [section, setSection] = useState("dashboard"); // "dashboard" | "tasks"
   const [view, setView] = useState("list"); // "list" | "kanban" | "backlog" | "gantt"
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedAssignees, setSelectedAssignees] = useState([]);
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],
@@ -84,14 +85,48 @@ export default function ProjectDetail() {
     queryClient.invalidateQueries({ queryKey: ["comments", selectedIssue?.id] });
   };
 
+  const allAssignees = useMemo(() => {
+    const assignees = new Map();
+    [...issues, ...tasks].forEach(item => {
+      if (item.assignee) {
+        if (!assignees.has(item.assignee)) {
+          assignees.set(item.assignee, {
+            email: item.assignee,
+            initial: item.assignee[0]?.toUpperCase() || "?"
+          });
+        }
+      }
+    });
+    return Array.from(assignees.values());
+  }, [issues, tasks]);
+
   const filteredIssues = useMemo(() => {
-    if (!searchQuery.trim()) return issues;
-    const query = searchQuery.toLowerCase();
-    return issues.filter(issue =>
-      issue.title?.toLowerCase().includes(query) ||
-      issue.description?.toLowerCase().includes(query)
-    );
-  }, [issues, searchQuery]);
+    let filtered = issues;
+    
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(issue =>
+        issue.title?.toLowerCase().includes(query) ||
+        issue.description?.toLowerCase().includes(query)
+      );
+    }
+    
+    if (selectedAssignees.length > 0) {
+      filtered = filtered.filter(issue => selectedAssignees.includes(issue.assignee));
+    }
+    
+    return filtered;
+  }, [issues, searchQuery, selectedAssignees]);
+
+  const filteredTasks = useMemo(() => {
+    let filtered = tasks;
+    
+    if (selectedAssignees.length > 0) {
+      filtered = filtered.filter(task => selectedAssignees.includes(task.assignee));
+    }
+    
+    return filtered;
+  }, [tasks, selectedAssignees]);
 
   if (!project) {
     return (
@@ -188,6 +223,29 @@ export default function ProjectDetail() {
                 <BarChart2 size={13} /> Timeline
               </button>
             </div>
+            
+            {(view === "list" || view === "backlog") && (
+              <div className="flex items-center gap-1.5">
+                {allAssignees.map(assignee => (
+                  <button
+                    key={assignee.email}
+                    onClick={() => setSelectedAssignees(prev =>
+                      prev.includes(assignee.email)
+                        ? prev.filter(a => a !== assignee.email)
+                        : [...prev, assignee.email]
+                    )}
+                    title={assignee.email}
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-semibold transition-all ${
+                      selectedAssignees.includes(assignee.email)
+                        ? "bg-[#5E6AD2] text-white ring-2 ring-[#7C3AED]"
+                        : "bg-[#252525] text-[#999] hover:bg-[#333]"
+                    }`}
+                  >
+                    {assignee.initial}
+                  </button>
+                ))}
+              </div>
+            )}
             <div className="relative flex-1 max-w-xs">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]" />
               <input
@@ -222,6 +280,7 @@ export default function ProjectDetail() {
                 <ProjectBacklog
                   projectId={projectId}
                   issues={filteredIssues}
+                  tasks={filteredTasks}
                   onIssueClick={(issue) => { setSelectedIssue(issue); setView("list"); }}
                 />
               </div>

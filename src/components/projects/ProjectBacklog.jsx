@@ -165,8 +165,8 @@ export default function ProjectBacklog({ projectId, issues, tasks, onIssueClick,
     if (active) setExpanded(prev => ({ ...prev, [active.id]: true }));
   }, [sprints]);
 
-  const getSprintIssues = (sprintId) => localIssues.filter(i => i.sprint_id === sprintId);
-  const backlogIssues = localIssues.filter(i => !i.sprint_id);
+  const getSprintItems = (sprintId) => localItems.filter(i => i.sprint_id === sprintId);
+  const backlogItems = localItems.filter(i => !i.sprint_id);
 
   const handleDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
@@ -176,12 +176,13 @@ export default function ProjectBacklog({ projectId, issues, tasks, onIssueClick,
     const newSprintId = dstId === "backlog" ? null : dstId.replace("sprint-", "");
 
     // Optimistic update
-    setLocalIssues(prev =>
+    setLocalItems(prev =>
       prev.map(i => i.id === draggableId ? { ...i, sprint_id: newSprintId } : i)
     );
 
-    await base44.entities.Issue.update(draggableId, { sprint_id: newSprintId });
-    queryClient.invalidateQueries({ queryKey: ["project-issues", projectId] });
+    const entity = tasks ? "Task" : "Issue";
+    await base44.entities[entity].update(draggableId, { sprint_id: newSprintId });
+    queryClient.invalidateQueries({ queryKey: tasks ? ["project-tasks", projectId] : ["project-issues", projectId] });
   };
 
   const handleCreateSprint = async () => {

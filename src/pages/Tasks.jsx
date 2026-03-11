@@ -30,6 +30,16 @@ export default function Tasks() {
     queryFn: () => base44.entities.Task.list("-created_date", 200),
   });
 
+  const { data: epics = [] } = useQuery({
+    queryKey: ["all-epics"],
+    queryFn: () => base44.entities.Epic.list(),
+  });
+
+  const { data: users = [] } = useQuery({
+    queryKey: ["all-users"],
+    queryFn: () => base44.entities.User.list(),
+  });
+
   const createTaskMutation = useMutation({
     mutationFn: (data) => base44.entities.Task.create(data),
     onSuccess: () => {

@@ -19,7 +19,7 @@ export default function ProjectDetail() {
   const projectId = params.get("id");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [selectedIssue, setSelectedIssue] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
   const [section, setSection] = useState("dashboard"); // "dashboard" | "tasks"
   const [view, setView] = useState("list"); // "list" | "kanban" | "backlog" | "gantt"

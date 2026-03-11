@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Rocket, FolderPlus, Slack, Github, Settings2 } from "lucide-react";
+import { Plus, Rocket, FolderPlus, Slack, Github, Settings2, RotateCcw, Trash2 } from "lucide-react";
 import SlackIntegrationSettings from "@/components/admin/SlackIntegrationSettings";
 
 export default function AdminPortal() {
@@ -45,6 +45,16 @@ export default function AdminPortal() {
   const { data: projects = [] } = useQuery({
     queryKey: ["all-projects"],
     queryFn: () => base44.asServiceRole.entities.Project.list(),
+  });
+
+  const { data: deletedProjects = [] } = useQuery({
+    queryKey: ["deleted-projects"],
+    queryFn: async () => {
+      const allProjects = await base44.asServiceRole.entities.Project.list();
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      return allProjects.filter(p => p.deleted_at && new Date(p.deleted_at) > thirtyDaysAgo);
+    }
   });
 
   const { data: epics = [] } = useQuery({
@@ -82,6 +92,22 @@ export default function AdminPortal() {
       setCustomFieldForm({ name: "", field_type: "text", entity_type: "issue", options: "", is_required: false });
       setCustomFieldOpen(false);
     },
+  });
+
+  const restoreProjectMutation = useMutation({
+    mutationFn: (projectId) => 
+      base44.asServiceRole.entities.Project.update(projectId, { deleted_at: null }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["deleted-projects"] });
+      queryClient.invalidateQueries({ queryKey: ["all-projects"] });
+    }
+  });
+
+  const permanentlyDeleteMutation = useMutation({
+    mutationFn: (projectId) => base44.asServiceRole.entities.Project.delete(projectId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["deleted-projects"] });
+    }
   });
 
   const handleCreateEpic = () => {
@@ -140,6 +166,53 @@ export default function AdminPortal() {
             Configure GitHub
           </Button>
         </div>
+
+        {/* Deleted Projects Section */}
+        {deletedProjects.length > 0 && (
+          <div id="deleted-projects" className="bg-[#111] border border-[#1E1E1E] rounded-lg p-6 mb-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Trash2 className="w-5 h-5 text-[#F87171]" />
+              <h2 className="text-lg font-semibold text-white">Deleted Projects</h2>
+              <span className="text-xs text-[#999]">({deletedProjects.length})</span>
+            </div>
+            <p className="text-sm text-[#999] mb-4">Projects can be restored within 30 days of deletion</p>
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {deletedProjects.map((project) => {
+                const daysLeft = Math.ceil((new Date(project.deleted_at).getTime() + 30 * 24 * 60 * 60 * 1000 - new Date().getTime()) / (24 * 60 * 60 * 1000));
+                return (
+                  <div key={project.id} className="p-3 bg-[#0D0D0D] border border-[#252525] rounded flex items-center justify-between">
+                    <div className="flex-1">
+                      <p className="text-sm text-[#CCC] font-medium">{project.icon} {project.name}</p>
+                      <p className="text-xs text-[#666]">Expires in {Math.max(0, daysLeft)} days</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => restoreProjectMutation.mutate(project.id)}
+                        disabled={restoreProjectMutation.isPending}
+                        className="p-1 text-[#4ADE80] hover:bg-[#252525] rounded transition-colors text-xs"
+                        title="Restore"
+                      >
+                        <RotateCcw size={14} />
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (confirm("Permanently delete? This cannot be undone.")) {
+                            permanentlyDeleteMutation.mutate(project.id);
+                          }
+                        }}
+                        disabled={permanentlyDeleteMutation.isPending}
+                        className="p-1 text-[#F87171] hover:bg-[#252525] rounded transition-colors text-xs"
+                        title="Permanently delete"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Create Epic Section */}

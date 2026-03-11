@@ -21,7 +21,7 @@ export default function ProjectDetail() {
   const queryClient = useQueryClient();
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
-  const [showBurndown, setShowBurndown] = useState(false);
+  const [section, setSection] = useState("dashboard"); // "dashboard" | "tasks"
   const [view, setView] = useState("list"); // "list" | "kanban" | "backlog" | "gantt"
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -118,39 +118,6 @@ export default function ProjectDetail() {
           <HealthBadge health={project.health} />
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center bg-[#161616] border border-[#252525] rounded-lg p-0.5">
-            <button
-              onClick={() => setView("list")}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${view === "list" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
-            >
-              <List size={13} /> List
-            </button>
-            <button
-              onClick={() => setView("kanban")}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${view === "kanban" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
-            >
-              <LayoutGrid size={13} /> Kanban
-            </button>
-            <button
-              onClick={() => setView("backlog")}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${view === "backlog" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
-            >
-              <Layers size={13} /> Backlog
-            </button>
-            <button
-              onClick={() => setView("gantt")}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${view === "gantt" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
-            >
-              <BarChart2 size={13} /> Timeline
-            </button>
-          </div>
-          <button
-            onClick={() => setShowBurndown(!showBurndown)}
-            title="Toggle burndown chart"
-            className={`transition-colors ${showBurndown ? "text-[#5E6AD2]" : "text-[#6B6B6B] hover:text-white"}`}
-          >
-            <BarChart2 size={16} />
-          </button>
           <button onClick={() => setShowCreate(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
             <Plus size={16} />
           </button>
@@ -160,106 +127,157 @@ export default function ProjectDetail() {
         </div>
       </div>
 
-      {/* Burndown Chart */}
-      {showBurndown && (
-        <div className="px-5 py-4 border-b border-[#1E1E1E] space-y-4">
-          <ProjectBurnupChart
-            tasks={tasks}
-            issues={issues}
-            targetDate={project?.target_date}
-            startDate={project?.start_date}
-          />
-          <SprintBurndownChart tasks={tasks} sprintStart={sprintStart} sprintEnd={sprintEnd} />
+      {/* Section Toggle */}
+      <div className="px-5 py-2.5 border-b border-[#1E1E1E] flex items-center gap-2">
+        <button
+          onClick={() => setSection("dashboard")}
+          className={`px-3 py-1.5 text-xs rounded-md transition-colors ${section === "dashboard" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+        >
+          Dashboard
+        </button>
+        <button
+          onClick={() => setSection("tasks")}
+          className={`px-3 py-1.5 text-xs rounded-md transition-colors ${section === "tasks" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+        >
+          Tasks
+        </button>
+      </div>
+
+      {/* Dashboard Section */}
+      {section === "dashboard" && (
+        <div className="flex-1 overflow-auto p-5">
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <ProjectBurnupChart
+                tasks={tasks}
+                issues={issues}
+                targetDate={project?.target_date}
+                startDate={project?.start_date}
+              />
+              <SprintBurndownChart tasks={tasks} sprintStart={sprintStart} sprintEnd={sprintEnd} />
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Search Bar */}
-      <div className="px-5 py-2.5 border-b border-[#1E1E1E] bg-[#0D0D0D]">
-        <div className="relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]" />
-          <input
-            type="text"
-            placeholder="Search issues by title or description..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#161616] border border-[#252525] rounded-lg pl-9 pr-9 py-2 text-xs text-white placeholder-[#555] focus:outline-none focus:border-[#5E6AD2]"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] hover:text-white transition-colors"
-            >
-              <X size={14} />
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 flex overflow-hidden">
-        {view === "gantt" ? (
-          <div className="flex-1 overflow-auto p-5">
-            <GanttChart
-              items={[...filteredIssues, ...tasks]}
-              onDateChange={handleDateChange}
-            />
-          </div>
-        ) : view === "backlog" ? (
-          <div className="flex-1 overflow-hidden">
-            <ProjectBacklog
-              projectId={projectId}
-              issues={filteredIssues}
-              onIssueClick={(issue) => { setSelectedIssue(issue); setView("list"); }}
-            />
-          </div>
-        ) : view === "kanban" ? (
-          <div className="flex-1 overflow-auto">
-            <ProjectKanban
-              issues={filteredIssues}
-              projectId={projectId}
-              onIssueClick={setSelectedIssue}
-            />
-          </div>
-        ) : view === "list" ? (
-          <div className={`${selectedIssue ? "w-[420px] flex-shrink-0" : "flex-1"} border-r border-[#1E1E1E] overflow-y-auto`}>
-            {filteredIssues.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-[#555]">
-                <p className="text-sm">{searchQuery ? "No issues match your search" : "No issues in this project"}</p>
-                <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
-                  Create an issue
+      {/* Tasks Section */}
+      {section === "tasks" && (
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* View Controls */}
+          <div className="px-5 py-2.5 border-b border-[#1E1E1E] flex items-center justify-between gap-2">
+            <div className="flex items-center bg-[#161616] border border-[#252525] rounded-lg p-0.5">
+              <button
+                onClick={() => setView("list")}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${view === "list" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+              >
+                <List size={13} /> List
+              </button>
+              <button
+                onClick={() => setView("kanban")}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${view === "kanban" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+              >
+                <LayoutGrid size={13} /> Kanban
+              </button>
+              <button
+                onClick={() => setView("backlog")}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${view === "backlog" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+              >
+                <Layers size={13} /> Backlog
+              </button>
+              <button
+                onClick={() => setView("gantt")}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs transition-colors ${view === "gantt" ? "bg-[#2A2A2A] text-white" : "text-[#666] hover:text-[#999]"}`}
+              >
+                <BarChart2 size={13} /> Timeline
+              </button>
+            </div>
+            <div className="relative flex-1 max-w-xs">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[#161616] border border-[#252525] rounded-lg pl-9 pr-9 py-1.5 text-xs text-white placeholder-[#555] focus:outline-none focus:border-[#5E6AD2]"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] hover:text-white transition-colors"
+                >
+                  <X size={14} />
                 </button>
-              </div>
-            ) : (
-              filteredIssues.map(issue => (
-                <IssueRow
-                  key={issue.id}
-                  issue={issue}
-                  projectPrefix={project.prefix}
-                  onClick={setSelectedIssue}
+              )}
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 flex overflow-hidden">
+            {view === "gantt" ? (
+              <div className="flex-1 overflow-auto p-5">
+                <GanttChart
+                  items={[...filteredIssues, ...tasks]}
+                  onDateChange={handleDateChange}
                 />
-              ))
+              </div>
+            ) : view === "backlog" ? (
+              <div className="flex-1 overflow-hidden">
+                <ProjectBacklog
+                  projectId={projectId}
+                  issues={filteredIssues}
+                  onIssueClick={(issue) => { setSelectedIssue(issue); setView("list"); }}
+                />
+              </div>
+            ) : view === "kanban" ? (
+              <div className="flex-1 overflow-auto">
+                <ProjectKanban
+                  issues={filteredIssues}
+                  projectId={projectId}
+                  onIssueClick={setSelectedIssue}
+                />
+              </div>
+            ) : view === "list" ? (
+              <div className={`${selectedIssue ? "w-[420px] flex-shrink-0" : "flex-1"} border-r border-[#1E1E1E] overflow-y-auto`}>
+                {filteredIssues.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-full text-[#555]">
+                    <p className="text-sm">{searchQuery ? "No issues match your search" : "No issues in this project"}</p>
+                    <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
+                      Create an issue
+                    </button>
+                  </div>
+                ) : (
+                  filteredIssues.map(issue => (
+                    <IssueRow
+                      key={issue.id}
+                      issue={issue}
+                      projectPrefix={project.prefix}
+                      onClick={setSelectedIssue}
+                    />
+                  ))
+                )}
+              </div>
+            ) : null}
+
+            {selectedIssue && view === "list" && (
+              <div className="flex-1">
+                <IssueDetail
+                  issue={selectedIssue}
+                  comments={comments}
+                  onClose={() => setSelectedIssue(null)}
+                  onStatusChange={handleStatusChange}
+                  onAddComment={handleAddComment}
+                  allIssues={issues}
+                  onUpdateIssue={async (issueId, data) => {
+                    await base44.entities.Issue.update(issueId, data);
+                    setSelectedIssue(prev => ({ ...prev, ...data }));
+                    queryClient.invalidateQueries({ queryKey: ["project-issues", projectId] });
+                  }}
+                />
+              </div>
             )}
           </div>
-        ) : null}
-
-        {selectedIssue && view === "list" && (
-          <div className="flex-1">
-            <IssueDetail
-              issue={selectedIssue}
-              comments={comments}
-              onClose={() => setSelectedIssue(null)}
-              onStatusChange={handleStatusChange}
-              onAddComment={handleAddComment}
-              allIssues={issues}
-              onUpdateIssue={async (issueId, data) => {
-                await base44.entities.Issue.update(issueId, data);
-                setSelectedIssue(prev => ({ ...prev, ...data }));
-                queryClient.invalidateQueries({ queryKey: ["project-issues", projectId] });
-              }}
-            />
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <CreateIssueModal
         open={showCreate}

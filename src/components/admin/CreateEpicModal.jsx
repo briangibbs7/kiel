@@ -23,7 +23,7 @@ export default function CreateEpicModal({ projects = [] }) {
     mutationFn: (data) => {
       const payload = { ...data };
       if (!payload.project_id) delete payload.project_id;
-      return base44.asServiceRole.entities.Epic.create(payload);
+      return base44.entities.Epic.create(payload);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["all-epics"] });

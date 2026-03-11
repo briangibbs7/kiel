@@ -29,6 +29,7 @@ export default function CreateTaskModal({
     title: "",
     description: "",
     epic_id: "",
+    project_id: "",
     priority: "medium",
     status: "todo",
     assignee: "",

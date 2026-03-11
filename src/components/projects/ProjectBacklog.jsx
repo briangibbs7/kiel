@@ -141,16 +141,17 @@ function SprintSection({ sprint, issues, isExpanded, onToggle, onStart, onComple
   );
 }
 
-export default function ProjectBacklog({ projectId, issues, onIssueClick }) {
+export default function ProjectBacklog({ projectId, issues, tasks, onIssueClick, onTaskClick }) {
   const queryClient = useQueryClient();
   const [expanded, setExpanded] = useState({});
   const [showCreateSprint, setShowCreateSprint] = useState(false);
   const [newName, setNewName] = useState("");
   const [newStart, setNewStart] = useState("");
   const [newEnd, setNewEnd] = useState("");
-  const [localIssues, setLocalIssues] = useState(issues);
+  const items = tasks || issues || [];
+  const [localItems, setLocalItems] = useState(items);
 
-  useEffect(() => { setLocalIssues(issues); }, [issues]);
+  useEffect(() => { setLocalItems(items); }, [items]);
 
   const { data: sprints = [] } = useQuery({
     queryKey: ["sprints", projectId],

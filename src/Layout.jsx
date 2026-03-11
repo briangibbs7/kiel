@@ -41,6 +41,7 @@ const navSections = [
 {
   label: "Work",
   items: [
+  { name: "For You", icon: Star, page: "ForYou" },
   { name: "Tasks", icon: ListTodo, page: "Tasks" },
   { name: "Backlog", icon: FileText, page: "Backlog" }]
 

@@ -72,6 +72,7 @@ import TimeTracking from './pages/TimeTracking';
 import AdvancedSearch from './pages/AdvancedSearch';
 import CustomFields from './pages/CustomFields';
 import GitHubIntegration from './pages/GitHubIntegration';
+import ForYou from './pages/ForYou';
 import __Layout from './Layout.jsx';
 
 
@@ -101,6 +102,7 @@ export const PAGES = {
     "AdvancedSearch": AdvancedSearch,
     "CustomFields": CustomFields,
     "GitHubIntegration": GitHubIntegration,
+    "ForYou": ForYou,
 }
 
 export const pagesConfig = {

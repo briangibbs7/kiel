@@ -43,6 +43,10 @@ const fieldOptions = [
 export default function CustomProjectBoards() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingBoard, setEditingBoard] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterProject, setFilterProject] = useState("");
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [favorites, setFavorites] = useState(new Set());
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -51,6 +55,7 @@ export default function CustomProjectBoards() {
     grouping: "status",
     sorting: "priority",
     visible_fields: [],
+    filters: {},
     is_default: false,
     is_shared: false,
   });

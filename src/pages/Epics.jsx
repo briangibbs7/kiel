@@ -102,7 +102,7 @@ export default function EpicsPage() {
             >
               <List className="w-4 h-4" />
             </Button>
-            <CreateEpicModal projects={projects} />
+
           </div>
         </div>
 

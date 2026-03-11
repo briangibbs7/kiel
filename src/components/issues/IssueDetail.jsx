@@ -3,8 +3,10 @@ import { IssueStatusIcon, PriorityIcon, LabelBadge, HealthBadge } from "../share
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { X, Send, MessageSquare, Link2 } from "lucide-react";
+import { X, Send, MessageSquare, Link2, Trash2 } from "lucide-react";
 import { format } from "date-fns";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
 import DependencyManager from "../shared/DependencyManager";
 import DependencyViewer from "../shared/DependencyViewer";
 import IssueAttachments from "./IssueAttachments";
@@ -12,9 +14,16 @@ import CommentThread from "../comments/CommentThread";
 import GitHubPanel from "./GitHubPanel";
 import TimeTrackingPanel from "@/components/issues/TimeTrackingPanel";
 
-export default function IssueDetail({ issue, comments, onClose, onStatusChange, onAddComment, allIssues = [], onUpdateIssue }) {
+export default function IssueDetail({ issue, comments, onClose, onStatusChange, onAddComment, allIssues = [], onUpdateIssue, onDelete }) {
   const [commentText, setCommentText] = useState("");
   const [showDeps, setShowDeps] = useState(false);
+
+  const { data: user } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => base44.auth.me()
+  });
+
+  const canDelete = user && (user.role === 'admin' || issue.created_by === user.email);
 
   const handleComment = () => {
     if (!commentText.trim()) return;
@@ -29,9 +38,24 @@ export default function IssueDetail({ issue, comments, onClose, onStatusChange, 
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-[#252525]">
         <span className="text-sm text-[#999]">{issue.title?.substring(0, 40)}</span>
-        <button onClick={onClose} className="text-[#6B6B6B] hover:text-white transition-colors">
-          <X size={16} />
-        </button>
+        <div className="flex items-center gap-2">
+          {canDelete && (
+            <button
+              onClick={() => {
+                if (confirm('Are you sure you want to delete this issue?')) {
+                  onDelete?.(issue.id);
+                }
+              }}
+              className="text-[#6B6B6B] hover:text-red-400 transition-colors"
+              title="Delete issue"
+            >
+              <Trash2 size={16} />
+            </button>
+          )}
+          <button onClick={onClose} className="text-[#6B6B6B] hover:text-white transition-colors">
+            <X size={16} />
+          </button>
+        </div>
       </div>
 
       {/* Body */}

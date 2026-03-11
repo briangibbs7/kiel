@@ -288,7 +288,7 @@ export default function ProjectBacklog({ projectId, issues, tasks, onIssueClick,
         {/* Backlog */}
         <div className="flex items-center justify-between pt-2">
           <span className="text-[11px] font-semibold text-[#555] uppercase tracking-wider">Backlog</span>
-          <span className="text-[11px] text-[#333]">{backlogIssues.length} issues</span>
+          <span className="text-[11px] text-[#333]">{backlogItems.length} items</span>
         </div>
 
         <Droppable droppableId="backlog">
@@ -300,11 +300,11 @@ export default function ProjectBacklog({ projectId, issues, tasks, onIssueClick,
                 snapshot.isDraggingOver ? "bg-[#1C1C2E] border-[#5E6AD2]/30" : "bg-[#090909] border-[#161616]"
               }`}
             >
-              {backlogIssues.length === 0 && !snapshot.isDraggingOver && (
-                <p className="text-[11px] text-[#2A2A2A] text-center py-4">All issues are in a sprint</p>
+              {backlogItems.length === 0 && !snapshot.isDraggingOver && (
+                <p className="text-[11px] text-[#2A2A2A] text-center py-4">All items are in a sprint</p>
               )}
-              {backlogIssues.map((issue, i) => (
-                <BacklogIssueRow key={issue.id} issue={issue} index={i} onIssueClick={onIssueClick} />
+              {backlogItems.map((issue, i) => (
+                <BacklogIssueRow key={issue.id} issue={issue} index={i} onIssueClick={onIssueClick || onTaskClick} />
               ))}
               {provided.placeholder}
             </div>

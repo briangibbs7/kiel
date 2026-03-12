@@ -375,6 +375,7 @@ export default function Tasks() {
           onSubmit={(data) => createTaskMutation.mutate(data)}
           epics={epics}
           users={users}
+          project={null}
         />
         </div>
       )}

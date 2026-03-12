@@ -141,28 +141,6 @@ export default function ProjectTemplates() {
                   {template.description}
                 </p>
 
-                <div className="mb-4">
-                  <p className="text-xs font-medium text-[#999] mb-2">
-                    Includes {template.default_epics.length} epics:
-                  </p>
-                  <div className="space-y-1">
-                    {template.default_epics.slice(0, 3).map((epic, idx) => (
-                      <div
-                        key={idx}
-                        className="text-xs text-[#666] flex items-center gap-2"
-                      >
-                        <div className="w-1 h-1 rounded-full bg-[#5E6AD2]" />
-                        {epic.title}
-                      </div>
-                    ))}
-                    {template.default_epics.length > 3 && (
-                      <div className="text-xs text-[#555] mt-1">
-                        +{template.default_epics.length - 3} more
-                      </div>
-                    )}
-                  </div>
-                </div>
-
                 <Button
                   onClick={() => handleSelectTemplate(template)}
                   className="w-full bg-[#5E6AD2] hover:bg-[#5E6AD2]/90"

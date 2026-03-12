@@ -16,17 +16,20 @@ const priorityColors = {
   urgent: "#F87171", high: "#FB923C", medium: "#FACC15", low: "#60A5FA",
 };
 
-export default function ProjectKanban({ issues, projectId, onIssueClick }) {
+export default function ProjectKanban({ issues, tasks, projectId, onIssueClick, onTaskClick }) {
   const [board, setBoard] = useState({});
   const queryClient = useQueryClient();
+
+  // Support both issues and tasks
+  const items = issues || tasks || [];
 
   useEffect(() => {
     const grouped = {};
     COLUMNS.forEach((col) => {
-      grouped[col.id] = issues.filter((i) => i.status === col.id);
+      grouped[col.id] = items.filter((i) => i.status === col.id);
     });
     setBoard(grouped);
-  }, [issues]);
+  }, [items]);
 
   const handleDragEnd = async (result) => {
     const { destination, source, draggableId } = result;

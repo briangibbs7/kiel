@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { base44 } from "@/api/base44Client";
 import {
   Select,
   SelectContent,
@@ -34,6 +36,11 @@ export default function TaskDetail({
   onUpdateTask,
 }) {
   const [editingField, setEditingField] = useState(null);
+
+  const { data: epics = [] } = useQuery({
+    queryKey: ["all-epics"],
+    queryFn: () => base44.entities.Epic.list(),
+  });
 
   return (
     <div className="h-full flex flex-col bg-[#0D0D0D] border-l border-[#1E1E1E] overflow-hidden">
@@ -95,6 +102,26 @@ export default function TaskDetail({
                 {priorityOptions.map((option) => (
                   <SelectItem key={option.value} value={option.value} className="text-white">
                     {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Epic */}
+          <div>
+            <h3 className="text-xs font-semibold text-[#999] uppercase tracking-wider mb-2">
+              Epic
+            </h3>
+            <Select value={task.epic_id || ""} onValueChange={(epic_id) => onUpdateTask(task.id, { epic_id: epic_id || null })}>
+              <SelectTrigger className="bg-[#111] border-[#333] text-white text-xs">
+                <SelectValue placeholder="No epic" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                <SelectItem value={null}>No epic</SelectItem>
+                {epics.map((epic) => (
+                  <SelectItem key={epic.id} value={epic.id} className="text-white">
+                    {epic.title}
                   </SelectItem>
                 ))}
               </SelectContent>

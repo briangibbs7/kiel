@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Search, Grid, List, ChevronRight } from "lucide-react";
+import { Search, Grid, List, ChevronRight, Edit } from "lucide-react";
 import CreateEpicModal from "@/components/admin/CreateEpicModal";
+import EditEpicModal from "@/components/admin/EditEpicModal";
 import EpicActivityFeed from "@/components/activity/EpicActivityFeed";
 
 const priorityColors = {
@@ -32,6 +33,7 @@ export default function EpicsPage() {
   const [filterProject, setFilterProject] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [selectedEpic, setSelectedEpic] = useState(null);
+  const [editingEpic, setEditingEpic] = useState(null);
 
   const { data: epics = [] } = useQuery({
     queryKey: ["all-epics"],
@@ -217,7 +219,21 @@ export default function EpicsPage() {
         <Dialog open={!!selectedEpic} onOpenChange={() => setSelectedEpic(null)}>
           <DialogContent className="bg-[#1A1A1A] border-[#333] max-w-2xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="text-white">{selectedEpic.title}</DialogTitle>
+              <div className="flex items-center justify-between">
+                <DialogTitle className="text-white">{selectedEpic.title}</DialogTitle>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setEditingEpic(selectedEpic);
+                    setSelectedEpic(null);
+                  }}
+                  className="border-[#333] text-[#CCC] hover:text-white"
+                >
+                  <Edit className="w-4 h-4 mr-2" />
+                  Edit
+                </Button>
+              </div>
             </DialogHeader>
             <div className="space-y-4">
               {selectedEpic.description && (
@@ -320,6 +336,13 @@ export default function EpicsPage() {
           </DialogContent>
         </Dialog>
       )}
+
+      <EditEpicModal
+        epic={editingEpic}
+        open={!!editingEpic}
+        onClose={() => setEditingEpic(null)}
+        projects={projects}
+      />
     </div>
   );
 }

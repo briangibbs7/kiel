@@ -24,6 +24,7 @@ export default function CreateTaskModal({
   onSubmit,
   epics,
   users = [],
+  project = null,
 }) {
   const [formData, setFormData] = useState({
     title: "",

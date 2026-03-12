@@ -76,6 +76,8 @@ import Tasks from './pages/Tasks';
 import TeamDashboard from './pages/TeamDashboard';
 import TimeTracking from './pages/TimeTracking';
 import UserManagement from './pages/UserManagement';
+import ConfluenceHome from './pages/ConfluenceHome';
+import ConfluenceSpaces from './pages/ConfluenceSpaces';
 import __Layout from './Layout.jsx';
 
 
@@ -109,6 +111,8 @@ export const PAGES = {
     "TeamDashboard": TeamDashboard,
     "TimeTracking": TimeTracking,
     "UserManagement": UserManagement,
+    "ConfluenceHome": ConfluenceHome,
+    "ConfluenceSpaces": ConfluenceSpaces,
 }
 
 export const pagesConfig = {

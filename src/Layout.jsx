@@ -96,6 +96,15 @@ export default function Layout({ children, currentPageName }) {
   const [currentApp, setCurrentApp] = useState("pm");
   const navigate = useNavigate();
 
+  const handleAppSwitch = (app) => {
+    setCurrentApp(app);
+    if (app === "confluence") {
+      navigate(createPageUrl("ConfluenceHome"));
+    } else {
+      navigate(createPageUrl("TeamDashboard"));
+    }
+  };
+
   useEffect(() => {
     base44.auth.me().then((u) => {
       setUser(u);
@@ -247,7 +256,7 @@ export default function Layout({ children, currentPageName }) {
                 <PopoverContent className={`w-64 bg-[#1A1A1A] border-[#333] p-2 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
                   <div className="space-y-1">
                     <button
-                      onClick={() => setCurrentApp("pm")}
+                      onClick={() => handleAppSwitch("pm")}
                       className={`w-full text-left px-3 py-2 rounded transition-colors flex items-center gap-3 ${
                         currentApp === "pm" ? "bg-[#5E6AD2] text-white" : "text-[#CCC] hover:bg-[#252525]"
                       }`}
@@ -261,7 +270,7 @@ export default function Layout({ children, currentPageName }) {
                       </div>
                     </button>
                     <button
-                      onClick={() => setCurrentApp("confluence")}
+                      onClick={() => handleAppSwitch("confluence")}
                       className={`w-full text-left px-3 py-2 rounded transition-colors flex items-center gap-3 ${
                         currentApp === "confluence" ? "bg-[#5E6AD2] text-white" : "text-[#CCC] hover:bg-[#252525]"
                       }`}

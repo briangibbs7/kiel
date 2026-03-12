@@ -35,7 +35,7 @@ export const BUILT_IN_TEMPLATES = [
     category: "engineering",
     description: "For engineering projects with design, development, and testing phases",
     sprint_length_days: 14,
-    story_point_options: [1, 2, 3, 5, 8, 13, 21],
+    story_point_options: [1, 2, 3, 5, 8, 13, 21, 34],
     allowed_entity_types: ["task"],
   },
   {

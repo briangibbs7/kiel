@@ -21,7 +21,8 @@ import {
   BarChart3,
   MessageCircle,
   LayoutGrid,
-  Grid3x3 } from
+  Grid3x3,
+  Clock } from
 "lucide-react";
 import {
   Popover,

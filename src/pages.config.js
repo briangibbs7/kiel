@@ -80,6 +80,7 @@ import ConfluenceHome from './pages/ConfluenceHome';
 import ConfluenceSpaces from './pages/ConfluenceSpaces';
 import ConfluenceSpace from './pages/ConfluenceSpace';
 import ConfluenceRecent from './pages/ConfluenceRecent';
+import ConfluenceStarred from './pages/ConfluenceStarred';
 import __Layout from './Layout.jsx';
 
 
@@ -117,6 +118,7 @@ export const PAGES = {
     "ConfluenceSpaces": ConfluenceSpaces,
     "ConfluenceSpace": ConfluenceSpace,
     "ConfluenceRecent": ConfluenceRecent,
+    "ConfluenceStarred": ConfluenceStarred,
 }
 
 export const pagesConfig = {

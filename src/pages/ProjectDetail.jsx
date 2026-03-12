@@ -327,6 +327,7 @@ export default function ProjectDetail() {
         onSubmit={(data) => createMutation.mutate(data)}
         epics={epics}
         users={users}
+        project={project}
       />
     </div>
   );

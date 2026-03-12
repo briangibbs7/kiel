@@ -246,17 +246,37 @@ export default function CreateTaskModal({
               <label className="text-xs font-semibold text-[#CCC] uppercase tracking-wider block mb-2">
                 Story Points
               </label>
-              <Input
-                type="number"
-                min="0"
-                step="1"
-                placeholder="e.g. 5"
-                value={formData.story_points}
-                onChange={(e) =>
-                  setFormData({ ...formData, story_points: e.target.value })
-                }
-                className="bg-[#111] border-[#333] text-white placeholder-[#555] focus:border-[#5E6AD2]"
-              />
+              {project?.story_point_options ? (
+                <Select
+                  value={formData.story_points}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, story_points: value })
+                  }
+                >
+                  <SelectTrigger className="bg-[#111] border-[#333] text-white hover:border-[#444] transition-colors">
+                    <SelectValue placeholder="Select points..." />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                    {project.story_point_options.map((points) => (
+                      <SelectItem key={points} value={String(points)} className="text-white">
+                        {points}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Input
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="e.g. 5"
+                  value={formData.story_points}
+                  onChange={(e) =>
+                    setFormData({ ...formData, story_points: e.target.value })
+                  }
+                  className="bg-[#111] border-[#333] text-white placeholder-[#555] focus:border-[#5E6AD2]"
+                />
+              )}
             </div>
           </div>
 

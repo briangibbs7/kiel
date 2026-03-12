@@ -78,6 +78,7 @@ import TimeTracking from './pages/TimeTracking';
 import UserManagement from './pages/UserManagement';
 import ConfluenceHome from './pages/ConfluenceHome';
 import ConfluenceSpaces from './pages/ConfluenceSpaces';
+import ConfluenceSpace from './pages/ConfluenceSpace';
 import __Layout from './Layout.jsx';
 
 
@@ -113,6 +114,7 @@ export const PAGES = {
     "UserManagement": UserManagement,
     "ConfluenceHome": ConfluenceHome,
     "ConfluenceSpaces": ConfluenceSpaces,
+    "ConfluenceSpace": ConfluenceSpace,
 }
 
 export const pagesConfig = {

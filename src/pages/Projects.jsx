@@ -243,7 +243,7 @@ export default function Projects() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-white text-sm">{template.name}</h4>
-                      <p className="text-xs text-[#999] mt-1">{template.default_epics.length} epics</p>
+                      <p className="text-xs text-[#999] mt-1">{template.description}</p>
                     </div>
                   </div>
                 </button>);

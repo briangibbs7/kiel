@@ -50,8 +50,15 @@ export default function ProjectKanban({ issues, tasks, projectId, onIssueClick, 
       newBoard[srcCol] = srcItems;
       newBoard[dstCol] = dstItems;
       setBoard(newBoard);
-      await base44.entities.Issue.update(draggableId, { status: dstCol });
-      queryClient.invalidateQueries({ queryKey: ["project-issues", projectId] });
+      
+      // Update either Issue or Task entity based on which is being used
+      if (issues) {
+        await base44.entities.Issue.update(draggableId, { status: dstCol });
+        queryClient.invalidateQueries({ queryKey: ["project-issues", projectId] });
+      } else if (tasks) {
+        await base44.entities.Task.update(draggableId, { status: dstCol });
+        queryClient.invalidateQueries({ queryKey: ["project-tasks", projectId] });
+      }
       return;
     }
     setBoard(newBoard);

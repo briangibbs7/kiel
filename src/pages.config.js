@@ -79,6 +79,7 @@ import UserManagement from './pages/UserManagement';
 import ConfluenceHome from './pages/ConfluenceHome';
 import ConfluenceSpaces from './pages/ConfluenceSpaces';
 import ConfluenceSpace from './pages/ConfluenceSpace';
+import ConfluenceRecent from './pages/ConfluenceRecent';
 import __Layout from './Layout.jsx';
 
 
@@ -115,6 +116,7 @@ export const PAGES = {
     "ConfluenceHome": ConfluenceHome,
     "ConfluenceSpaces": ConfluenceSpaces,
     "ConfluenceSpace": ConfluenceSpace,
+    "ConfluenceRecent": ConfluenceRecent,
 }
 
 export const pagesConfig = {

@@ -20,7 +20,8 @@ import {
   Settings,
   BarChart3,
   MessageCircle,
-  LayoutGrid } from
+  LayoutGrid,
+  Grid3x3 } from
 "lucide-react";
 import {
   Popover,
@@ -92,6 +93,7 @@ export default function Layout({ children, currentPageName }) {
   const [sidebarPos, setSidebarPos] = useState("left");
   const [searchOpen, setSearchOpen] = useState(false);
   const [collapsedSections, setCollapsedSections] = useState({ Planning: true, Insights: true, Reports: true });
+  const [currentApp, setCurrentApp] = useState("pm");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -127,10 +129,53 @@ export default function Layout({ children, currentPageName }) {
       {isSidebarTop &&
       <aside className="h-16 flex-shrink-0 bg-[#111111] border-b border-[#1E1E1E] flex items-center px-4 gap-2 overflow-x-auto">
           <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="w-5 h-5 rounded bg-gradient-to-br from-[#5E6AD2] to-[#7C3AED]">
-              <span className="text-[8px] font-bold text-white flex items-center justify-center h-full">PM</span>
-            </div>
-            <span className="text-sm font-semibold text-[#E5E5E5]">Workspace</span>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
+                  <div className="w-5 h-5 rounded bg-gradient-to-br from-[#5E6AD2] to-[#7C3AED]">
+                    <span className="text-[8px] font-bold text-white flex items-center justify-center h-full">
+                      {currentApp === "pm" ? "PM" : "CF"}
+                    </span>
+                  </div>
+                  <span className="text-sm font-semibold text-[#E5E5E5]">
+                    {currentApp === "pm" ? "Project Management" : "Confluence"}
+                  </span>
+                  <Grid3x3 size={14} className="text-[#666]" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-64 bg-[#1A1A1A] border-[#333] p-2">
+                <div className="space-y-1">
+                  <button
+                    onClick={() => setCurrentApp("pm")}
+                    className={`w-full text-left px-3 py-2 rounded transition-colors flex items-center gap-3 ${
+                      currentApp === "pm" ? "bg-[#5E6AD2] text-white" : "text-[#CCC] hover:bg-[#252525]"
+                    }`}
+                  >
+                    <div className="w-6 h-6 rounded bg-gradient-to-br from-[#5E6AD2] to-[#7C3AED] flex items-center justify-center">
+                      <span className="text-[10px] font-bold text-white">PM</span>
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium">Project Management</div>
+                      <div className="text-xs text-[#999]">Tasks, epics & roadmaps</div>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => setCurrentApp("confluence")}
+                    className={`w-full text-left px-3 py-2 rounded transition-colors flex items-center gap-3 ${
+                      currentApp === "confluence" ? "bg-[#5E6AD2] text-white" : "text-[#CCC] hover:bg-[#252525]"
+                    }`}
+                  >
+                    <div className="w-6 h-6 rounded bg-gradient-to-br from-[#2684FF] to-[#0052CC] flex items-center justify-center">
+                      <span className="text-[10px] font-bold text-white">CF</span>
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium">Confluence</div>
+                      <div className="text-xs text-[#999]">Docs, wikis & knowledge base</div>
+                    </div>
+                  </button>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
           <nav className="flex gap-0.5 flex-1 ml-4">
             {navItems.map((item) => {
@@ -184,14 +229,62 @@ export default function Layout({ children, currentPageName }) {
         {isSidebarVertical &&
         <>
             {/* Workspace header */}
-            <div className="px-4 py-3 flex items-center justify-between border-b border-[#1E1E1E]">
+            <div className="px-4 py-3 border-b border-[#1E1E1E]">
               <Popover>
                 <PopoverTrigger asChild>
-                  <button className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
+                  <button className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer mb-3 w-full">
                     <div className="w-5 h-5 rounded bg-gradient-to-br from-[#5E6AD2] to-[#7C3AED] flex items-center justify-center">
-                      <span className="text-[9px] font-bold text-white">PM</span>
+                      <span className="text-[9px] font-bold text-white">
+                        {currentApp === "pm" ? "PM" : "CF"}
+                      </span>
                     </div>
-                    <span className="text-sm font-semibold text-[#E5E5E5]">Workspace</span>
+                    <span className="text-sm font-semibold text-[#E5E5E5] flex-1 text-left truncate">
+                      {currentApp === "pm" ? "Project Mgmt" : "Confluence"}
+                    </span>
+                    <Grid3x3 size={12} className="text-[#666]" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className={`w-64 bg-[#1A1A1A] border-[#333] p-2 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
+                  <div className="space-y-1">
+                    <button
+                      onClick={() => setCurrentApp("pm")}
+                      className={`w-full text-left px-3 py-2 rounded transition-colors flex items-center gap-3 ${
+                        currentApp === "pm" ? "bg-[#5E6AD2] text-white" : "text-[#CCC] hover:bg-[#252525]"
+                      }`}
+                    >
+                      <div className="w-6 h-6 rounded bg-gradient-to-br from-[#5E6AD2] to-[#7C3AED] flex items-center justify-center">
+                        <span className="text-[10px] font-bold text-white">PM</span>
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium">Project Management</div>
+                        <div className="text-xs text-[#999]">Tasks, epics & roadmaps</div>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => setCurrentApp("confluence")}
+                      className={`w-full text-left px-3 py-2 rounded transition-colors flex items-center gap-3 ${
+                        currentApp === "confluence" ? "bg-[#5E6AD2] text-white" : "text-[#CCC] hover:bg-[#252525]"
+                      }`}
+                    >
+                      <div className="w-6 h-6 rounded bg-gradient-to-br from-[#2684FF] to-[#0052CC] flex items-center justify-center">
+                        <span className="text-[10px] font-bold text-white">CF</span>
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium">Confluence</div>
+                        <div className="text-xs text-[#999]">Docs, wikis & knowledge base</div>
+                      </div>
+                    </button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer w-full">
+                    <div className="w-5 h-5 rounded bg-[#252525] flex items-center justify-center">
+                      <span className="text-[9px] font-bold text-white">W</span>
+                    </div>
+                    <span className="text-sm font-semibold text-[#E5E5E5] flex-1 text-left truncate">Workspace</span>
+                    <ChevronDown size={12} className="text-[#666]" />
                   </button>
                 </PopoverTrigger>
                 <PopoverContent className={`w-48 bg-[#1A1A1A] border-[#333] p-0 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
@@ -225,7 +318,7 @@ export default function Layout({ children, currentPageName }) {
                 </PopoverContent>
               </Popover>
 
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 mt-3">
                 <button className="p-1 text-[#6B6B6B] hover:text-white transition-colors" onClick={() => setSearchOpen(true)}>
                   <Search size={14} className="text-slate-50 lucide lucide-search" />
                 </button>

@@ -85,7 +85,10 @@ export default function ProjectKanban({ issues, tasks, projectId, onIssueClick, 
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            onClick={() => onIssueClick?.(issue)}
+                            onClick={() => {
+                              if (onIssueClick) onIssueClick(issue);
+                              if (onTaskClick) onTaskClick(issue);
+                            }}
                             className={`p-3 rounded-lg border transition-all cursor-grab active:cursor-grabbing ${
                               snapshot.isDragging
                                 ? "border-[#5E6AD2] bg-[#1E1E1E] shadow-2xl shadow-black/60 rotate-1"

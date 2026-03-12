@@ -31,7 +31,7 @@ import {
 import NotificationBell from "@/components/notifications/NotificationBell";
 import GlobalSearch from "@/components/search/GlobalSearch";
 
-const navSections = [
+const pmNavSections = [
 {
   label: "My Work",
   items: [
@@ -77,9 +77,36 @@ const navSections = [
 
 }];
 
+const confluenceNavSections = [
+{
+  label: "Home",
+  items: [
+  { name: "Home", icon: LayoutGrid, page: "ConfluenceHome" },
+  { name: "Spaces", icon: Folder, page: "ConfluenceSpaces" }]
 
-// Flat list for top bar
-const navItems = navSections.flatMap((s) => s.items);
+},
+{
+  label: "Content",
+  items: [
+  { name: "Recent", icon: Clock, page: "ConfluenceRecent" },
+  { name: "Starred", icon: Star, page: "ConfluenceStarred" },
+  { name: "Drafts", icon: FileText, page: "ConfluenceDrafts" }]
+
+},
+{
+  label: "Create",
+  items: [
+  { name: "Templates", icon: FileText, page: "ConfluenceTemplates" },
+  { name: "Whiteboards", icon: LayoutGrid, page: "ConfluenceWhiteboards" }]
+
+},
+{
+  label: "Tools",
+  items: [
+  { name: "Search", icon: Search, page: "ConfluenceSearch" },
+  { name: "Analytics", icon: BarChart3, page: "ConfluenceAnalytics" }]
+
+}];
 
 
 const sidebarPositions = [
@@ -131,6 +158,9 @@ export default function Layout({ children, currentPageName }) {
 
   const isSidebarVertical = sidebarPos === "left" || sidebarPos === "right";
   const isSidebarTop = sidebarPos === "top";
+
+  const navSections = currentApp === "confluence" ? confluenceNavSections : pmNavSections;
+  const navItems = navSections.flatMap((s) => s.items);
 
   return (
     <div className={`h-screen bg-[#0D0D0D] overflow-hidden ${isSidebarVertical ? "flex" : "flex flex-col"}`}>
@@ -370,7 +400,7 @@ export default function Layout({ children, currentPageName }) {
         {/* Navigation */}
         <nav className="flex-1 py-2 overflow-y-auto">
           {navSections.map((section) => {
-            const isCollapsible = ["Planning", "Insights", "Reports"].includes(section.label);
+            const isCollapsible = ["Planning", "Insights", "Reports", "Content", "Create", "Tools"].includes(section.label);
             const isCollapsed = collapsedSections[section.label];
             
             return (

@@ -25,20 +25,36 @@ export default function CreateTaskModal({
   epics,
   users = [],
   project = null,
+  initialData = null,
+  isEditing = false,
 }) {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    epic_id: "",
-    project_id: "",
-    priority: "medium",
-    status: "todo",
-    assignee: "",
-    estimated_hours: "",
-    story_points: "",
-    due_date: "",
-    sprint_id: null,
-  });
+  const [formData, setFormData] = useState(
+    initialData ? {
+      title: initialData.title || "",
+      description: initialData.description || "",
+      epic_id: initialData.epic_id || "",
+      project_id: initialData.project_id || "",
+      priority: initialData.priority || "medium",
+      status: initialData.status || "todo",
+      assignee: initialData.assignee || "",
+      estimated_hours: initialData.estimated_hours ? String(initialData.estimated_hours) : "",
+      story_points: initialData.story_points ? String(initialData.story_points) : "",
+      due_date: initialData.due_date || "",
+      sprint_id: initialData.sprint_id || null,
+    } : {
+      title: "",
+      description: "",
+      epic_id: "",
+      project_id: "",
+      priority: "medium",
+      status: "todo",
+      assignee: "",
+      estimated_hours: "",
+      story_points: "",
+      due_date: "",
+      sprint_id: null,
+    }
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -74,7 +90,7 @@ export default function CreateTaskModal({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="bg-[#1A1A1A] border-[#333] max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-white">Create Task</DialogTitle>
+          <DialogTitle className="text-white">{isEditing ? "Edit Task" : "Create Task"}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto">
@@ -281,12 +297,12 @@ export default function CreateTaskModal({
           </div>
 
           <DialogFooter className="gap-2 pt-4 border-t border-[#252525]">
-            <Button variant="outline" onClick={onClose} className="border-[#333] text-[#999] hover:bg-[#111]">
-              Cancel
-            </Button>
-            <Button type="submit" className="bg-[#5E6AD2] hover:bg-[#5E6AD2]/90 text-white">
-              Create Task
-            </Button>
+           <Button variant="outline" onClick={onClose} className="border-[#333] text-[#999] hover:bg-[#111]">
+             Cancel
+           </Button>
+           <Button type="submit" className="bg-[#5E6AD2] hover:bg-[#5E6AD2]/90 text-white">
+             {isEditing ? "Save Changes" : "Create Task"}
+           </Button>
           </DialogFooter>
         </form>
       </DialogContent>

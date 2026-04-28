@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, ChevronDown, ChevronRight, List, Columns, Network, Trash2 } from "lucide-react";
+import { Plus, ChevronDown, ChevronRight, List, Columns, Network, Trash2, Edit2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SubTaskManager from "@/components/tasks/SubTaskManager";
 import TaskDependencyManager from "@/components/tasks/TaskDependencyManager";
@@ -17,6 +17,7 @@ export default function Tasks() {
   const [selectedStory, setSelectedStory] = useState(null);
   const [view, setView] = useState("list");
   const [showDependencyMap, setShowDependencyMap] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -45,6 +46,14 @@ export default function Tasks() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["all-tasks"] });
       setShowCreateTask(false);
+    },
+  });
+
+  const updateTaskMutation = useMutation({
+    mutationFn: ({ taskId, data }) => base44.entities.Task.update(taskId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["all-tasks"] });
+      setEditingTask(null);
     },
   });
 
@@ -216,6 +225,13 @@ export default function Tasks() {
                             </span>
                           )}
                           <button
+                            onClick={() => setEditingTask(task)}
+                            className="text-[#6B6B6B] hover:text-blue-400 transition-colors opacity-0 group-hover:opacity-100"
+                            title="Edit task"
+                          >
+                            <Edit2 size={14} />
+                          </button>
+                          <button
                             onClick={() => {
                               if (confirm('Are you sure you want to delete this task?')) {
                                 deleteTaskMutation.mutate(task.id);
@@ -322,6 +338,14 @@ export default function Tasks() {
                            )}
 
                            <button
+                             onClick={() => setEditingTask(task)}
+                             className="text-[#6B6B6B] hover:text-blue-400 transition-colors opacity-0 group-hover:opacity-100"
+                             title="Edit task"
+                           >
+                             <Edit2 size={14} />
+                           </button>
+
+                           <button
                              onClick={() => {
                                if (confirm('Are you sure you want to delete this task?')) {
                                  deleteTaskMutation.mutate(task.id);
@@ -376,6 +400,17 @@ export default function Tasks() {
           epics={epics}
           users={users}
           project={null}
+        />
+
+        <CreateTaskModal
+          open={!!editingTask}
+          onClose={() => setEditingTask(null)}
+          onSubmit={(data) => updateTaskMutation.mutate({ taskId: editingTask.id, data })}
+          epics={epics}
+          users={users}
+          project={null}
+          initialData={editingTask}
+          isEditing={true}
         />
         </div>
       )}

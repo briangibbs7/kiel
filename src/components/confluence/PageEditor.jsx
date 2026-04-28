@@ -4,12 +4,13 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Save, X, Image, MessageSquare, Send } from "lucide-react";
+import { Save, X, Image, MessageSquare, Send, History } from "lucide-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { usePagePresence } from "@/hooks/usePagePresence";
 import PresenceAvatars from "@/components/confluence/PresenceAvatars";
 import InlineCommentPanel from "@/components/confluence/InlineCommentPanel";
+import VersionHistoryPanel from "@/components/confluence/VersionHistoryPanel";
 
 export default function PageEditor({ page, spaceId, onSave, onCancel }) {
   const [title, setTitle] = useState(page?.title || "");
@@ -17,6 +18,7 @@ export default function PageEditor({ page, spaceId, onSave, onCancel }) {
   const [status, setStatus] = useState(page?.status || "draft");
   const [labels, setLabels] = useState(page?.labels?.join(", ") || "");
   const [showComments, setShowComments] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
   // Inline comment bubble state
   const [bubble, setBubble] = useState(null); // { x, y, text, range }
@@ -45,14 +47,39 @@ export default function PageEditor({ page, spaceId, onSave, onCancel }) {
 
   const saveMutation = useMutation({
     mutationFn: async (data) => {
-      if (page) return base44.entities.Page.update(page.id, data);
-      return base44.entities.Page.create(data);
+      let savedPage;
+      if (page) {
+        savedPage = await base44.entities.Page.update(page.id, data);
+        // Snapshot a version
+        const existingVersions = await base44.entities.PageVersion.filter({ page_id: page.id });
+        const nextVersionNumber = existingVersions.length > 0
+          ? Math.max(...existingVersions.map((v) => v.version_number)) + 1
+          : 1;
+        await base44.entities.PageVersion.create({
+          page_id: page.id,
+          version_number: nextVersionNumber,
+          content: data.content,
+          title: data.title,
+          author: user?.email || "unknown",
+        });
+      } else {
+        savedPage = await base44.entities.Page.create(data);
+      }
+      return savedPage;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pages", spaceId] });
+      queryClient.invalidateQueries({ queryKey: ["page-versions", page?.id] });
       onSave();
     },
   });
+
+  const handleRevert = async (version) => {
+    if (!page || !confirm(`Revert to version ${version.version_number}? This will overwrite the current content.`)) return;
+    setContent(version.content);
+    setTitle(version.title);
+    setShowHistory(false);
+  };
 
   const createCommentMutation = useMutation({
     mutationFn: (data) => base44.entities.PageComment.create(data),
@@ -174,13 +201,26 @@ export default function PageEditor({ page, spaceId, onSave, onCancel }) {
         {/* Toggle comments panel */}
         {page?.id && (
           <button
-            onClick={() => setShowComments((v) => !v)}
+            onClick={() => { setShowComments((v) => !v); setShowHistory(false); }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-sm transition-colors ${
               showComments ? "bg-[#5E6AD2] text-white" : "border border-[#333] text-[#999] hover:text-white hover:border-[#555]"
             }`}
           >
             <MessageSquare className="w-4 h-4" />
             Comments
+          </button>
+        )}
+
+        {/* Toggle version history panel */}
+        {page?.id && (
+          <button
+            onClick={() => { setShowHistory((v) => !v); setShowComments(false); }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-sm transition-colors ${
+              showHistory ? "bg-[#5E6AD2] text-white" : "border border-[#333] text-[#999] hover:text-white hover:border-[#555]"
+            }`}
+          >
+            <History className="w-4 h-4" />
+            History
           </button>
         )}
 
@@ -321,6 +361,17 @@ export default function PageEditor({ page, spaceId, onSave, onCancel }) {
             pageId={page.id}
             user={user}
             onClose={() => setShowComments(false)}
+          />
+        )}
+
+        {/* Version history panel */}
+        {showHistory && page?.id && (
+          <VersionHistoryPanel
+            pageId={page.id}
+            currentContent={content}
+            currentTitle={title}
+            onRevert={handleRevert}
+            onClose={() => setShowHistory(false)}
           />
         )}
       </div>

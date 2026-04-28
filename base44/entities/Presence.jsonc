@@ -1,0 +1,37 @@
+{
+  "name": "Presence",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "User email"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "User display name"
+    },
+    "page_id": {
+      "type": "string",
+      "description": "Page being viewed/edited"
+    },
+    "last_seen_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last heartbeat timestamp"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "online",
+        "idle",
+        "offline"
+      ],
+      "default": "online",
+      "description": "User presence status"
+    }
+  },
+  "required": [
+    "user_email",
+    "page_id"
+  ]
+}

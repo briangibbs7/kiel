@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Save, X, Image, FileText, Link as LinkIcon, Code, List, ListOrdered, Bold, Italic, Underline, Strikethrough } from "lucide-react";
+import { Save, X, Image } from "lucide-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { usePagePresence } from "@/hooks/usePagePresence";
+import PresenceAvatars from "@/components/confluence/PresenceAvatars";
 
 export default function PageEditor({ page, spaceId, onSave, onCancel }) {
   const [title, setTitle] = useState(page?.title || "");
@@ -15,6 +17,13 @@ export default function PageEditor({ page, spaceId, onSave, onCancel }) {
   const [labels, setLabels] = useState(page?.labels?.join(", ") || "");
   const quillRef = useRef(null);
   const queryClient = useQueryClient();
+
+  const { data: user } = useQuery({
+    queryKey: ["me"],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const presenceUsers = usePagePresence(page?.id, user);
 
   useEffect(() => {
     if (page) {
@@ -116,6 +125,9 @@ export default function PageEditor({ page, spaceId, onSave, onCancel }) {
           onChange={(e) => setTitle(e.target.value)}
           className="flex-1 bg-transparent border-none text-2xl font-semibold text-white placeholder-[#666] focus-visible:ring-0"
         />
+        {/* Live presence */}
+        <PresenceAvatars users={presenceUsers} />
+
         <Select value={status} onValueChange={setStatus}>
           <SelectTrigger className="w-32 bg-[#1A1A1A] border-[#333] text-white">
             <SelectValue />

@@ -13,8 +13,16 @@ import {
   Wrench,
   Factory,
   Building2,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const TEMPLATE_ICONS = {
   engineering: Code2,
@@ -98,6 +106,7 @@ export const BUILT_IN_TEMPLATES = [
 
 export default function ProjectTemplates() {
   const navigate = useNavigate();
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
 
   const handleSelectTemplate = (template) => {
     // Store template data and navigate to project creation
@@ -118,39 +127,131 @@ export default function ProjectTemplates() {
 
       <div className="p-6 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {BUILT_IN_TEMPLATES.map((template) => {
-            const IconComponent = TEMPLATE_ICONS[template.category];
-            return (
-              <div
-                key={template.id}
-                className="p-6 bg-[#111] border border-[#1E1E1E] rounded-lg hover:border-[#252525] transition-colors group"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="w-12 h-12 rounded-lg bg-[#1E1E1E] flex items-center justify-center group-hover:bg-[#252525] transition-colors">
-                    <IconComponent
-                      size={24}
-                      className="text-[#5E6AD2]"
-                    />
-                  </div>
-                </div>
+           {BUILT_IN_TEMPLATES.map((template) => {
+             const IconComponent = TEMPLATE_ICONS[template.category];
+             return (
+               <div
+                 key={template.id}
+                 onClick={() => setSelectedTemplate(template)}
+                 className="p-6 bg-[#111] border border-[#1E1E1E] rounded-lg hover:border-[#5E6AD2] transition-colors group cursor-pointer"
+               >
+                 <div className="flex items-start justify-between mb-3">
+                   <div className="w-12 h-12 rounded-lg bg-[#1E1E1E] flex items-center justify-center group-hover:bg-[#252525] transition-colors">
+                     <IconComponent
+                       size={24}
+                       className="text-[#5E6AD2]"
+                     />
+                   </div>
+                 </div>
 
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  {template.name}
-                </h3>
-                <p className="text-sm text-[#999] mb-4">
-                  {template.description}
-                </p>
+                 <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-[#5E6AD2] transition-colors">
+                   {template.name}
+                 </h3>
+                 <p className="text-sm text-[#999] mb-4">
+                   {template.description}
+                 </p>
 
-                <Button
-                  onClick={() => handleSelectTemplate(template)}
-                  className="w-full bg-[#5E6AD2] hover:bg-[#5E6AD2]/90"
-                >
-                  Use Template
-                </Button>
-              </div>
-            );
-          })}
-        </div>
+                 <Button
+                   onClick={(e) => {
+                     e.stopPropagation();
+                     handleSelectTemplate(template);
+                   }}
+                   className="w-full bg-[#5E6AD2] hover:bg-[#5E6AD2]/90"
+                 >
+                   Use Template
+                 </Button>
+               </div>
+             );
+           })}
+         </div>
+
+         {/* Template Details Modal */}
+         <Dialog open={!!selectedTemplate} onOpenChange={(open) => !open && setSelectedTemplate(null)}>
+           <DialogContent className="max-w-2xl bg-[#111] border-[#1E1E1E]">
+             {selectedTemplate && (
+               <>
+                 <DialogHeader>
+                   <div className="flex items-center gap-3">
+                     {React.createElement(TEMPLATE_ICONS[selectedTemplate.category], {
+                       size: 32,
+                       className: "text-[#5E6AD2]",
+                     })}
+                     <div>
+                       <DialogTitle className="text-2xl text-white">
+                         {selectedTemplate.name}
+                       </DialogTitle>
+                       <DialogDescription className="text-[#999]">
+                         {selectedTemplate.description}
+                       </DialogDescription>
+                     </div>
+                   </div>
+                 </DialogHeader>
+
+                 <div className="space-y-4 py-4">
+                   {selectedTemplate.sprint_length_days && (
+                     <div className="p-3 bg-[#1E1E1E] rounded border border-[#252525]">
+                       <p className="text-xs text-[#666] uppercase tracking-wide">Sprint Length</p>
+                       <p className="text-white font-semibold mt-1">
+                         {selectedTemplate.sprint_length_days} days
+                       </p>
+                     </div>
+                   )}
+
+                   {selectedTemplate.story_point_options && (
+                     <div className="p-3 bg-[#1E1E1E] rounded border border-[#252525]">
+                       <p className="text-xs text-[#666] uppercase tracking-wide">Story Point Options</p>
+                       <div className="flex gap-2 flex-wrap mt-2">
+                         {selectedTemplate.story_point_options.map((point) => (
+                           <span
+                             key={point}
+                             className="px-3 py-1 bg-[#252525] text-[#CCC] text-sm rounded"
+                           >
+                             {point}
+                           </span>
+                         ))}
+                       </div>
+                     </div>
+                   )}
+
+                   {selectedTemplate.allowed_entity_types && (
+                     <div className="p-3 bg-[#1E1E1E] rounded border border-[#252525]">
+                       <p className="text-xs text-[#666] uppercase tracking-wide">Allowed Entity Types</p>
+                       <div className="flex gap-2 flex-wrap mt-2">
+                         {selectedTemplate.allowed_entity_types.map((type) => (
+                           <span
+                             key={type}
+                             className="px-3 py-1 bg-[#252525] text-[#5E6AD2] text-sm rounded capitalize"
+                           >
+                             {type}
+                           </span>
+                         ))}
+                       </div>
+                     </div>
+                   )}
+                 </div>
+
+                 <div className="flex gap-3 justify-end">
+                   <Button
+                     variant="outline"
+                     onClick={() => setSelectedTemplate(null)}
+                     className="border-[#252525] text-[#CCC] hover:bg-[#1E1E1E]"
+                   >
+                     Close
+                   </Button>
+                   <Button
+                     onClick={() => {
+                       handleSelectTemplate(selectedTemplate);
+                       setSelectedTemplate(null);
+                     }}
+                     className="bg-[#5E6AD2] hover:bg-[#5E6AD2]/90"
+                   >
+                     Use This Template
+                   </Button>
+                 </div>
+               </>
+             )}
+           </DialogContent>
+         </Dialog>
       </div>
     </div>
   );

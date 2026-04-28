@@ -56,6 +56,7 @@ export default function DirectMessages() {
 
       if (existingPresence.length > 0) {
         await base44.entities.Presence.update(existingPresence[0].id, {
+          page_id: existingPresence[0].page_id || "messages",
           status: "online",
           last_seen_at: new Date().toISOString(),
         });

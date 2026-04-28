@@ -57,13 +57,14 @@ export default function DirectMessages() {
       if (existingPresence.length > 0) {
         await base44.entities.Presence.update(existingPresence[0].id, {
           status: "online",
-          last_seen: new Date().toISOString(),
+          last_seen_at: new Date().toISOString(),
         });
       } else {
         await base44.entities.Presence.create({
           user_email: currentUser.email,
+          page_id: "messages",
           status: "online",
-          last_seen: new Date().toISOString(),
+          last_seen_at: new Date().toISOString(),
         });
       }
     };
@@ -82,7 +83,7 @@ export default function DirectMessages() {
         if (results.length > 0) {
           base44.entities.Presence.update(results[0].id, {
             status: "offline",
-            last_seen: new Date().toISOString(),
+            last_seen_at: new Date().toISOString(),
           });
         }
       });

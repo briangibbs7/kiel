@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
+import { CheckCheck, Check } from "lucide-react";
 import MessageInput from "./MessageInput";
 
 export default function MessageThread({ currentUserEmail, otherUserEmail }) {
@@ -79,6 +80,12 @@ export default function MessageThread({ currentUserEmail, otherUserEmail }) {
     return unsubscribe;
   }, [currentUserEmail, otherUserEmail, queryClient]);
 
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
     <div className="flex flex-col h-full bg-[#0D0D0D]">
       {/* Messages */}
@@ -88,39 +95,40 @@ export default function MessageThread({ currentUserEmail, otherUserEmail }) {
             No messages yet. Start the conversation!
           </div>
         ) : (
-          messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={`flex ${
-                msg.from_user === currentUserEmail
-                  ? "justify-end"
-                  : "justify-start"
-              }`}
-            >
+          messages.map((msg) => {
+            const isMine = msg.from_user === currentUserEmail;
+            const isRead = isMine && msg.is_read;
+            return (
               <div
-                className={`max-w-xs px-4 py-2 rounded-lg ${
-                  msg.from_user === currentUserEmail
-                    ? "bg-[#5E6AD2] text-white"
-                    : "bg-[#1E1E1E] text-[#CCC]"
-                }`}
+                key={msg.id}
+                className={`flex ${isMine ? "justify-end" : "justify-start"}`}
               >
-                <p className="text-sm break-words">{msg.content}</p>
-                <p
-                  className={`text-[10px] mt-1 ${
-                    msg.from_user === currentUserEmail
-                      ? "text-[#B0B8FF]"
-                      : "text-[#999]"
+                <div
+                  className={`max-w-xs lg:max-w-sm px-4 py-2 rounded-2xl ${
+                    isMine
+                      ? "bg-[#5E6AD2] text-white rounded-br-sm"
+                      : "bg-[#1E1E1E] text-[#CCC] rounded-bl-sm"
                   }`}
                 >
-                  {format(new Date(msg.created_date), "HH:mm")}
-                  {msg.is_read && msg.from_user === currentUserEmail && (
-                    <span className="ml-1">✓</span>
-                  )}
-                </p>
+                  <p className="text-sm break-words">{msg.content}</p>
+                  <div className={`flex items-center gap-1 mt-1 ${isMine ? "justify-end" : "justify-start"}`}>
+                    <span className={`text-[10px] ${isMine ? "text-[#B0B8FF]" : "text-[#666]"}`}>
+                      {format(new Date(msg.created_date), "HH:mm")}
+                    </span>
+                    {isMine && (
+                      isRead ? (
+                        <CheckCheck className="w-3 h-3 text-[#93C5FD]" title={`Read at ${msg.read_at ? format(new Date(msg.read_at), "HH:mm") : ""}`} />
+                      ) : (
+                        <Check className="w-3 h-3 text-[#7B86D4]" title="Sent" />
+                      )
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
+        <div ref={bottomRef} />
       </div>
 
       {/* Input */}

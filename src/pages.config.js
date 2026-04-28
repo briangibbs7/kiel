@@ -81,6 +81,12 @@ import ConfluenceSpaces from './pages/ConfluenceSpaces';
 import ConfluenceSpace from './pages/ConfluenceSpace';
 import ConfluenceRecent from './pages/ConfluenceRecent';
 import ConfluenceStarred from './pages/ConfluenceStarred';
+import ConfluenceDrafts from './pages/ConfluenceDrafts';
+import ConfluenceTemplates from './pages/ConfluenceTemplates';
+import ConfluenceWhiteboards from './pages/ConfluenceWhiteboards';
+import ConfluenceSearch from './pages/ConfluenceSearch';
+import ConfluenceAnalytics from './pages/ConfluenceAnalytics';
+import SprintBoard from './pages/SprintBoard';
 import __Layout from './Layout.jsx';
 
 
@@ -119,6 +125,12 @@ export const PAGES = {
     "ConfluenceSpace": ConfluenceSpace,
     "ConfluenceRecent": ConfluenceRecent,
     "ConfluenceStarred": ConfluenceStarred,
+    "ConfluenceDrafts": ConfluenceDrafts,
+    "ConfluenceTemplates": ConfluenceTemplates,
+    "ConfluenceWhiteboards": ConfluenceWhiteboards,
+    "ConfluenceSearch": ConfluenceSearch,
+    "ConfluenceAnalytics": ConfluenceAnalytics,
+    "SprintBoard": SprintBoard,
 }
 
 export const pagesConfig = {

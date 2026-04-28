@@ -54,6 +54,7 @@ const pmNavSections = [
   label: "Planning",
   items: [
   { name: "Projects", icon: Folder, page: "Projects" },
+  { name: "Sprint Board", icon: Rocket, page: "SprintBoard" },
   { name: "Roadmap", icon: Rocket, page: "Roadmap" },
   { name: "Initiatives", icon: Rocket, page: "Initiatives" },
   { name: "Epics", icon: Rocket, page: "Epics" }]
@@ -90,15 +91,15 @@ const confluenceNavSections = [
   label: "Content",
   items: [
   { name: "Recent", icon: Clock, page: "ConfluenceRecent" },
-  { name: "Starred", icon: Star, page: "ConfluenceStarred" },
-  { name: "Drafts", icon: FileText, page: "ConfluenceDrafts" }]
+  { name: "Starred", icon: Star, page: "ConfluenceStarred" }]
 
 },
 {
   label: "Create",
   items: [
   { name: "Templates", icon: FileText, page: "ConfluenceTemplates" },
-  { name: "Whiteboards", icon: LayoutGrid, page: "ConfluenceWhiteboards" }]
+  { name: "Whiteboards", icon: LayoutGrid, page: "ConfluenceWhiteboards" },
+  { name: "Drafts", icon: FileText, page: "ConfluenceDrafts" }]
 
 },
 {
@@ -120,7 +121,7 @@ export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [sidebarPos, setSidebarPos] = useState("left");
   const [searchOpen, setSearchOpen] = useState(false);
-  const [collapsedSections, setCollapsedSections] = useState({ Planning: true, Insights: true, Reports: true });
+  const [collapsedSections, setCollapsedSections] = useState({ Insights: true, Reports: true });
   const [currentApp, setCurrentApp] = useState("pm");
   const navigate = useNavigate();
 

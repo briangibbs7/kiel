@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 :root {
-  /* Dark mode (default) */
   --pm-bg: #0D0D0D;
   --pm-surface: #161616;
   --pm-surface-hover: #1E1E1E;
@@ -13,7 +12,6 @@
   --pm-text-muted: #6B6B6B;
   --pm-text-secondary: #999999;
   --pm-accent: #5E6AD2;
-  --pm-accent-hover: #4f5bc0;
   --pm-green: #4ADE80;
   --pm-yellow: #FACC15;
   --pm-red: #F87171;
@@ -21,22 +19,12 @@
   --pm-blue: #60A5FA;
   --pm-purple: #A78BFA;
   --pm-cyan: #22D3EE;
-  --pm-nav-item-active: #1E1E1E;
-  --pm-nav-item-hover: #161616;
-  --pm-popover: #1A1A1A;
-  --pm-input-bg: #111111;
-  --pm-header-bg: #111111;
-  --pm-scrollbar: #333;
-  --pm-scrollbar-hover: #444;
 }
-
-
 
 body {
   background-color: var(--pm-bg);
   color: var(--pm-text);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Custom scrollbar */
@@ -48,15 +36,15 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--pm-scrollbar);
+  background: #333;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--pm-scrollbar-hover);
+  background: #444;
 }
 
 @layer base {
   * {
-    border-color: var(--pm-border);
+    @apply border-[#252525];
   }
 }

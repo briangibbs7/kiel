@@ -43,51 +43,58 @@ export default function Backlog() {
   };
 
   return (
-    <div className="h-full overflow-y-auto" style={{ backgroundColor: "var(--pm-bg)" }}>
-      <div className="px-6 py-4 border-b sticky top-0" style={{ borderColor: "var(--pm-border)", backgroundColor: "var(--pm-bg)" }}>
+    <div className="h-full bg-[#0D0D0D] overflow-y-auto">
+      <div className="px-6 py-4 border-b border-[#1E1E1E] sticky top-0 bg-[#0D0D0D]">
         <div>
-          <h1 className="text-2xl font-bold" style={{ color: "var(--pm-text)" }}>Backlog</h1>
-          <p className="text-sm mt-1" style={{ color: "var(--pm-text-secondary)" }}>
+          <h1 className="text-2xl font-bold text-white">Backlog</h1>
+          <p className="text-sm text-[#999] mt-1">
             All backlogs across your projects
           </p>
         </div>
       </div>
 
       <div className="p-6 max-w-6xl mx-auto space-y-4">
+        {/* Epics grouped by project */}
         {projects.map((project) => {
           const projectEpics = epics.filter((e) => e.project_id === project.id);
           if (projectEpics.length === 0) return null;
 
           return (
             <div key={project.id} className="space-y-3">
-              <h2 className="text-sm font-semibold px-2" style={{ color: "var(--pm-text-secondary)" }}>{project.name}</h2>
+              <h2 className="text-sm font-semibold text-[#CCC] px-2">{project.name}</h2>
               {projectEpics.map((epic) => {
                 const epicTasks = getTasksForEpic(epic.id);
                 const isExpanded = expandedEpics[epic.id];
 
                 return (
-                  <div key={epic.id} className="border rounded-lg overflow-hidden" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
+                  <div key={epic.id} className="bg-[#111] border border-[#1E1E1E] rounded-lg overflow-hidden">
                     <button
                       onClick={() => toggleEpic(epic.id)}
-                      className="w-full px-4 py-3 flex items-center gap-3 hover:opacity-80 transition-opacity group"
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-[#161616] transition-colors group"
                     >
-                      <div style={{ color: "var(--pm-text-muted)" }}>
-                        {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                      <div className="text-[#999] group-hover:text-white">
+                        {isExpanded ? (
+                          <ChevronDown size={16} />
+                        ) : (
+                          <ChevronRight size={16} />
+                        )}
                       </div>
                       <EpicCard epic={epic} />
                     </button>
 
                     {isExpanded && (
-                      <div className="border-t p-4 space-y-2" style={{ borderColor: "var(--pm-border)", backgroundColor: "var(--pm-bg)" }}>
-                        {epicTasks.length === 0 ? (
-                          <p className="text-xs py-4 text-center" style={{ color: "var(--pm-text-muted)" }}>
-                            No tasks in this epic
-                          </p>
-                        ) : (
-                          epicTasks.map((task) => (
-                            <TaskCard key={task.id} task={task} />
-                          ))
-                        )}
+                      <div className="border-t border-[#1E1E1E] bg-[#0D0D0D]">
+                        <div className="p-4 space-y-2">
+                          {epicTasks.length === 0 ? (
+                            <p className="text-xs text-[#555] py-4 text-center">
+                              No tasks in this epic
+                            </p>
+                          ) : (
+                            epicTasks.map((task) => (
+                              <TaskCard key={task.id} task={task} />
+                            ))
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -97,9 +104,10 @@ export default function Backlog() {
           );
         })}
 
+        {/* Global backlog (tasks without epic) */}
         {getBacklogTasks().length > 0 && (
-          <div className="border rounded-lg p-4" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
-            <h3 className="text-sm font-semibold mb-3" style={{ color: "var(--pm-text)" }}>Backlog (No Epic)</h3>
+          <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-white mb-3">Backlog (No Epic)</h3>
             <div className="space-y-2">
               {getBacklogTasks().map((task) => (
                 <TaskCard key={task.id} task={task} />

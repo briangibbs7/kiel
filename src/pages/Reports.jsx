@@ -54,30 +54,60 @@ export default function Reports() {
   const metrics = calculateMetrics();
 
   return (
-    <div className="h-full overflow-y-auto" style={{ backgroundColor: "var(--pm-bg)" }}>
-      <div className="px-6 py-4 border-b" style={{ borderColor: "var(--pm-border)" }}>
-        <h1 className="text-2xl font-bold" style={{ color: "var(--pm-text)" }}>Reports & Analytics</h1>
-        <p className="text-sm mt-1" style={{ color: "var(--pm-text-secondary)" }}>
+    <div className="h-full bg-[#0D0D0D] overflow-y-auto">
+      <div className="px-6 py-4 border-b border-[#1E1E1E]">
+        <h1 className="text-2xl font-bold text-white">Reports & Analytics</h1>
+        <p className="text-sm text-[#999] mt-1">
           Project metrics and team performance insights
         </p>
       </div>
 
       <div className="p-6 space-y-6 max-w-7xl mx-auto">
+        {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {[
-            { label: "Total Issues", value: metrics.totalIssues, color: "var(--pm-text)" },
-            { label: "Completed", value: metrics.completedIssues, color: "var(--pm-green)" },
-            { label: "In Progress", value: metrics.inProgressIssues, color: "var(--pm-yellow)" },
-            { label: "Completion Rate", value: `${metrics.completionRate}%`, color: "var(--pm-accent)" },
-            { label: "Team Members", value: metrics.assignedUsers, color: "var(--pm-blue)" },
-          ].map((stat) => (
-            <div key={stat.label} className="border rounded-lg p-4" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
-              <p className="text-xs font-medium uppercase tracking-wider" style={{ color: "var(--pm-text-secondary)" }}>{stat.label}</p>
-              <p className="text-3xl font-bold mt-2" style={{ color: stat.color }}>{stat.value}</p>
-            </div>
-          ))}
+          <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-4">
+            <p className="text-xs font-medium text-[#999] uppercase tracking-wider">
+              Total Issues
+            </p>
+            <p className="text-3xl font-bold text-white mt-2">
+              {metrics.totalIssues}
+            </p>
+          </div>
+          <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-4">
+            <p className="text-xs font-medium text-[#999] uppercase tracking-wider">
+              Completed
+            </p>
+            <p className="text-3xl font-bold text-[#4ADE80] mt-2">
+              {metrics.completedIssues}
+            </p>
+          </div>
+          <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-4">
+            <p className="text-xs font-medium text-[#999] uppercase tracking-wider">
+              In Progress
+            </p>
+            <p className="text-3xl font-bold text-[#FACC15] mt-2">
+              {metrics.inProgressIssues}
+            </p>
+          </div>
+          <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-4">
+            <p className="text-xs font-medium text-[#999] uppercase tracking-wider">
+              Completion Rate
+            </p>
+            <p className="text-3xl font-bold text-[#5E6AD2] mt-2">
+              {metrics.completionRate}%
+            </p>
+          </div>
+          <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-4">
+            <p className="text-xs font-medium text-[#999] uppercase tracking-wider">
+              Team Members
+            </p>
+            <p className="text-3xl font-bold text-[#60A5FA] mt-2">
+              {metrics.assignedUsers}
+            </p>
+          </div>
         </div>
 
+        {/* Charts Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ResolutionTimeChart issues={issues} />
           <WorkloadChart issues={issues} />
@@ -87,32 +117,56 @@ export default function Reports() {
           <ProjectProgressChart issues={issues} projects={projects} />
         </div>
 
+        {/* Project Burndown Dashboard */}
         <div>
-          <h2 className="text-lg font-semibold mb-4" style={{ color: "var(--pm-text)" }}>Project Progress & Burndown</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">Project Progress & Burndown</h2>
           <ProjectBurndownDashboard projects={projects} tasks={tasks} sprints={sprints} />
         </div>
 
-        <div className="border rounded-lg p-6" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
-          <h3 className="text-sm font-semibold mb-4" style={{ color: "var(--pm-text)" }}>Project Summary</h3>
+        {/* Project Summary */}
+        <div className="bg-[#111] border border-[#1E1E1E] rounded-lg p-6">
+          <h3 className="text-sm font-semibold text-white mb-4">
+            Project Summary
+          </h3>
           <div className="space-y-3">
             {projects.length === 0 ? (
-              <p className="text-xs" style={{ color: "var(--pm-text-muted)" }}>No projects yet</p>
+              <p className="text-xs text-[#555]">No projects yet</p>
             ) : (
               projects.map((project) => {
-                const projectIssues = issues.filter((i) => i.project_id === project.id);
-                const doneCount = projectIssues.filter((i) => i.status === "done").length;
-                const progress = projectIssues.length > 0 ? Math.round((doneCount / projectIssues.length) * 100) : 0;
+                const projectIssues = issues.filter(
+                  (i) => i.project_id === project.id
+                );
+                const doneCount = projectIssues.filter(
+                  (i) => i.status === "done"
+                ).length;
+                const progress =
+                  projectIssues.length > 0
+                    ? Math.round((doneCount / projectIssues.length) * 100)
+                    : 0;
+
                 return (
-                  <div key={project.id} className="flex items-center justify-between p-3 border rounded hover:opacity-80 transition-opacity" style={{ backgroundColor: "var(--pm-bg)", borderColor: "var(--pm-border)" }}>
+                  <div
+                    key={project.id}
+                    className="flex items-center justify-between p-3 bg-[#0D0D0D] border border-[#1E1E1E] rounded hover:border-[#252525] transition-colors"
+                  >
                     <div className="flex-1">
-                      <p className="text-sm font-medium" style={{ color: "var(--pm-text)" }}>{project.name}</p>
-                      <p className="text-xs mt-1" style={{ color: "var(--pm-text-secondary)" }}>{projectIssues.length} issues • {doneCount} completed</p>
+                      <p className="text-sm font-medium text-white">
+                        {project.name}
+                      </p>
+                      <p className="text-xs text-[#999] mt-1">
+                        {projectIssues.length} issues • {doneCount} completed
+                      </p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-24 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "var(--pm-border)" }}>
-                        <div className="h-full bg-gradient-to-r from-[#5E6AD2] to-[#7C3AED]" style={{ width: `${progress}%` }} />
+                      <div className="w-24 h-2 bg-[#1E1E1E] rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-[#5E6AD2] to-[#7C3AED]"
+                          style={{ width: `${progress}%` }}
+                        />
                       </div>
-                      <span className="text-sm font-medium w-10 text-right" style={{ color: "var(--pm-text-secondary)" }}>{progress}%</span>
+                      <span className="text-sm font-medium text-[#999] w-10 text-right">
+                        {progress}%
+                      </span>
                     </div>
                   </div>
                 );

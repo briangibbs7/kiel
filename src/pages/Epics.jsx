@@ -82,63 +82,38 @@ export default function EpicsPage() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-[#0D0D0D]">
+    <div className="h-full flex flex-col" style={{ backgroundColor: "var(--pm-bg)" }}>
       {/* Header */}
-      <div className="p-6 border-b border-[#1E1E1E]">
+      <div className="p-6 border-b" style={{ borderColor: "var(--pm-border)" }}>
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold text-white">Epics</h1>
+          <h1 className="text-2xl font-bold" style={{ color: "var(--pm-text)" }}>Epics</h1>
           <div className="flex gap-2">
-            <Button
-              variant={view === "grid" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setView("grid")}
-              className="bg-[#5E6AD2]"
-            >
-              <Grid className="w-4 h-4" />
-            </Button>
-            <Button
-              variant={view === "list" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setView("list")}
-              className="bg-[#5E6AD2]"
-            >
-              <List className="w-4 h-4" />
-            </Button>
-
+            <Button variant={view === "grid" ? "default" : "outline"} size="icon" onClick={() => setView("grid")} className="bg-[#5E6AD2]"><Grid className="w-4 h-4" /></Button>
+            <Button variant={view === "list" ? "default" : "outline"} size="icon" onClick={() => setView("list")} className="bg-[#5E6AD2]"><List className="w-4 h-4" /></Button>
           </div>
         </div>
 
-        {/* Filters */}
         <div className="flex gap-3 flex-wrap">
           <div className="flex-1 min-w-[200px]">
             <div className="relative">
-              <Search className="absolute left-3 top-2.5 w-4 h-4 text-[#666]" />
-              <Input
-                placeholder="Search epics..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-9 bg-[#1A1A1A] border-[#333] text-white placeholder-[#666]"
-              />
+              <Search className="absolute left-3 top-2.5 w-4 h-4" style={{ color: "var(--pm-text-muted)" }} />
+              <Input placeholder="Search epics..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }} />
             </div>
           </div>
           <Select value={filterProject} onValueChange={setFilterProject}>
-            <SelectTrigger className="w-40 bg-[#1A1A1A] border-[#333] text-white">
+            <SelectTrigger className="w-40" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
               <SelectValue placeholder="All projects" />
             </SelectTrigger>
-            <SelectContent className="bg-[#1A1A1A] border-[#333]">
+            <SelectContent style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)" }}>
               <SelectItem value={null}>All projects</SelectItem>
-              {projects.map((p) => (
-                <SelectItem key={p.id} value={p.id}>
-                  {p.name}
-                </SelectItem>
-              ))}
+              {projects.map((p) => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
             </SelectContent>
           </Select>
           <Select value={filterStatus} onValueChange={setFilterStatus}>
-            <SelectTrigger className="w-40 bg-[#1A1A1A] border-[#333] text-white">
+            <SelectTrigger className="w-40" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
               <SelectValue placeholder="All statuses" />
             </SelectTrigger>
-            <SelectContent className="bg-[#1A1A1A] border-[#333]">
+            <SelectContent style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)" }}>
               <SelectItem value={null}>All statuses</SelectItem>
               <SelectItem value="backlog">Backlog</SelectItem>
               <SelectItem value="todo">Todo</SelectItem>
@@ -149,35 +124,28 @@ export default function EpicsPage() {
         </div>
       </div>
 
-      {/* Content */}
       <div className="flex-1 overflow-auto p-6">
         {filteredEpics.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <p className="text-[#999] mb-2">No epics found</p>
-              <p className="text-[#666] text-sm">Create an epic to get started</p>
+              <p className="mb-2" style={{ color: "var(--pm-text-secondary)" }}>No epics found</p>
+              <p className="text-sm" style={{ color: "var(--pm-text-muted)" }}>Create an epic to get started</p>
             </div>
           </div>
         ) : view === "grid" ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredEpics.map((epic) => (
-              <div
-                key={epic.id}
-                onClick={() => setSelectedEpic(epic)}
-                className="bg-[#111] border border-[#1E1E1E] rounded-lg p-4 cursor-pointer hover:border-[#333] transition-colors"
-              >
+              <div key={epic.id} onClick={() => setSelectedEpic(epic)} className="border rounded-lg p-4 cursor-pointer hover:opacity-80 transition-opacity" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
                 <div className="flex items-start justify-between mb-3">
-                  <h3 className="font-semibold text-white flex-1 pr-2">{epic.title}</h3>
-                  <ChevronRight className="w-4 h-4 text-[#666]" />
+                  <h3 className="font-semibold flex-1 pr-2" style={{ color: "var(--pm-text)" }}>{epic.title}</h3>
+                  <ChevronRight className="w-4 h-4" style={{ color: "var(--pm-text-muted)" }} />
                 </div>
-                {epic.description && <p className="text-sm text-[#999] mb-3 line-clamp-2">{epic.description}</p>}
+                {epic.description && <p className="text-sm mb-3 line-clamp-2" style={{ color: "var(--pm-text-secondary)" }}>{epic.description}</p>}
                 <div className="flex gap-2 flex-wrap mb-3">
-                  <Badge className={`text-xs ${statusColors[epic.status] || statusColors.backlog}`}>
-                    {epic.status}
-                  </Badge>
+                  <Badge className={`text-xs ${statusColors[epic.status] || statusColors.backlog}`}>{epic.status}</Badge>
                   {epic.priority && <Badge className={`text-xs ${priorityColors[epic.priority] || priorityColors.none}`}>{epic.priority}</Badge>}
                 </div>
-                <div className="text-xs text-[#666]">
+                <div className="text-xs" style={{ color: "var(--pm-text-muted)" }}>
                   <p>{getProjectName(epic.project_id)}</p>
                   <div className="mt-2 space-y-1">
                     <p>{getEpicIssues(epic.id).length} issues</p>
@@ -191,146 +159,90 @@ export default function EpicsPage() {
         ) : (
           <div className="space-y-2">
             {filteredEpics.map((epic) => (
-              <div
-                key={epic.id}
-                onClick={() => setSelectedEpic(epic)}
-                className="bg-[#111] border border-[#1E1E1E] rounded-lg p-4 flex items-center justify-between cursor-pointer hover:border-[#333] transition-colors"
-              >
+              <div key={epic.id} onClick={() => setSelectedEpic(epic)} className="border rounded-lg p-4 flex items-center justify-between cursor-pointer hover:opacity-80 transition-opacity" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="font-semibold text-white">{epic.title}</h3>
+                    <h3 className="font-semibold" style={{ color: "var(--pm-text)" }}>{epic.title}</h3>
                     <Badge className={statusColors[epic.status] || statusColors.backlog}>{epic.status}</Badge>
                     {epic.priority && <Badge className={priorityColors[epic.priority] || priorityColors.none}>{epic.priority}</Badge>}
                   </div>
-                  <p className="text-sm text-[#999]">{getProjectName(epic.project_id)}</p>
+                  <p className="text-sm" style={{ color: "var(--pm-text-secondary)" }}>{getProjectName(epic.project_id)}</p>
                 </div>
                 <div className="text-right mr-4">
-                  <p className="text-sm text-[#666]">{getEpicIssues(epic.id).length} issues • {getEpicTasks(epic.id).length} tasks • {getEpicStoryPoints(epic.id)} pts</p>
+                  <p className="text-sm" style={{ color: "var(--pm-text-muted)" }}>{getEpicIssues(epic.id).length} issues • {getEpicTasks(epic.id).length} tasks • {getEpicStoryPoints(epic.id)} pts</p>
                 </div>
-                <ChevronRight className="w-4 h-4 text-[#666]" />
+                <ChevronRight className="w-4 h-4" style={{ color: "var(--pm-text-muted)" }} />
               </div>
             ))}
           </div>
         )}
       </div>
 
-      {/* Detail Modal */}
       {selectedEpic && (
         <Dialog open={!!selectedEpic} onOpenChange={() => setSelectedEpic(null)}>
-          <DialogContent className="bg-[#1A1A1A] border-[#333] max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto" style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)" }}>
             <DialogHeader>
               <div className="flex items-center justify-between">
-                <DialogTitle className="text-white">{selectedEpic.title}</DialogTitle>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => {
-                    setEditingEpic(selectedEpic);
-                    setSelectedEpic(null);
-                  }}
-                  className="border-[#333] text-[#CCC] hover:text-white"
-                >
-                  <Edit className="w-4 h-4 mr-2" />
-                  Edit
+                <DialogTitle style={{ color: "var(--pm-text)" }}>{selectedEpic.title}</DialogTitle>
+                <Button size="sm" variant="outline" onClick={() => { setEditingEpic(selectedEpic); setSelectedEpic(null); }} style={{ borderColor: "var(--pm-border-light)", color: "var(--pm-text-secondary)" }}>
+                  <Edit className="w-4 h-4 mr-2" /> Edit
                 </Button>
               </div>
             </DialogHeader>
             <div className="space-y-4">
               {selectedEpic.description && (
                 <div>
-                  <h3 className="text-sm font-semibold text-[#CCC] mb-2">Description</h3>
-                  <p className="text-[#999]">{selectedEpic.description}</p>
+                  <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--pm-text-secondary)" }}>Description</h3>
+                  <p style={{ color: "var(--pm-text-secondary)" }}>{selectedEpic.description}</p>
                 </div>
               )}
-
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h3 className="text-sm font-semibold text-[#CCC] mb-2">Status</h3>
+                  <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--pm-text-secondary)" }}>Status</h3>
                   <Badge className={statusColors[selectedEpic.status] || statusColors.backlog}>{selectedEpic.status}</Badge>
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-[#CCC] mb-2">Priority</h3>
-                  <Badge className={priorityColors[selectedEpic.priority] || priorityColors.none}>
-                    {selectedEpic.priority || "None"}
-                  </Badge>
+                  <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--pm-text-secondary)" }}>Priority</h3>
+                  <Badge className={priorityColors[selectedEpic.priority] || priorityColors.none}>{selectedEpic.priority || "None"}</Badge>
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-[#CCC] mb-2">Project</h3>
-                  <p className="text-[#999]">{getProjectName(selectedEpic.project_id)}</p>
+                  <h3 className="text-sm font-semibold mb-2" style={{ color: "var(--pm-text-secondary)" }}>Project</h3>
+                  <p style={{ color: "var(--pm-text-secondary)" }}>{getProjectName(selectedEpic.project_id)}</p>
                 </div>
               </div>
-
-              <div className="grid grid-cols-3 gap-4 p-3 bg-[#0D0D0D] border border-[#252525] rounded">
-                <div>
-                  <p className="text-xs text-[#666]">Issues</p>
-                  <p className="text-lg font-semibold text-white">{getEpicIssues(selectedEpic.id).length}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-[#666]">Tasks</p>
-                  <p className="text-lg font-semibold text-white">{getEpicTasks(selectedEpic.id).length}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-[#666]">Story Points</p>
-                  <p className="text-lg font-semibold text-white">{getEpicStoryPoints(selectedEpic.id)}</p>
-                </div>
+              <div className="grid grid-cols-3 gap-4 p-3 border rounded" style={{ backgroundColor: "var(--pm-bg)", borderColor: "var(--pm-border-light)" }}>
+                {[["Issues", getEpicIssues(selectedEpic.id).length], ["Tasks", getEpicTasks(selectedEpic.id).length], ["Story Points", getEpicStoryPoints(selectedEpic.id)]].map(([label, val]) => (
+                  <div key={label}>
+                    <p className="text-xs" style={{ color: "var(--pm-text-muted)" }}>{label}</p>
+                    <p className="text-lg font-semibold" style={{ color: "var(--pm-text)" }}>{val}</p>
+                  </div>
+                ))}
               </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-[#CCC] mb-3">Linked Issues ({getEpicIssues(selectedEpic.id).length})</h3>
-                <div className="space-y-2 max-h-48 overflow-y-auto">
-                  {getEpicIssues(selectedEpic.id).length === 0 ? (
-                    <p className="text-sm text-[#666]">No issues linked to this epic</p>
-                  ) : (
-                    getEpicIssues(selectedEpic.id).map((issue) => (
-                      <div key={issue.id} className="p-3 bg-[#0D0D0D] border border-[#252525] rounded">
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <p className="font-medium text-white text-sm">{issue.title}</p>
-                            <p className="text-xs text-[#666] mt-1">{issue.description}</p>
-                          </div>
-                          <Badge className={statusColors[issue.status] || statusColors.backlog} size="sm">
-                            {issue.status}
-                          </Badge>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-[#CCC] mb-3">Linked Tasks ({getEpicTasks(selectedEpic.id).length})</h3>
-                <div className="space-y-2 max-h-48 overflow-y-auto">
-                  {getEpicTasks(selectedEpic.id).length === 0 ? (
-                    <p className="text-sm text-[#666]">No tasks linked to this epic</p>
-                  ) : (
-                    getEpicTasks(selectedEpic.id).map((task) => (
-                      <div key={task.id} className="p-3 bg-[#0D0D0D] border border-[#252525] rounded">
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <p className="font-medium text-white text-sm">{task.title}</p>
-                            <p className="text-xs text-[#666] mt-1">{task.description}</p>
-                          </div>
-                          <div className="flex gap-2">
-                            {task.story_points && <Badge className="bg-[#5E6AD2] text-white text-xs">{task.story_points} pts</Badge>}
-                            <Badge className={statusColors[task.status] || statusColors.backlog} size="sm">
-                              {task.status}
-                            </Badge>
+              {[["Linked Issues", getEpicIssues(selectedEpic.id)], ["Linked Tasks", getEpicTasks(selectedEpic.id)]].map(([label, items]) => (
+                <div key={label}>
+                  <h3 className="text-sm font-semibold mb-3" style={{ color: "var(--pm-text-secondary)" }}>{label} ({items.length})</h3>
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {items.length === 0 ? (
+                      <p className="text-sm" style={{ color: "var(--pm-text-muted)" }}>None linked</p>
+                    ) : (
+                      items.map((item) => (
+                        <div key={item.id} className="p-3 border rounded" style={{ backgroundColor: "var(--pm-bg)", borderColor: "var(--pm-border-light)" }}>
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1">
+                              <p className="font-medium text-sm" style={{ color: "var(--pm-text)" }}>{item.title}</p>
+                              {item.description && <p className="text-xs mt-1" style={{ color: "var(--pm-text-muted)" }}>{item.description}</p>}
+                            </div>
+                            <Badge className={statusColors[item.status] || statusColors.backlog} size="sm">{item.status}</Badge>
                           </div>
                         </div>
-                      </div>
-                    ))
-                  )}
+                      ))
+                    )}
+                  </div>
                 </div>
-              </div>
-
+              ))}
               <div>
-                <h3 className="text-sm font-semibold text-[#CCC] mb-3">Activity</h3>
-                <EpicActivityFeed 
-                  epic={selectedEpic}
-                  issues={getEpicIssues(selectedEpic.id)}
-                  tasks={getEpicTasks(selectedEpic.id)}
-                />
+                <h3 className="text-sm font-semibold mb-3" style={{ color: "var(--pm-text-secondary)" }}>Activity</h3>
+                <EpicActivityFeed epic={selectedEpic} issues={getEpicIssues(selectedEpic.id)} tasks={getEpicTasks(selectedEpic.id)} />
               </div>
             </div>
           </DialogContent>

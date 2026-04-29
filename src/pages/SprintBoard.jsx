@@ -28,34 +28,31 @@ function IssueCard({ issue, index, onClick }) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           onClick={() => onClick(issue)}
-          className={`bg-[#161616] border rounded-lg p-3 cursor-pointer transition-colors mb-2 ${
-            snapshot.isDragging ? "border-[#5E6AD2] shadow-lg shadow-[#5E6AD2]/20" : "border-[#252525] hover:border-[#333]"
-          }`}
+          className="border rounded-lg p-3 cursor-pointer transition-colors mb-2"
+          style={{
+            backgroundColor: "var(--pm-surface)",
+            borderColor: snapshot.isDragging ? "#5E6AD2" : "var(--pm-border-light)",
+            boxShadow: snapshot.isDragging ? "0 4px 12px rgba(94,106,210,0.2)" : "none",
+          }}
         >
           <div className="flex items-start justify-between gap-2 mb-2">
-            <p className="text-sm text-white font-medium leading-tight">{issue.title}</p>
-            <div
-              className="w-2 h-2 rounded-full flex-shrink-0 mt-1.5"
-              style={{ backgroundColor: PRIORITY_COLORS[issue.priority] || "#666" }}
-              title={issue.priority}
-            />
+            <p className="text-sm font-medium leading-tight" style={{ color: "var(--pm-text)" }}>{issue.title}</p>
+            <div className="w-2 h-2 rounded-full flex-shrink-0 mt-1.5" style={{ backgroundColor: PRIORITY_COLORS[issue.priority] || "var(--pm-text-muted)" }} title={issue.priority} />
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             {issue.assignee && (
-              <div className="flex items-center gap-1">
-                <div className="w-4 h-4 rounded-full bg-[#5E6AD2] flex items-center justify-center text-[8px] font-bold text-white">
-                  {issue.assignee[0]?.toUpperCase()}
-                </div>
+              <div className="w-4 h-4 rounded-full bg-[#5E6AD2] flex items-center justify-center text-[8px] font-bold text-white">
+                {issue.assignee[0]?.toUpperCase()}
               </div>
             )}
             {issue.due_date && (
-              <span className="flex items-center gap-1 text-[10px] text-[#666]">
+              <span className="flex items-center gap-1 text-[10px]" style={{ color: "var(--pm-text-muted)" }}>
                 <Calendar className="w-2.5 h-2.5" />
                 {format(new Date(issue.due_date), "MMM d")}
               </span>
             )}
             {issue.labels?.slice(0, 2).map((l) => (
-              <span key={l} className="text-[9px] bg-[#252525] text-[#888] px-1.5 py-0.5 rounded">{l}</span>
+              <span key={l} className="text-[9px] px-1.5 py-0.5 rounded" style={{ backgroundColor: "var(--pm-surface-hover)", color: "var(--pm-text-secondary)" }}>{l}</span>
             ))}
           </div>
         </div>
@@ -129,14 +126,15 @@ export default function SprintBoard() {
   const donePoints = sprintIssues.filter((i) => i.status === "done").reduce((sum, i) => sum + (i.story_points || 0), 0);
 
   return (
-    <div className="h-full flex flex-col bg-[#0D0D0D]">
+    <div className="h-full flex flex-col" style={{ backgroundColor: "var(--pm-bg)" }}>
       {/* Header */}
-      <div className="px-5 py-3 border-b border-[#1E1E1E] flex items-center gap-4 flex-shrink-0">
-        <h1 className="text-sm font-semibold text-white">Sprint Board</h1>
+      <div className="px-5 py-3 border-b flex items-center gap-4 flex-shrink-0" style={{ borderColor: "var(--pm-border)" }}>
+        <h1 className="text-sm font-semibold" style={{ color: "var(--pm-text)" }}>Sprint Board</h1>
         <select
           value={selectedProject}
           onChange={(e) => setSelectedProject(e.target.value)}
-          className="bg-[#1A1A1A] border border-[#333] text-white rounded px-2 py-1 text-sm"
+          className="border rounded px-2 py-1 text-sm"
+          style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}
         >
           <option value="">Select project...</option>
           {projects.map((p) => <option key={p.id} value={p.id}>{p.icon} {p.name}</option>)}
@@ -189,64 +187,53 @@ export default function SprintBoard() {
       {!selectedProject ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <Target className="w-12 h-12 mx-auto mb-3 text-[#333]" />
-            <p className="text-[#666] text-sm">Select a project to manage sprints</p>
+            <Target className="w-12 h-12 mx-auto mb-3" style={{ color: "var(--pm-border-light)" }} />
+            <p className="text-sm" style={{ color: "var(--pm-text-muted)" }}>Select a project to manage sprints</p>
           </div>
         </div>
       ) : !activeSprint ? (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <Play className="w-12 h-12 mx-auto mb-3 text-[#333]" />
-            <p className="text-white font-semibold mb-1">No active sprint</p>
+            <Play className="w-12 h-12 mx-auto mb-3" style={{ color: "var(--pm-border-light)" }} />
+            <p className="font-semibold mb-1" style={{ color: "var(--pm-text)" }}>No active sprint</p>
             {plannedSprints.length > 0 ? (
               <div className="space-y-2 mt-4">
                 {plannedSprints.map((s) => (
-                  <div key={s.id} className="flex items-center gap-3 bg-[#111] border border-[#1E1E1E] rounded-lg px-4 py-3">
-                    <span className="text-sm text-white flex-1">{s.name}</span>
-                    <Button
-                      size="sm"
-                      onClick={() => startSprintMutation.mutate(s.id)}
-                      className="bg-[#5E6AD2] hover:bg-[#6E7AE2] text-white h-7 text-xs"
-                    >
+                  <div key={s.id} className="flex items-center gap-3 border rounded-lg px-4 py-3" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
+                    <span className="text-sm flex-1" style={{ color: "var(--pm-text)" }}>{s.name}</span>
+                    <Button size="sm" onClick={() => startSprintMutation.mutate(s.id)} className="bg-[#5E6AD2] hover:bg-[#6E7AE2] text-white h-7 text-xs">
                       <Play className="w-3 h-3 mr-1" /> Start
                     </Button>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-[#666]">Create a sprint to start tracking work</p>
+              <p className="text-sm" style={{ color: "var(--pm-text-muted)" }}>Create a sprint to start tracking work</p>
             )}
-            <Button
-              onClick={() => setShowCreateSprint(true)}
-              variant="outline"
-              className="border-[#333] text-[#999] mt-4"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Create Sprint
+            <Button onClick={() => setShowCreateSprint(true)} variant="outline" className="mt-4" style={{ borderColor: "var(--pm-border-light)", color: "var(--pm-text-secondary)" }}>
+              <Plus className="w-4 h-4 mr-2" /> Create Sprint
             </Button>
           </div>
         </div>
       ) : (
         <div className="flex-1 overflow-hidden flex flex-col">
-          {/* Sprint stats */}
           {(totalPoints > 0 || sprintIssues.length > 0) && (
-            <div className="px-5 py-2 border-b border-[#1E1E1E] flex items-center gap-6 text-xs text-[#666]">
+            <div className="px-5 py-2 border-b flex items-center gap-6 text-xs" style={{ borderColor: "var(--pm-border)", color: "var(--pm-text-muted)" }}>
               <span>{sprintIssues.length} issues</span>
               {totalPoints > 0 && <span>{donePoints}/{totalPoints} story points</span>}
               {totalPoints > 0 && (
-                <div className="flex-1 max-w-40 h-1.5 bg-[#252525] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#4ADE80] rounded-full transition-all" style={{ width: `${Math.round((donePoints / totalPoints) * 100)}%` }} />
+                <div className="flex-1 max-w-40 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: "var(--pm-border-light)" }}>
+                  <div className="h-full rounded-full transition-all" style={{ width: `${Math.round((donePoints / totalPoints) * 100)}%`, backgroundColor: "var(--pm-green)" }} />
                 </div>
               )}
               {activeSprint.goal && (
-                <span className="text-[#5E6AD2] flex items-center gap-1">
+                <span className="flex items-center gap-1 text-[#5E6AD2]">
                   <Target className="w-3 h-3" /> {activeSprint.goal}
                 </span>
               )}
             </div>
           )}
 
-          {/* Kanban board */}
           <DragDropContext onDragEnd={handleDragEnd}>
             <div className="flex-1 overflow-x-auto overflow-y-hidden flex gap-0">
               {STATUSES.map((status) => (
@@ -255,12 +242,13 @@ export default function SprintBoard() {
                     <div
                       ref={provided.innerRef}
                       {...provided.droppableProps}
-                      className={`flex-1 min-w-[220px] flex flex-col border-r border-[#1E1E1E] last:border-r-0 transition-colors ${snapshot.isDraggingOver ? "bg-[#111]" : ""}`}
+                      className="flex-1 min-w-[220px] flex flex-col border-r last:border-r-0 transition-colors"
+                      style={{ borderColor: "var(--pm-border)", backgroundColor: snapshot.isDraggingOver ? "var(--pm-surface)" : "transparent" }}
                     >
-                      <div className="px-4 py-3 border-b border-[#1E1E1E] flex items-center gap-2 flex-shrink-0">
+                      <div className="px-4 py-3 border-b flex items-center gap-2 flex-shrink-0" style={{ borderColor: "var(--pm-border)" }}>
                         <div className="w-2 h-2 rounded-full" style={{ backgroundColor: status.color }} />
-                        <span className="text-xs font-semibold text-[#CCC] uppercase tracking-wider">{status.label}</span>
-                        <span className="text-xs text-[#555] ml-auto">{byStatus[status.id]?.length || 0}</span>
+                        <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "var(--pm-text-secondary)" }}>{status.label}</span>
+                        <span className="text-xs ml-auto" style={{ color: "var(--pm-text-muted)" }}>{byStatus[status.id]?.length || 0}</span>
                       </div>
                       <div className="flex-1 overflow-y-auto p-3">
                         {byStatus[status.id]?.map((issue, idx) => (
@@ -277,50 +265,48 @@ export default function SprintBoard() {
         </div>
       )}
 
-      {/* Create Sprint Dialog */}
       <Dialog open={showCreateSprint} onOpenChange={setShowCreateSprint}>
-        <DialogContent className="bg-[#1A1A1A] border-[#333] text-white max-w-md">
-          <DialogHeader><DialogTitle>Create Sprint</DialogTitle></DialogHeader>
+        <DialogContent className="max-w-md" style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
+          <DialogHeader><DialogTitle style={{ color: "var(--pm-text)" }}>Create Sprint</DialogTitle></DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label className="text-xs text-[#999] mb-1.5 block">Sprint Name</Label>
-              <Input value={sprintForm.name} onChange={(e) => setSprintForm({ ...sprintForm, name: e.target.value })} className="bg-[#111] border-[#333] text-white" placeholder="Sprint 1" />
+              <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Sprint Name</Label>
+              <Input value={sprintForm.name} onChange={(e) => setSprintForm({ ...sprintForm, name: e.target.value })} style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }} placeholder="Sprint 1" />
             </div>
             <div>
-              <Label className="text-xs text-[#999] mb-1.5 block">Sprint Goal (optional)</Label>
-              <Input value={sprintForm.goal} onChange={(e) => setSprintForm({ ...sprintForm, goal: e.target.value })} className="bg-[#111] border-[#333] text-white" placeholder="What's the goal of this sprint?" />
+              <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Sprint Goal (optional)</Label>
+              <Input value={sprintForm.goal} onChange={(e) => setSprintForm({ ...sprintForm, goal: e.target.value })} style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }} placeholder="What's the goal of this sprint?" />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label className="text-xs text-[#999] mb-1.5 block">Start Date</Label>
-                <Input type="date" value={sprintForm.start_date} onChange={(e) => setSprintForm({ ...sprintForm, start_date: e.target.value })} className="bg-[#111] border-[#333] text-white" />
+                <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Start Date</Label>
+                <Input type="date" value={sprintForm.start_date} onChange={(e) => setSprintForm({ ...sprintForm, start_date: e.target.value })} style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }} />
               </div>
               <div>
-                <Label className="text-xs text-[#999] mb-1.5 block">End Date</Label>
-                <Input type="date" value={sprintForm.end_date} onChange={(e) => setSprintForm({ ...sprintForm, end_date: e.target.value })} className="bg-[#111] border-[#333] text-white" />
+                <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>End Date</Label>
+                <Input type="date" value={sprintForm.end_date} onChange={(e) => setSprintForm({ ...sprintForm, end_date: e.target.value })} style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }} />
               </div>
             </div>
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <Button variant="ghost" onClick={() => setShowCreateSprint(false)} className="text-[#999]">Cancel</Button>
+            <Button variant="ghost" onClick={() => setShowCreateSprint(false)} style={{ color: "var(--pm-text-muted)" }}>Cancel</Button>
             <Button onClick={() => sprintForm.name && createSprintMutation.mutate(sprintForm)} disabled={!sprintForm.name || createSprintMutation.isPending} className="bg-[#5E6AD2] hover:bg-[#6E7AE2] text-white">Create</Button>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* Create Issue Dialog */}
       <Dialog open={showCreateIssue} onOpenChange={setShowCreateIssue}>
-        <DialogContent className="bg-[#1A1A1A] border-[#333] text-white max-w-md">
-          <DialogHeader><DialogTitle>Add Issue to Sprint</DialogTitle></DialogHeader>
+        <DialogContent className="max-w-md" style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
+          <DialogHeader><DialogTitle style={{ color: "var(--pm-text)" }}>Add Issue to Sprint</DialogTitle></DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label className="text-xs text-[#999] mb-1.5 block">Title</Label>
-              <Input value={issueForm.title} onChange={(e) => setIssueForm({ ...issueForm, title: e.target.value })} className="bg-[#111] border-[#333] text-white" placeholder="Issue title..." />
+              <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Title</Label>
+              <Input value={issueForm.title} onChange={(e) => setIssueForm({ ...issueForm, title: e.target.value })} style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }} placeholder="Issue title..." />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label className="text-xs text-[#999] mb-1.5 block">Priority</Label>
-                <select value={issueForm.priority} onChange={(e) => setIssueForm({ ...issueForm, priority: e.target.value })} className="w-full bg-[#111] border border-[#333] text-white rounded px-2 py-2 text-sm">
+                <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Priority</Label>
+                <select value={issueForm.priority} onChange={(e) => setIssueForm({ ...issueForm, priority: e.target.value })} className="w-full border rounded px-2 py-2 text-sm" style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
                   <option value="urgent">Urgent</option>
                   <option value="high">High</option>
                   <option value="medium">Medium</option>
@@ -328,8 +314,8 @@ export default function SprintBoard() {
                 </select>
               </div>
               <div>
-                <Label className="text-xs text-[#999] mb-1.5 block">Assignee</Label>
-                <select value={issueForm.assignee} onChange={(e) => setIssueForm({ ...issueForm, assignee: e.target.value })} className="w-full bg-[#111] border border-[#333] text-white rounded px-2 py-2 text-sm">
+                <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Assignee</Label>
+                <select value={issueForm.assignee} onChange={(e) => setIssueForm({ ...issueForm, assignee: e.target.value })} className="w-full border rounded px-2 py-2 text-sm" style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
                   <option value="">Unassigned</option>
                   {users.map((u) => <option key={u.id} value={u.email}>{u.full_name}</option>)}
                 </select>
@@ -337,7 +323,7 @@ export default function SprintBoard() {
             </div>
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <Button variant="ghost" onClick={() => setShowCreateIssue(false)} className="text-[#999]">Cancel</Button>
+            <Button variant="ghost" onClick={() => setShowCreateIssue(false)} style={{ color: "var(--pm-text-muted)" }}>Cancel</Button>
             <Button onClick={() => issueForm.title && createIssueMutation.mutate(issueForm)} disabled={!issueForm.title || createIssueMutation.isPending} className="bg-[#5E6AD2] hover:bg-[#6E7AE2] text-white">Add Issue</Button>
           </div>
         </DialogContent>

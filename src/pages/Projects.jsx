@@ -110,119 +110,90 @@ export default function Projects() {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="px-5 py-2.5 border-b border-[#1E1E1E] flex items-center justify-between">
+    <div className="h-full flex flex-col" style={{ backgroundColor: "var(--pm-bg)" }}>
+      <div className="px-5 py-2.5 border-b flex items-center justify-between" style={{ borderColor: "var(--pm-border)" }}>
         <Tabs defaultValue="active" onValueChange={setActiveTab}>
           <TabsList className="bg-transparent h-8 p-0 gap-0">
             {["all", "active", "planned", "completed"].map((tab) =>
             <TabsTrigger
               key={tab}
               value={tab}
-              className="data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none text-[#6B6B6B] text-xs px-3 h-8 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-white capitalize">
-
+              className="data-[state=active]:bg-transparent data-[state=active]:shadow-none text-xs px-3 h-8 rounded-none data-[state=active]:border-b-2 capitalize"
+              style={{ color: "var(--pm-text-muted)" }}>
                 {tab}
               </TabsTrigger>
             )}
           </TabsList>
         </Tabs>
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => setView(view === "list" ? "timeline" : "list")}
-            className={`p-1 rounded transition-colors ${
-            view === "timeline" ? "text-white bg-[#252525]" : "text-[#6B6B6B] hover:text-white"}`
-            }
-            title={view === "list" ? "Switch to timeline" : "Switch to list"}>
-
-            <BarChart3 size={16} className="text-slate-50 lucide lucide-chart-column" />
+          <button onClick={() => setView(view === "list" ? "timeline" : "list")} className="p-1 rounded transition-colors hover:opacity-80" style={{ color: "var(--pm-text-muted)" }}>
+            <BarChart3 size={16} />
           </button>
-          <button 
-            onClick={() => navigate(createPageUrl("Tasks") + "?create=true")}
-            className="text-[#6B6B6B] hover:text-white transition-colors text-xs font-medium gap-1 flex items-center px-2">
-            <Plus size={16} className="text-slate-50 lucide lucide-plus" />
-            Task
+          <button onClick={() => navigate(createPageUrl("Tasks") + "?create=true")} className="text-xs font-medium gap-1 flex items-center px-2 hover:opacity-80 transition-opacity" style={{ color: "var(--pm-text-muted)" }}>
+            <Plus size={16} /> Task
           </button>
-          <button onClick={() => setShowTemplateSelect(true)} className="text-[#6B6B6B] hover:text-white transition-colors">
-            <Plus size={16} className="text-slate-50 lucide lucide-plus" />
+          <button onClick={() => setShowTemplateSelect(true)} className="hover:opacity-80 transition-opacity" style={{ color: "var(--pm-text-muted)" }}>
+            <Plus size={16} />
           </button>
           {canDeleteProject && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="text-[#555] hover:text-white transition-colors">
-                  <MoreHorizontal size={16} className="text-slate-50 lucide lucide-more-horizontal" />
+                <button className="hover:opacity-80 transition-opacity" style={{ color: "var(--pm-text-muted)" }}>
+                  <MoreHorizontal size={16} />
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-[#1A1A1A] border-[#333]">
-                <DropdownMenuItem 
-                  className="text-[#F87171] focus:text-[#F87171] focus:bg-[#252525]"
-                  onClick={() => navigate(createPageUrl("AdminPortal") + "#deleted-projects")}
-                >
-                  <Trash2 size={14} className="mr-2" />
-                  Restore Deleted
+              <DropdownMenuContent style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)" }}>
+                <DropdownMenuItem className="text-[#F87171] focus:text-[#F87171]" onClick={() => navigate(createPageUrl("AdminPortal") + "#deleted-projects")}>
+                  <Trash2 size={14} className="mr-2" /> Restore Deleted
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}
-          <button className="text-[#555] hover:text-white transition-colors">
-            <Filter size={14} className="text-slate-50 lucide lucide-filter" />
-          </button>
-          <button className="text-[#555] hover:text-white transition-colors">
-            <Settings2 size={14} className="text-slate-50 lucide lucide-settings2" />
-          </button>
+          <button className="hover:opacity-80 transition-opacity" style={{ color: "var(--pm-text-muted)" }}><Filter size={14} /></button>
+          <button className="hover:opacity-80 transition-opacity" style={{ color: "var(--pm-text-muted)" }}><Settings2 size={14} /></button>
         </div>
       </div>
 
-      {view === "list" ?
-      <>
-          {/* Table header */}
-          <div className="flex items-center gap-4 px-4 py-2 border-b border-[#1E1E1E] text-[10px] text-[#555] uppercase tracking-wider font-semibold">
+      {view === "list" ? (
+        <>
+          <div className="flex items-center gap-4 px-4 py-2 border-b text-[10px] uppercase tracking-wider font-semibold" style={{ borderColor: "var(--pm-border)", color: "var(--pm-text-muted)" }}>
             <span className="flex-1">Name</span>
             <span className="w-20 text-center">Target</span>
             <span className="w-24">Health</span>
             <span className="w-16 text-center">Issues</span>
             <span className="w-4" />
           </div>
-
           <div className="flex-1 overflow-y-auto">
-            {filtered.length === 0 ?
-          <div className="flex flex-col items-center justify-center h-full text-[#555]">
+            {filtered.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full" style={{ color: "var(--pm-text-muted)" }}>
                 <p className="text-sm">No projects found</p>
-                <button onClick={() => setShowTemplateSelect(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
-                  Create a project
-                </button>
-              </div> :
-
-          filtered.map((project) =>
-          <div key={project.id} className="flex items-center">
-            <ProjectRow
-              project={project}
-              issueCount={getIssueCount(project.id)}
-              completedIssueCount={getCompletedIssueCount(project.id)}
-              onClick={handleProjectClick} />
-            {canDeleteProject && (
-              <div className="w-12 flex justify-center pr-2">
-                <button
-                  onClick={() => setProjectToDelete(project)}
-                  className="text-[#555] hover:text-[#F87171] transition-colors p-1"
-                  title="Delete project"
-                >
-                  <Trash2 size={14} />
-                </button>
+                <button onClick={() => setShowTemplateSelect(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">Create a project</button>
               </div>
+            ) : (
+              filtered.map((project) => (
+                <div key={project.id} className="flex items-center">
+                  <ProjectRow project={project} issueCount={getIssueCount(project.id)} completedIssueCount={getCompletedIssueCount(project.id)} onClick={handleProjectClick} />
+                  {canDeleteProject && (
+                    <div className="w-12 flex justify-center pr-2">
+                      <button onClick={() => setProjectToDelete(project)} className="p-1 hover:opacity-80 transition-opacity" style={{ color: "var(--pm-text-muted)" }} title="Delete project">
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))
             )}
           </div>
-          )
-          }
-          </div>
-        </> :
-
-      <ProjectTimeline projects={filtered} />
-      }
+        </>
+      ) : (
+        <ProjectTimeline projects={filtered} />
+      )}
 
       {/* Template Selection Modal */}
       <Dialog open={showTemplateSelect} onOpenChange={setShowTemplateSelect}>
-        <DialogContent className="bg-[#1A1A1A] border-[#333] text-[#E5E5E5] max-w-2xl">
+        <DialogContent className="max-w-2xl" style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
           <DialogHeader>
-            <DialogTitle className="text-[#E5E5E5]">Select a Template</DialogTitle>
+            <DialogTitle style={{ color: "var(--pm-text)" }}>Select a Template</DialogTitle>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-3 max-h-96 overflow-y-auto">
             {BUILT_IN_TEMPLATES.map((template) => {
@@ -230,60 +201,42 @@ export default function Projects() {
               return (
                 <button
                   key={template.id}
-                  onClick={() => {
-                    setSelectedTemplate(template);
-                    setShowTemplateSelect(false);
-                    setShowCreate(true);
-                  }}
-                  className="p-4 bg-[#111] border border-[#1E1E1E] rounded-lg hover:border-[#5E6AD2] transition-colors text-left">
-
+                  onClick={() => { setSelectedTemplate(template); setShowTemplateSelect(false); setShowCreate(true); }}
+                  className="p-4 border rounded-lg hover:border-[#5E6AD2] transition-colors text-left"
+                  style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded bg-[#1E1E1E] flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "var(--pm-border)" }}>
                       <IconComponent size={20} className="text-[#5E6AD2]" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white text-sm">{template.name}</h4>
-                      <p className="text-xs text-[#999] mt-1">{template.description}</p>
+                      <h4 className="font-semibold text-sm" style={{ color: "var(--pm-text)" }}>{template.name}</h4>
+                      <p className="text-xs mt-1" style={{ color: "var(--pm-text-secondary)" }}>{template.description}</p>
                     </div>
                   </div>
-                </button>);
-
+                </button>
+              );
             })}
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => {
-                setShowTemplateSelect(false);
-                setShowCreate(true);
-              }}
-              className="text-[#6B6B6B] hover:text-white hover:bg-[#252525]">
-
+            <Button type="button" variant="ghost" onClick={() => { setShowTemplateSelect(false); setShowCreate(true); }} style={{ color: "var(--pm-text-muted)" }}>
               Skip & Create Blank
             </Button>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* Delete Project Confirmation */}
+      {/* Delete Confirmation */}
       <AlertDialog open={!!projectToDelete} onOpenChange={(open) => !open && setProjectToDelete(null)}>
-        <AlertDialogContent className="bg-[#1A1A1A] border-[#333] text-[#E5E5E5]">
+        <AlertDialogContent style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-white">Delete Project?</AlertDialogTitle>
-            <AlertDialogDescription className="text-[#999]">
+            <AlertDialogTitle style={{ color: "var(--pm-text)" }}>Delete Project?</AlertDialogTitle>
+            <AlertDialogDescription style={{ color: "var(--pm-text-secondary)" }}>
               "{projectToDelete?.name}" will be moved to trash. You can restore it from the Admin Portal within 30 days.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex gap-2 pt-2">
-            <AlertDialogCancel className="border-[#333] text-[#CCC] hover:bg-[#252525]">
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-[#F87171] hover:bg-[#FF7A7A] text-white"
-              onClick={() => projectToDelete && deleteMutation.mutate(projectToDelete.id)}
-              disabled={deleteMutation.isPending}
-            >
+            <AlertDialogCancel style={{ borderColor: "var(--pm-border-light)", color: "var(--pm-text-secondary)" }}>Cancel</AlertDialogCancel>
+            <AlertDialogAction className="bg-[#F87171] hover:bg-[#FF7A7A] text-white" onClick={() => projectToDelete && deleteMutation.mutate(projectToDelete.id)} disabled={deleteMutation.isPending}>
               {deleteMutation.isPending ? "Deleting..." : "Delete"}
             </AlertDialogAction>
           </div>
@@ -292,39 +245,30 @@ export default function Projects() {
 
       {/* Create Project Modal */}
       <Dialog open={showCreate} onOpenChange={setShowCreate}>
-        <DialogContent className="bg-[#1A1A1A] border-[#333] text-[#E5E5E5] max-w-md">
+        <DialogContent className="max-w-md" style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
           <DialogHeader>
             <div className="flex items-center gap-2">
-              {selectedTemplate &&
-              <button
-                onClick={() => {
-                  setShowCreate(false);
-                  setSelectedTemplate(null);
-                  setShowTemplateSelect(true);
-                }}
-                className="text-[#6B6B6B] hover:text-white transition-colors">
-
+              {selectedTemplate && (
+                <button onClick={() => { setShowCreate(false); setSelectedTemplate(null); setShowTemplateSelect(true); }} className="hover:opacity-80 transition-opacity" style={{ color: "var(--pm-text-muted)" }}>
                   <ChevronLeft size={20} />
                 </button>
-              }
-              <DialogTitle className="text-[#E5E5E5]">
+              )}
+              <DialogTitle style={{ color: "var(--pm-text)" }}>
                 {selectedTemplate ? `New ${selectedTemplate.name} Project` : "New Project"}
               </DialogTitle>
             </div>
           </DialogHeader>
-          <form onSubmit={(e) => {e.preventDefault();if (form.name && form.prefix) createMutation.mutate(form);}} className="space-y-4">
+          <form onSubmit={(e) => { e.preventDefault(); if (form.name && form.prefix) createMutation.mutate(form); }} className="space-y-4">
             {!selectedTemplate && (
               <div>
-                <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Template</Label>
+                <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Template</Label>
                 <Select value={selectedTemplate?.id || ""} onValueChange={(templateId) => setSelectedTemplate(BUILT_IN_TEMPLATES.find(t => t.id === templateId))}>
-                  <SelectTrigger className="bg-[#111] border-[#333] text-white">
+                  <SelectTrigger style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
                     <SelectValue placeholder="Select a template" />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                  <SelectContent style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)" }}>
                     {BUILT_IN_TEMPLATES.map((template) => (
-                      <SelectItem key={template.id} value={template.id} className="text-white focus:bg-[#252525] focus:text-white">
-                        {template.name}
-                      </SelectItem>
+                      <SelectItem key={template.id} value={template.id}>{template.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -332,51 +276,47 @@ export default function Projects() {
             )}
             <div className="grid grid-cols-3 gap-3">
               <div className="col-span-2">
-                <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Name</Label>
-                <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="bg-[#111] border-[#333] text-white" placeholder="Project name" />
+                <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Name</Label>
+                <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }} placeholder="Project name" />
               </div>
               <div>
-                <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Prefix</Label>
-                <Input value={form.prefix} onChange={(e) => setForm({ ...form, prefix: e.target.value.toUpperCase() })} className="bg-[#111] border-[#333] text-white" placeholder="ENG" maxLength={5} />
+                <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Prefix</Label>
+                <Input value={form.prefix} onChange={(e) => setForm({ ...form, prefix: e.target.value.toUpperCase() })} style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }} placeholder="ENG" maxLength={5} />
               </div>
             </div>
             <div>
-              <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Description</Label>
-              <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="bg-[#111] border-[#333] text-white min-h-[60px]" placeholder="Optional" />
+              <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Description</Label>
+              <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }} className="min-h-[60px]" placeholder="Optional" />
             </div>
             <IconPicker value={form.icon} onChange={(icon) => setForm({ ...form, icon })} />
             <div className="grid grid-cols-2 gap-3">
-               <div>
-                 <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Lead</Label>
-                 <Select value={form.lead} onValueChange={(v) => setForm({ ...form, lead: v })}>
-                   <SelectTrigger className="bg-[#111] border-[#333] text-white">
-                     <SelectValue placeholder="Select lead" />
-                   </SelectTrigger>
-                   <SelectContent className="bg-[#1A1A1A] border-[#333]">
-                     {users.map((user) => (
-                       <SelectItem key={user.id} value={user.email} className="text-white focus:bg-[#252525] focus:text-white">
-                         {user.full_name}
-                       </SelectItem>
-                     ))}
-                   </SelectContent>
-                 </Select>
-               </div>
-               <div>
-                 <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Health</Label>
-                 <Select value={form.health} onValueChange={(v) => setForm({ ...form, health: v })}>
-                   <SelectTrigger className="bg-[#111] border-[#333] text-white">
-                     <SelectValue />
-                   </SelectTrigger>
-                   <SelectContent className="bg-[#1A1A1A] border-[#333]">
-                     <SelectItem value="planning" className="text-white focus:bg-[#252525] focus:text-white">Planning</SelectItem>
-                     <SelectItem value="pending" className="text-white focus:bg-[#252525] focus:text-white">Pending</SelectItem>
-                     <SelectItem value="blocked" className="text-white focus:bg-[#252525] focus:text-white">Blocked</SelectItem>
-                   </SelectContent>
-                 </Select>
-               </div>
-             </div>
+              <div>
+                <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Lead</Label>
+                <Select value={form.lead} onValueChange={(v) => setForm({ ...form, lead: v })}>
+                  <SelectTrigger style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
+                    <SelectValue placeholder="Select lead" />
+                  </SelectTrigger>
+                  <SelectContent style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)" }}>
+                    {users.map((u) => <SelectItem key={u.id} value={u.email}>{u.full_name}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Health</Label>
+                <Select value={form.health} onValueChange={(v) => setForm({ ...form, health: v })}>
+                  <SelectTrigger style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)" }}>
+                    <SelectItem value="planning">Planning</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="blocked">Blocked</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
             <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="ghost" onClick={() => setShowCreate(false)} className="text-[#6B6B6B] hover:text-white hover:bg-[#252525]">Cancel</Button>
+              <Button type="button" variant="ghost" onClick={() => setShowCreate(false)} style={{ color: "var(--pm-text-muted)" }}>Cancel</Button>
               <Button type="submit" className="bg-[#5E6AD2] hover:bg-[#4F5ABF] text-white">Create</Button>
             </div>
           </form>

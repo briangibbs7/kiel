@@ -23,16 +23,17 @@ function QuickActionCard({ icon: Icon, label, desc, color, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-3 p-4 bg-[#111] border border-[#1E1E1E] rounded-lg hover:border-[#2A2A2A] hover:bg-[#151515] transition-all text-left group"
+      style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}
+      className="flex items-center gap-3 p-4 border rounded-lg hover:opacity-80 transition-all text-left group"
     >
       <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: color + "22" }}>
         <Icon className="w-5 h-5" style={{ color }} />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-white">{label}</p>
-        <p className="text-xs text-[#666] truncate">{desc}</p>
+        <p className="text-sm font-medium" style={{ color: "var(--pm-text)" }}>{label}</p>
+        <p className="text-xs truncate" style={{ color: "var(--pm-text-muted)" }}>{desc}</p>
       </div>
-      <ArrowRight className="w-4 h-4 text-[#444] group-hover:text-[#666] transition-colors flex-shrink-0" />
+      <ArrowRight className="w-4 h-4 transition-colors flex-shrink-0" style={{ color: "var(--pm-text-muted)" }} />
     </button>
   );
 }
@@ -121,25 +122,26 @@ export default function TeamDashboard() {
   };
 
   return (
-    <div className="h-full bg-[#0D0D0D] overflow-auto">
+    <div className="h-full overflow-auto" style={{ backgroundColor: "var(--pm-bg)" }}>
       <div className="p-6 space-y-6 max-w-screen-2xl mx-auto">
 
         {/* Welcome header */}
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white">
+            <h1 className="text-2xl font-bold" style={{ color: "var(--pm-text)" }}>
               {greeting()}, {user?.full_name?.split(" ")[0] || "there"} 👋
             </h1>
-            <p className="text-[#999] mt-1 text-sm">Here's what's happening with your team today</p>
+            <p className="mt-1 text-sm" style={{ color: "var(--pm-text-secondary)" }}>Here's what's happening with your team today</p>
           </div>
           {metrics.activeSprint && (
             <div
               onClick={() => navigate(createPageUrl("SprintBoard"))}
-              className="flex items-center gap-2 bg-[#111] border border-[#1E1E1E] rounded-lg px-4 py-2.5 cursor-pointer hover:border-[#2A2A2A] transition-colors"
+              className="flex items-center gap-2 border rounded-lg px-4 py-2.5 cursor-pointer hover:opacity-80 transition-opacity"
+              style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}
             >
               <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-sm text-white">{metrics.activeSprint.name}</span>
-              <ArrowRight className="w-4 h-4 text-[#555]" />
+              <span className="text-sm" style={{ color: "var(--pm-text)" }}>{metrics.activeSprint.name}</span>
+              <ArrowRight className="w-4 h-4" style={{ color: "var(--pm-text-muted)" }} />
             </div>
           )}
         </div>
@@ -148,91 +150,84 @@ export default function TeamDashboard() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { label: "Active Projects", value: metrics.activeProjects, icon: Folder, color: "#5E6AD2", page: "Projects" },
-            { label: "Team Progress", value: `${teamProgress}%`, sub: `${metrics.doneItems}/${metrics.totalItems} done`, icon: CheckCircle2, color: "#4ADE80", page: "MyIssues" },
-            { label: "My Open Issues", value: myIssues.length, sub: `${myTasks.length} tasks`, icon: ListTodo, color: "#60A5FA", page: "MyIssues" },
-            { label: "Upcoming Deadlines", value: metrics.upcomingDeadlines.length, sub: "in next 2 weeks", icon: AlertCircle, color: "#FB923C", page: "MyIssues" },
+            { label: "Team Progress", value: `${teamProgress}%`, sub: `${metrics.doneItems}/${metrics.totalItems} done`, icon: CheckCircle2, color: "var(--pm-green)", page: "MyIssues" },
+            { label: "My Open Issues", value: myIssues.length, sub: `${myTasks.length} tasks`, icon: ListTodo, color: "var(--pm-blue)", page: "MyIssues" },
+            { label: "Upcoming Deadlines", value: metrics.upcomingDeadlines.length, sub: "in next 2 weeks", icon: AlertCircle, color: "var(--pm-orange)", page: "MyIssues" },
           ].map((stat) => (
             <Card
               key={stat.label}
               onClick={() => navigate(createPageUrl(stat.page))}
-              className="bg-[#111] border-[#1E1E1E] p-4 cursor-pointer hover:border-[#2A2A2A] transition-colors"
+              className="p-4 cursor-pointer hover:opacity-80 transition-opacity"
+              style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}
             >
               <div className="flex items-center justify-between mb-2">
-                <p className="text-sm text-[#999]">{stat.label}</p>
+                <p className="text-sm" style={{ color: "var(--pm-text-secondary)" }}>{stat.label}</p>
                 <stat.icon className="w-4 h-4" style={{ color: stat.color }} />
               </div>
-              <p className="text-2xl font-bold text-white">{stat.value}</p>
-              {stat.sub && <p className="text-xs text-[#666] mt-1">{stat.sub}</p>}
+              <p className="text-2xl font-bold" style={{ color: "var(--pm-text)" }}>{stat.value}</p>
+              {stat.sub && <p className="text-xs mt-1" style={{ color: "var(--pm-text-muted)" }}>{stat.sub}</p>}
             </Card>
           ))}
         </div>
 
         {/* Quick Actions */}
         <div>
-          <h2 className="text-sm font-semibold text-[#666] uppercase tracking-wider mb-3">Quick Actions</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wider mb-3" style={{ color: "var(--pm-text-muted)" }}>Quick Actions</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <QuickActionCard icon={Plus} label="New Project" desc="Start from template" color="#5E6AD2" onClick={() => navigate(createPageUrl("Projects") + "?create=true")} />
-            <QuickActionCard icon={Zap} label="New Issue" desc="Track a bug or feature" color="#60A5FA" onClick={() => navigate(createPageUrl("MyIssues") + "?create=true")} />
-            <QuickActionCard icon={Play} label="Sprint Board" desc="Manage active sprint" color="#4ADE80" onClick={() => navigate(createPageUrl("SprintBoard"))} />
-            <QuickActionCard icon={BarChart3} label="View Reports" desc="Team analytics" color="#A78BFA" onClick={() => navigate(createPageUrl("Reports"))} />
+            <QuickActionCard icon={Zap} label="New Issue" desc="Track a bug or feature" color="var(--pm-blue)" onClick={() => navigate(createPageUrl("MyIssues") + "?create=true")} />
+            <QuickActionCard icon={Play} label="Sprint Board" desc="Manage active sprint" color="var(--pm-green)" onClick={() => navigate(createPageUrl("SprintBoard"))} />
+            <QuickActionCard icon={BarChart3} label="View Reports" desc="Team analytics" color="var(--pm-purple)" onClick={() => navigate(createPageUrl("Reports"))} />
           </div>
         </div>
 
         {/* My Work */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* My Issues */}
-          <Card className="bg-[#111] border-[#1E1E1E] p-4">
+          <Card className="p-4" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-base font-semibold text-white">My Issues</h2>
+              <h2 className="text-base font-semibold" style={{ color: "var(--pm-text)" }}>My Issues</h2>
               <button onClick={() => navigate(createPageUrl("MyIssues"))} className="text-xs text-[#5E6AD2] hover:underline">View all</button>
             </div>
             {myIssues.length === 0 ? (
               <div className="py-6 text-center">
-                <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-[#333]" />
-                <p className="text-xs text-[#555]">You're all caught up!</p>
+                <CheckCircle2 className="w-8 h-8 mx-auto mb-2" style={{ color: "var(--pm-border-light)" }} />
+                <p className="text-xs" style={{ color: "var(--pm-text-muted)" }}>You're all caught up!</p>
               </div>
             ) : (
               <div className="space-y-2">
                 {myIssues.slice(0, 5).map((issue) => (
-                  <div key={issue.id} className="flex items-center gap-2 py-1.5 border-b border-[#1A1A1A] last:border-0">
-                    <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: PRIORITY_COLORS[issue.priority] || "#666" }} />
-                    <p className="text-sm text-white flex-1 truncate">{issue.title}</p>
-                    <span className="text-[10px] text-[#555]" style={{ color: STATUS_COLORS[issue.status] }}>{issue.status?.replace("_", " ")}</span>
+                  <div key={issue.id} className="flex items-center gap-2 py-1.5 border-b last:border-0" style={{ borderColor: "var(--pm-border)" }}>
+                    <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: PRIORITY_COLORS[issue.priority] || "var(--pm-text-muted)" }} />
+                    <p className="text-sm flex-1 truncate" style={{ color: "var(--pm-text)" }}>{issue.title}</p>
+                    <span className="text-[10px]" style={{ color: STATUS_COLORS[issue.status] }}>{issue.status?.replace("_", " ")}</span>
                   </div>
                 ))}
               </div>
             )}
           </Card>
 
-          {/* Project Health */}
-          <Card className="bg-[#111] border-[#1E1E1E] p-4">
+          <Card className="p-4" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-base font-semibold text-white">Project Health</h2>
+              <h2 className="text-base font-semibold" style={{ color: "var(--pm-text)" }}>Project Health</h2>
               <button onClick={() => navigate(createPageUrl("Projects"))} className="text-xs text-[#5E6AD2] hover:underline">View all</button>
             </div>
             {metrics.projectHealth.length === 0 ? (
               <div className="py-6 text-center">
-                <Folder className="w-8 h-8 mx-auto mb-2 text-[#333]" />
-                <p className="text-xs text-[#555]">No projects yet</p>
+                <Folder className="w-8 h-8 mx-auto mb-2" style={{ color: "var(--pm-border-light)" }} />
+                <p className="text-xs" style={{ color: "var(--pm-text-muted)" }}>No projects yet</p>
               </div>
             ) : (
               <div className="space-y-3">
                 {metrics.projectHealth.slice(0, 5).map((p) => (
                   <div key={p.id} onClick={() => navigate(createPageUrl("ProjectDetail") + `?id=${p.id}`)} className="cursor-pointer group">
                     <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm text-white group-hover:text-[#5E6AD2] transition-colors truncate flex items-center gap-1.5">
+                      <p className="text-sm group-hover:text-[#5E6AD2] transition-colors truncate flex items-center gap-1.5" style={{ color: "var(--pm-text)" }}>
                         <span>{p.icon || "📋"}</span> {p.name}
                       </p>
-                      <span className="text-xs text-[#666]">{p.progress}%</span>
+                      <span className="text-xs" style={{ color: "var(--pm-text-muted)" }}>{p.progress}%</span>
                     </div>
-                    <div className="w-full bg-[#1A1A1A] rounded-full h-1.5">
-                      <div
-                        className="h-1.5 rounded-full transition-all"
-                        style={{
-                          width: `${p.progress}%`,
-                          backgroundColor: p.health === "on_track" ? "#4ADE80" : p.health === "at_risk" ? "#FFA500" : "#F87171"
-                        }}
-                      />
+                    <div className="w-full rounded-full h-1.5" style={{ backgroundColor: "var(--pm-border)" }}>
+                      <div className="h-1.5 rounded-full transition-all" style={{ width: `${p.progress}%`, backgroundColor: p.health === "on_track" ? "var(--pm-green)" : p.health === "at_risk" ? "var(--pm-orange)" : "var(--pm-red)" }} />
                     </div>
                   </div>
                 ))}
@@ -240,25 +235,24 @@ export default function TeamDashboard() {
             )}
           </Card>
 
-          {/* Upcoming Deadlines */}
-          <Card className="bg-[#111] border-[#1E1E1E] p-4">
+          <Card className="p-4" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-base font-semibold text-white">Upcoming Deadlines</h2>
-              <Clock className="w-4 h-4 text-[#555]" />
+              <h2 className="text-base font-semibold" style={{ color: "var(--pm-text)" }}>Upcoming Deadlines</h2>
+              <Clock className="w-4 h-4" style={{ color: "var(--pm-text-muted)" }} />
             </div>
             {metrics.upcomingDeadlines.length === 0 ? (
               <div className="py-6 text-center">
-                <Calendar className="w-8 h-8 mx-auto mb-2 text-[#333]" />
-                <p className="text-xs text-[#555]">No upcoming deadlines</p>
+                <Calendar className="w-8 h-8 mx-auto mb-2" style={{ color: "var(--pm-border-light)" }} />
+                <p className="text-xs" style={{ color: "var(--pm-text-muted)" }}>No upcoming deadlines</p>
               </div>
             ) : (
               <div className="space-y-2">
                 {metrics.upcomingDeadlines.slice(0, 5).map((item) => {
                   const daysLeft = Math.ceil((new Date(item.due_date) - new Date()) / (1000 * 60 * 60 * 24));
                   return (
-                    <div key={item.id} className="flex items-center gap-2 py-1.5 border-b border-[#1A1A1A] last:border-0">
+                    <div key={item.id} className="flex items-center gap-2 py-1.5 border-b last:border-0" style={{ borderColor: "var(--pm-border)" }}>
                       <div className={`w-2 h-2 rounded-full flex-shrink-0 ${daysLeft <= 2 ? "bg-red-400" : daysLeft <= 5 ? "bg-orange-400" : "bg-yellow-400"}`} />
-                      <p className="text-sm text-white flex-1 truncate">{item.title}</p>
+                      <p className="text-sm flex-1 truncate" style={{ color: "var(--pm-text)" }}>{item.title}</p>
                       <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${daysLeft <= 2 ? "bg-red-900/40 text-red-400" : daysLeft <= 5 ? "bg-orange-900/40 text-orange-400" : "bg-yellow-900/40 text-yellow-400"}`}>
                         {daysLeft}d
                       </span>
@@ -272,29 +266,27 @@ export default function TeamDashboard() {
 
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Workload Distribution */}
-          <Card className="bg-[#111] border-[#1E1E1E] p-4">
-            <h2 className="text-base font-semibold text-white mb-4">Workload Distribution</h2>
+          <Card className="p-4" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
+            <h2 className="text-base font-semibold mb-4" style={{ color: "var(--pm-text)" }}>Workload Distribution</h2>
             {metrics.workloadData.length > 0 ? (
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={metrics.workloadData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1E1E1E" />
-                  <XAxis dataKey="user" stroke="#444" style={{ fontSize: "11px" }} />
-                  <YAxis stroke="#444" style={{ fontSize: "11px" }} allowDecimals={false} />
-                  <Tooltip contentStyle={{ backgroundColor: "#1A1A1A", border: "1px solid #333", color: "#fff" }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--pm-border)" />
+                  <XAxis dataKey="user" stroke="var(--pm-text-muted)" style={{ fontSize: "11px" }} />
+                  <YAxis stroke="var(--pm-text-muted)" style={{ fontSize: "11px" }} allowDecimals={false} />
+                  <Tooltip contentStyle={{ backgroundColor: "var(--pm-popover)", border: "1px solid var(--pm-border-light)", color: "var(--pm-text)" }} />
                   <Bar dataKey="tasks" fill="#5E6AD2" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
               <div className="h-60 flex items-center justify-center">
-                <p className="text-sm text-[#555]">No workload data</p>
+                <p className="text-sm" style={{ color: "var(--pm-text-muted)" }}>No workload data</p>
               </div>
             )}
           </Card>
 
-          {/* Issue Status Breakdown */}
-          <Card className="bg-[#111] border-[#1E1E1E] p-4">
-            <h2 className="text-base font-semibold text-white mb-4">Issue Status Breakdown</h2>
+          <Card className="p-4" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
+            <h2 className="text-base font-semibold mb-4" style={{ color: "var(--pm-text)" }}>Issue Status Breakdown</h2>
             {metrics.statusDist.length > 0 ? (
               <div className="flex items-center gap-6">
                 <ResponsiveContainer width={180} height={180}>
@@ -304,53 +296,51 @@ export default function TeamDashboard() {
                         <Cell key={i} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip contentStyle={{ backgroundColor: "#1A1A1A", border: "1px solid #333", color: "#fff" }} />
+                    <Tooltip contentStyle={{ backgroundColor: "var(--pm-popover)", border: "1px solid var(--pm-border-light)", color: "var(--pm-text)" }} />
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="space-y-2 flex-1">
                   {metrics.statusDist.map((d) => (
                     <div key={d.name} className="flex items-center gap-2">
                       <div className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ backgroundColor: d.color }} />
-                      <span className="text-xs text-[#999] flex-1 capitalize">{d.name}</span>
-                      <span className="text-xs font-semibold text-white">{d.value}</span>
+                      <span className="text-xs flex-1 capitalize" style={{ color: "var(--pm-text-secondary)" }}>{d.name}</span>
+                      <span className="text-xs font-semibold" style={{ color: "var(--pm-text)" }}>{d.value}</span>
                     </div>
                   ))}
                 </div>
               </div>
             ) : (
               <div className="h-60 flex items-center justify-center">
-                <p className="text-sm text-[#555]">No issues yet</p>
+                <p className="text-sm" style={{ color: "var(--pm-text-muted)" }}>No issues yet</p>
               </div>
             )}
           </Card>
         </div>
 
         {/* Recent Activity */}
-        <Card className="bg-[#111] border-[#1E1E1E] p-4">
+        <Card className="p-4" style={{ backgroundColor: "var(--pm-surface)", borderColor: "var(--pm-border)" }}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold text-white">Recent Activity</h2>
+            <h2 className="text-base font-semibold" style={{ color: "var(--pm-text)" }}>Recent Activity</h2>
             <button onClick={() => navigate(createPageUrl("MyIssues"))} className="text-xs text-[#5E6AD2] hover:underline">View all issues</button>
           </div>
           {metrics.recentActivity.length === 0 ? (
-            <p className="text-sm text-[#555] text-center py-6">No recent activity</p>
+            <p className="text-sm text-center py-6" style={{ color: "var(--pm-text-muted)" }}>No recent activity</p>
           ) : (
-            <div className="divide-y divide-[#1A1A1A]">
+            <div className="divide-y" style={{ borderColor: "var(--pm-border)" }}>
               {metrics.recentActivity.map((issue) => (
                 <div key={issue.id} className="py-2.5 flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: STATUS_COLORS[issue.status] }} />
-                  <p className="text-sm text-white flex-1 truncate">{issue.title}</p>
+                  <p className="text-sm flex-1 truncate" style={{ color: "var(--pm-text)" }}>{issue.title}</p>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {issue.priority && (
-                      <span className="text-[10px]" style={{ color: PRIORITY_COLORS[issue.priority] }}>
-                        {issue.priority}
-                      </span>
+                      <span className="text-[10px]" style={{ color: PRIORITY_COLORS[issue.priority] }}>{issue.priority}</span>
                     )}
                     {issue.assignee && (
-                      <div className="w-5 h-5 rounded-full bg-[#252525] flex items-center justify-center text-[9px] text-white" title={issue.assignee}>
+                      <div className="w-5 h-5 rounded-full bg-[#5E6AD2] flex items-center justify-center text-[9px] text-white" title={issue.assignee}>
                         {issue.assignee[0]?.toUpperCase()}
                       </div>
                     )}
-                    <span className="text-[10px] text-[#555]">
+                    <span className="text-[10px]" style={{ color: "var(--pm-text-muted)" }}>
                       {formatDistanceToNow(new Date(issue.created_date), { addSuffix: true })}
                     </span>
                   </div>

@@ -170,21 +170,20 @@ export default function MyIssues() {
 
       {/* Main content */}
       <div className="flex-1 overflow-hidden flex">
-        <div className={`${selectedIssue ? "flex-1 min-w-0" : "flex-1"} flex flex-col border-r border-[#1E1E1E]`}>
-          {isLoading ?
-          <div className="space-y-0 flex-1">
-              {Array(8).fill(0).map((_, i) =>
-            <div key={i} className="h-10 border-b border-[#1A1A1A] animate-pulse bg-[#111]" />
-            )}
-            </div> :
-          issues.length === 0 ?
-          <div className="flex flex-col items-center justify-center h-full text-[#555]">
+        <div className={`${selectedIssue ? "flex-1 min-w-0" : "flex-1"} flex flex-col border-r`} style={{ borderColor: "var(--pm-border)" }}>
+          {isLoading ? (
+            <div className="space-y-0 flex-1">
+              {Array(8).fill(0).map((_, i) => (
+                <div key={i} className="h-10 border-b animate-pulse" style={{ borderColor: "var(--pm-border)", backgroundColor: "var(--pm-surface)" }} />
+              ))}
+            </div>
+          ) : issues.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full" style={{ color: "var(--pm-text-muted)" }}>
               <ListIcon size={24} className="mb-3" />
               <p className="text-sm">No issues yet</p>
-              <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
-                Create your first issue
-              </button>
-            </div> :
+              <button onClick={() => setShowCreate(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">Create your first issue</button>
+            </div>
+          ) :
           viewMode === "list" ?
           <IssueTableView
             issues={issues}
@@ -222,7 +221,7 @@ export default function MyIssues() {
 
         {/* Detail panel */}
         {selectedIssue &&
-        <div className="w-[420px] flex-shrink-0 border-r border-[#1E1E1E]">
+        <div className="w-[420px] flex-shrink-0 border-r" style={{ borderColor: "var(--pm-border)" }}>
             <IssueDetail
             issue={selectedIssue}
             comments={comments}

@@ -45,6 +45,14 @@ export const BUILT_IN_TEMPLATES = [
     sprint_length_days: 14,
     story_point_options: [1, 2, 3, 5, 8, 13, 21, 34],
     allowed_entity_types: ["task"],
+    sprints: [
+      { name: "Sprint 1", goal: "Foundation & Setup",        fibonacci_capacity: 13 },
+      { name: "Sprint 2", goal: "Core Feature Development",  fibonacci_capacity: 21 },
+      { name: "Sprint 3", goal: "Integration & APIs",        fibonacci_capacity: 34 },
+      { name: "Sprint 4", goal: "Testing & QA",              fibonacci_capacity: 21 },
+      { name: "Sprint 5", goal: "Performance & Hardening",   fibonacci_capacity: 13 },
+      { name: "Sprint 6", goal: "Release & Retrospective",   fibonacci_capacity: 8  },
+    ],
   },
   {
     id: "sales",
@@ -208,6 +216,25 @@ export default function ProjectTemplates() {
                            >
                              {point}
                            </span>
+                         ))}
+                       </div>
+                     </div>
+                   )}
+
+                   {selectedTemplate.sprints && (
+                     <div className="p-3 bg-[#1E1E1E] rounded border border-[#252525]">
+                       <p className="text-xs text-[#666] uppercase tracking-wide mb-2">Sprint Plan (Fibonacci Capacity)</p>
+                       <div className="space-y-1.5">
+                         {selectedTemplate.sprints.map((sprint, i) => (
+                           <div key={i} className="flex items-center justify-between text-sm">
+                             <span className="text-[#CCC]">
+                               <span className="text-[#666] mr-2">{sprint.name}</span>
+                               {sprint.goal}
+                             </span>
+                             <span className="ml-4 px-2 py-0.5 bg-[#5E6AD2]/20 text-[#5E6AD2] rounded text-xs font-mono font-semibold flex-shrink-0">
+                               {sprint.fibonacci_capacity} pts
+                             </span>
+                           </div>
                          ))}
                        </div>
                      </div>

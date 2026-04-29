@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import { useTheme } from "@/lib/ThemeContext";
 import {
   Inbox,
   ListTodo,
-  FileText,
   Folder,
   Search,
   PenSquare,
@@ -33,9 +31,7 @@ import {
   BookOpen,
   PenLine,
   LayoutDashboard,
-  TrendingUp,
-  Sun,
-  Moon } from
+  TrendingUp } from
 "lucide-react";
 import {
   Popover,
@@ -124,7 +120,7 @@ export default function Layout({ children, currentPageName }) {
   const [collapsedSections, setCollapsedSections] = useState({ Workspace: true, Reports: true });
   const [currentApp, setCurrentApp] = useState("pm");
   const navigate = useNavigate();
-  const { theme, toggleTheme } = useTheme();
+
 
   const handleAppSwitch = (app) => {
     setCurrentApp(app);
@@ -249,9 +245,6 @@ export default function Layout({ children, currentPageName }) {
                 </Link>);
           })}
           </nav>
-          <button onClick={toggleTheme} style={{ color: tv.textMuted }} className="p-1.5 hover:opacity-80 transition-opacity flex-shrink-0" title="Toggle theme">
-            {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
-          </button>
           <Popover>
             <PopoverTrigger asChild>
               <button style={{ color: tv.textMuted }} className="hover:opacity-80 transition-opacity flex-shrink-0">
@@ -370,9 +363,6 @@ export default function Layout({ children, currentPageName }) {
                   <PenSquare size={14} />
                 </button>
                 <NotificationBell />
-                <button onClick={toggleTheme} style={{ color: tv.textMuted }} className="p-1 hover:opacity-80 transition-opacity" title="Toggle theme">
-                  {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
-                </button>
                 <Popover>
                   <PopoverTrigger asChild>
                     <button style={{ color: tv.textMuted }} className="p-1 hover:opacity-80 transition-opacity">

@@ -30,32 +30,7 @@
   --pm-scrollbar-hover: #444;
 }
 
-.light-mode {
-  --pm-bg: #F5F5F5;
-  --pm-surface: #FFFFFF;
-  --pm-surface-hover: #F0F0F0;
-  --pm-border: #E0E0E0;
-  --pm-border-light: #CCCCCC;
-  --pm-text: #1A1A1A;
-  --pm-text-muted: #888888;
-  --pm-text-secondary: #555555;
-  --pm-accent: #5E6AD2;
-  --pm-accent-hover: #4f5bc0;
-  --pm-green: #16A34A;
-  --pm-yellow: #CA8A04;
-  --pm-red: #DC2626;
-  --pm-orange: #EA580C;
-  --pm-blue: #2563EB;
-  --pm-purple: #7C3AED;
-  --pm-cyan: #0891B2;
-  --pm-nav-item-active: #E8E8F0;
-  --pm-nav-item-hover: #EFEFEF;
-  --pm-popover: #FFFFFF;
-  --pm-input-bg: #F9F9F9;
-  --pm-header-bg: #FFFFFF;
-  --pm-scrollbar: #CCCCCC;
-  --pm-scrollbar-hover: #BBBBBB;
-}
+
 
 body {
   background-color: var(--pm-bg);

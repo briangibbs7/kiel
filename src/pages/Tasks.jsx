@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, ChevronDown, ChevronRight, List, Columns, Network, Trash2, Edit2 } from "lucide-react";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { Plus, ChevronDown, ChevronRight, List, Columns, Network, Trash2, Edit2, GripVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SubTaskManager from "@/components/tasks/SubTaskManager";
 import TaskDependencyManager from "@/components/tasks/TaskDependencyManager";
@@ -62,10 +63,32 @@ export default function Tasks() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["all-tasks"] }),
   });
 
+  const updateSortOrderMutation = useMutation({
+    mutationFn: ({ taskId, sort_order }) => base44.entities.Task.update(taskId, { sort_order }),
+  });
+
   const deleteTaskMutation = useMutation({
     mutationFn: (taskId) => base44.entities.Task.delete(taskId),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["all-tasks"] }),
   });
+
+  // Local ordered task list for optimistic DnD reordering
+  const [orderedTasks, setOrderedTasks] = useState([]);
+  useEffect(() => {
+    setOrderedTasks([...tasks].sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)));
+  }, [tasks]);
+
+  const handleListDragEnd = (result) => {
+    const { destination, source } = result;
+    if (!destination || destination.index === source.index) return;
+    const next = Array.from(orderedTasks);
+    const [moved] = next.splice(source.index, 1);
+    next.splice(destination.index, 0, moved);
+    setOrderedTasks(next);
+    next.forEach((task, idx) => {
+      updateSortOrderMutation.mutate({ taskId: task.id, sort_order: idx * 1000 });
+    });
+  };
 
   const toggleTask = (taskId) => {
     setExpandedTasks((prev) => ({
@@ -153,244 +176,116 @@ export default function Tasks() {
           <TaskKanbanBoard
             tasks={tasks}
             onStatusChange={(taskId, status) => updateStatusMutation.mutate({ taskId, status })}
+            onReorder={(taskId, sort_order) => updateSortOrderMutation.mutate({ taskId, sort_order })}
           />
         </div>
       ) : (
         <div className="p-6 max-w-6xl mx-auto space-y-4">
-        {tasks.length === 0 ? (
+        {orderedTasks.length === 0 ? (
           <div className="text-center py-12 text-[#555]">
             <p className="text-sm">No tasks yet. Create a task to get started.</p>
           </div>
         ) : (
-          <>
-            {getTasksWithoutStory().length > 0 && (
-              <div className="space-y-2">
-                <div className="px-4 py-3 bg-[#111] border border-[#1E1E1E] rounded-lg">
-                  <h3 className="font-medium text-white">General Tasks</h3>
-                  <p className="text-xs text-[#999] mt-1">
-                    {getTasksWithoutStory().length} tasks
-                  </p>
-                </div>
-                <div className="space-y-2 ml-4">
-                  {getTasksWithoutStory().map((task) => {
+          <DragDropContext onDragEnd={handleListDragEnd}>
+            <Droppable droppableId="task-list">
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps} className="space-y-2">
+                  {orderedTasks.map((task, index) => {
                     const isExpanded = expandedTasks[task.id];
                     return (
-                      <div key={task.id} className="border border-[#1E1E1E] rounded-lg overflow-hidden bg-[#0D0D0D]">
-                        <div className="w-full px-4 py-3 flex items-center gap-3 group">
-                          <button
-                            onClick={() => toggleTask(task.id)}
-                            className="text-[#999] hover:text-white transition-colors"
+                      <Draggable key={task.id} draggableId={task.id} index={index}>
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className={`border rounded-lg overflow-hidden transition-all ${
+                              snapshot.isDragging
+                                ? "border-[#5E6AD2] bg-[#1A1A1A] shadow-lg shadow-black/40"
+                                : "border-[#1E1E1E] bg-[#0D0D0D]"
+                            }`}
                           >
-                            {isExpanded ? (
-                              <ChevronDown size={16} />
-                            ) : (
-                              <ChevronRight size={16} />
-                            )}
-                          </button>
-                          <div className="flex-1 text-left min-w-0">
-                            <h4 className="font-medium text-white truncate">
-                              {task.title}
-                            </h4>
-                            <div className="flex items-center gap-2 mt-1">
-                              <span
-                                className="text-[10px] font-medium px-1.5 py-0.5 rounded"
-                                style={{
-                                  backgroundColor: `${statusColors[task.status]}20`,
-                                  color: statusColors[task.status],
-                                }}
+                            <div className="w-full px-4 py-3 flex items-center gap-3 group">
+                              {/* Drag handle */}
+                              <div
+                                {...provided.dragHandleProps}
+                                className="text-[#444] hover:text-[#777] cursor-grab active:cursor-grabbing flex-shrink-0"
                               >
-                                {task.status}
-                              </span>
-                              {task.priority && (
-                                <span
-                                  className="text-[10px] font-medium px-1.5 py-0.5 rounded"
-                                  style={{
-                                    backgroundColor: `${priorityColors[task.priority]}20`,
-                                    color: priorityColors[task.priority],
-                                  }}
-                                >
-                                  {task.priority}
-                                </span>
+                                <GripVertical size={14} />
+                              </div>
+                              <button
+                                onClick={() => toggleTask(task.id)}
+                                className="text-[#999] hover:text-white transition-colors"
+                              >
+                                {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                              </button>
+                              <div className="flex-1 text-left min-w-0">
+                                <h4 className="font-medium text-white truncate">{task.title}</h4>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <span
+                                    className="text-[10px] font-medium px-1.5 py-0.5 rounded"
+                                    style={{ backgroundColor: `${statusColors[task.status]}20`, color: statusColors[task.status] }}
+                                  >
+                                    {task.status}
+                                  </span>
+                                  {task.priority && (
+                                    <span
+                                      className="text-[10px] font-medium px-1.5 py-0.5 rounded"
+                                      style={{ backgroundColor: `${priorityColors[task.priority]}20`, color: priorityColors[task.priority] }}
+                                    >
+                                      {task.priority}
+                                    </span>
+                                  )}
+                                  {task.estimated_hours && (
+                                    <span className="text-[10px] text-[#999]">{task.estimated_hours}h</span>
+                                  )}
+                                </div>
+                              </div>
+                              {task.assignee && (
+                                <span className="text-xs text-[#999] flex-shrink-0">{task.assignee.split("@")[0]}</span>
                               )}
-                              {task.estimated_hours && (
-                                <span className="text-[10px] text-[#999]">
-                                  {task.estimated_hours}h
-                                </span>
-                              )}
+                              <button
+                                onClick={() => setEditingTask(task)}
+                                className="text-[#6B6B6B] hover:text-blue-400 transition-colors opacity-0 group-hover:opacity-100"
+                                title="Edit task"
+                              >
+                                <Edit2 size={14} />
+                              </button>
+                              <button
+                                onClick={() => {
+                                  if (confirm('Are you sure you want to delete this task?')) {
+                                    deleteTaskMutation.mutate(task.id);
+                                  }
+                                }}
+                                className="text-[#6B6B6B] hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+                                title="Delete task"
+                              >
+                                <Trash2 size={14} />
+                              </button>
                             </div>
-                          </div>
-                          {task.assignee && (
-                            <span className="text-xs text-[#999] flex-shrink-0">
-                              {task.assignee.split("@")[0]}
-                            </span>
-                          )}
-                          <button
-                            onClick={() => setEditingTask(task)}
-                            className="text-[#6B6B6B] hover:text-blue-400 transition-colors opacity-0 group-hover:opacity-100"
-                            title="Edit task"
-                          >
-                            <Edit2 size={14} />
-                          </button>
-                          <button
-                            onClick={() => {
-                              if (confirm('Are you sure you want to delete this task?')) {
-                                deleteTaskMutation.mutate(task.id);
-                              }
-                            }}
-                            className="text-[#6B6B6B] hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
-                            title="Delete task"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-                        {isExpanded && (
-                          <div className="border-t border-[#1E1E1E] bg-[#0D0D0D] p-4 space-y-6">
-                            {task.description && (
-                              <div>
-                                <h5 className="text-xs font-semibold text-[#999] uppercase tracking-wider mb-2">
-                                  Description
-                                </h5>
-                                <p className="text-sm text-[#CCC]">
-                                  {task.description}
-                                </p>
+                            {isExpanded && (
+                              <div className="border-t border-[#1E1E1E] bg-[#0D0D0D] p-4 space-y-6">
+                                {task.description && (
+                                  <div>
+                                    <h5 className="text-xs font-semibold text-[#999] uppercase tracking-wider mb-2">Description</h5>
+                                    <p className="text-sm text-[#CCC]">{task.description}</p>
+                                  </div>
+                                )}
+                                <SubTaskManager taskId={task.id} />
+                                <TaskDependencyManager taskId={task.id} storyId={task.story_id || null} />
+                                <TaskAttachments task={task} />
+                                <CommentThread taskId={task.id} />
                               </div>
                             )}
-                            <SubTaskManager taskId={task.id} />
-                            <TaskDependencyManager taskId={task.id} storyId={null} />
-                            <TaskAttachments task={task} />
-                            <CommentThread taskId={task.id} />
                           </div>
                         )}
-                      </div>
+                      </Draggable>
                     );
                   })}
+                  {provided.placeholder}
                 </div>
-              </div>
-            )}
-            {stories.map((story) => {
-              const storyTasks = getTasksForStory(story.id);
-              if (storyTasks.length === 0) return null;
-
-            return (
-               <div key={story.id} className="space-y-2">
-                 <div className="px-4 py-3 bg-[#111] border border-[#1E1E1E] rounded-lg">
-                   <h3 className="font-medium text-white">{story.title}</h3>
-                   <p className="text-xs text-[#999] mt-1">
-                     {storyTasks.length} tasks
-                   </p>
-                 </div>
-
-                 <div className="space-y-2 ml-4">
-                   {storyTasks.map((task) => {
-                     const isExpanded = expandedTasks[task.id];
-
-                     return (
-                       <div key={task.id} className="border border-[#1E1E1E] rounded-lg overflow-hidden bg-[#0D0D0D]">
-                         <div className="w-full px-4 py-3 flex items-center gap-3 group">
-                           <button
-                             onClick={() => toggleTask(task.id)}
-                             className="text-[#999] hover:text-white transition-colors"
-                           >
-                             {isExpanded ? (
-                               <ChevronDown size={16} />
-                             ) : (
-                               <ChevronRight size={16} />
-                             )}
-                           </button>
-
-                           <div className="flex-1 text-left min-w-0">
-                             <h4 className="font-medium text-white truncate">
-                               {task.title}
-                             </h4>
-                             <div className="flex items-center gap-2 mt-1">
-                               <span
-                                 className="text-[10px] font-medium px-1.5 py-0.5 rounded"
-                                 style={{
-                                   backgroundColor: `${statusColors[task.status]}20`,
-                                   color: statusColors[task.status],
-                                 }}
-                               >
-                                 {task.status}
-                               </span>
-                               {task.priority && (
-                                 <span
-                                   className="text-[10px] font-medium px-1.5 py-0.5 rounded"
-                                   style={{
-                                     backgroundColor: `${priorityColors[task.priority]}20`,
-                                     color: priorityColors[task.priority],
-                                   }}
-                                 >
-                                   {task.priority}
-                                 </span>
-                               )}
-                               {task.estimated_hours && (
-                                 <span className="text-[10px] text-[#999]">
-                                   {task.estimated_hours}h
-                                 </span>
-                               )}
-                             </div>
-                           </div>
-
-                           {task.assignee && (
-                             <span className="text-xs text-[#999] flex-shrink-0">
-                               {task.assignee.split("@")[0]}
-                             </span>
-                           )}
-
-                           <button
-                             onClick={() => setEditingTask(task)}
-                             className="text-[#6B6B6B] hover:text-blue-400 transition-colors opacity-0 group-hover:opacity-100"
-                             title="Edit task"
-                           >
-                             <Edit2 size={14} />
-                           </button>
-
-                           <button
-                             onClick={() => {
-                               if (confirm('Are you sure you want to delete this task?')) {
-                                 deleteTaskMutation.mutate(task.id);
-                               }
-                             }}
-                             className="text-[#6B6B6B] hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
-                             title="Delete task"
-                           >
-                             <Trash2 size={14} />
-                           </button>
-                         </div>
-
-                         {isExpanded && (
-                           <div className="border-t border-[#1E1E1E] bg-[#0D0D0D] p-4 space-y-6">
-                             {task.description && (
-                               <div>
-                                 <h5 className="text-xs font-semibold text-[#999] uppercase tracking-wider mb-2">
-                                   Description
-                                 </h5>
-                                 <p className="text-sm text-[#CCC]">
-                                   {task.description}
-                                 </p>
-                               </div>
-                             )}
-
-                             <SubTaskManager taskId={task.id} />
-
-                             <TaskDependencyManager
-                               taskId={task.id}
-                               storyId={story.id}
-                             />
-
-                             <TaskAttachments task={task} />
-
-                             <CommentThread taskId={task.id} />
-                           </div>
-                         )}
-                       </div>
-                     );
-                   })}
-                 </div>
-               </div>
-             );
-            })}
-          </>
+              )}
+            </Droppable>
+          </DragDropContext>
         )}
 
         <CreateTaskModal

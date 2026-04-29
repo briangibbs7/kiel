@@ -15,13 +15,15 @@ const priorityColors = {
   low: "#60A5FA",
 };
 
-export default function TaskKanbanBoard({ tasks, onStatusChange }) {
+export default function TaskKanbanBoard({ tasks, onStatusChange, onReorder }) {
   const [ordered, setOrdered] = useState({});
 
   useEffect(() => {
     const grouped = {};
     COLUMNS.forEach((col) => {
-      grouped[col.id] = tasks.filter((t) => t.status === col.id);
+      grouped[col.id] = tasks
+        .filter((t) => t.status === col.id)
+        .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
     });
     setOrdered(grouped);
   }, [tasks]);
@@ -29,6 +31,7 @@ export default function TaskKanbanBoard({ tasks, onStatusChange }) {
   const handleDragEnd = (result) => {
     const { destination, source, draggableId } = result;
     if (!destination) return;
+    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
 
     const srcCol = source.droppableId;
     const dstCol = destination.droppableId;
@@ -40,15 +43,27 @@ export default function TaskKanbanBoard({ tasks, onStatusChange }) {
     if (srcCol === dstCol) {
       srcItems.splice(destination.index, 0, moved);
       next[srcCol] = srcItems;
+      setOrdered(next);
+      // Persist new sort_order for same-column reorder
+      if (onReorder) {
+        srcItems.forEach((task, idx) => {
+          onReorder(task.id, idx * 1000);
+        });
+      }
     } else {
       const dstItems = Array.from(next[dstCol] || []);
       dstItems.splice(destination.index, 0, { ...moved, status: dstCol });
       next[srcCol] = srcItems;
       next[dstCol] = dstItems;
+      setOrdered(next);
       onStatusChange(draggableId, dstCol);
+      // Persist new sort_order for destination column
+      if (onReorder) {
+        dstItems.forEach((task, idx) => {
+          onReorder(task.id, idx * 1000);
+        });
+      }
     }
-
-    setOrdered(next);
   };
 
   return (

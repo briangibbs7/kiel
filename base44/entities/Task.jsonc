@@ -1,0 +1,101 @@
+{
+  "name": "Task",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Task title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Task description"
+    },
+    "epic_id": {
+      "type": "string",
+      "description": "Parent epic ID"
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Associated project ID"
+    },
+    "sprint_id": {
+      "type": "string",
+      "description": "Associated sprint ID (null = backlog)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "todo",
+        "in_progress",
+        "in_review",
+        "done"
+      ],
+      "default": "todo"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "urgent",
+        "high",
+        "medium",
+        "low"
+      ],
+      "default": "medium"
+    },
+    "sort_order": {
+      "type": "number",
+      "description": "Manual sort order for prioritization within a list or board column"
+    },
+    "story_points": {
+      "type": "number",
+      "description": "Story points estimate"
+    },
+    "assignee": {
+      "type": "string",
+      "description": "Assignee email"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "estimated_hours": {
+      "type": "number",
+      "description": "Estimated hours to complete"
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "size": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Attached files"
+    },
+    "depends_on_task_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Task IDs that this task depends on"
+    },
+    "blocked_by_task_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Task IDs that block this task"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

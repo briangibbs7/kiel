@@ -8,8 +8,7 @@ import { HealthBadge } from "../components/shared/StatusBadge";
 import TaskRow from "@/components/tasks/TaskRow";
 import TaskDetail from "@/components/tasks/TaskDetail";
 import CreateTaskModal from "../components/tasks/CreateTaskModal";
-import SprintBurndownChart from "../components/projects/SprintBurndownChart";
-import ProjectBurnupChart from "../components/projects/ProjectBurnupChart";
+import ProjectDashboard from "../components/projects/ProjectDashboard";
 import ProjectKanban from "../components/projects/ProjectKanban";
 import ProjectBacklog from "../components/projects/ProjectBacklog";
 import GanttChart from "../components/gantt/GanttChart";
@@ -165,18 +164,12 @@ export default function ProjectDetail() {
 
       {/* Dashboard Section */}
       {section === "dashboard" && (
-        <div className="flex-1 overflow-auto p-5">
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <ProjectBurnupChart
-                tasks={tasks}
-                targetDate={project?.target_date}
-                startDate={project?.start_date}
-              />
-              <SprintBurndownChart tasks={tasks} sprintStart={sprintStart} sprintEnd={sprintEnd} />
-            </div>
-          </div>
-        </div>
+        <ProjectDashboard
+          project={project}
+          tasks={tasks}
+          sprintStart={sprintStart}
+          sprintEnd={sprintEnd}
+        />
       )}
 
       {/* Tasks Section */}

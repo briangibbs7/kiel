@@ -37,9 +37,9 @@ export default function CreateIssueModal({ open, onClose, onSubmit, projects }) 
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-[#1A1A1A] border-[#333] text-[#E5E5E5] max-w-lg">
+      <DialogContent className="max-w-lg" style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
         <DialogHeader>
-          <DialogTitle className="text-[#E5E5E5]">New Issue</DialogTitle>
+          <DialogTitle style={{ color: "var(--pm-text)" }}>New Issue</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -47,7 +47,7 @@ export default function CreateIssueModal({ open, onClose, onSubmit, projects }) 
               placeholder="Issue title"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="bg-[#111] border-[#333] text-white placeholder:text-[#555] focus:border-[#5E6AD2]"
+              style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}
               autoFocus
             />
           </div>
@@ -56,78 +56,73 @@ export default function CreateIssueModal({ open, onClose, onSubmit, projects }) 
               placeholder="Add description..."
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="bg-[#111] border-[#333] text-white placeholder:text-[#555] focus:border-[#5E6AD2] min-h-[80px]"
+              style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}
+              className="min-h-[80px]"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Project</Label>
+              <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Project</Label>
               <Select value={form.project_id} onValueChange={(v) => setForm({ ...form, project_id: v })}>
-                <SelectTrigger className="bg-[#111] border-[#333] text-white">
+                <SelectTrigger style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
                   <SelectValue placeholder="Select project" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                <SelectContent style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)" }}>
                   {projects?.map(p => (
-                    <SelectItem key={p.id} value={p.id} className="text-white focus:bg-[#252525] focus:text-white">
-                      {p.prefix} - {p.name}
-                    </SelectItem>
+                    <SelectItem key={p.id} value={p.id}>{p.prefix} - {p.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Priority</Label>
+              <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Priority</Label>
               <Select value={form.priority} onValueChange={(v) => setForm({ ...form, priority: v })}>
-                <SelectTrigger className="bg-[#111] border-[#333] text-white">
+                <SelectTrigger style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                <SelectContent style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)" }}>
                   {["urgent", "high", "medium", "low", "none"].map(p => (
-                    <SelectItem key={p} value={p} className="text-white focus:bg-[#252525] focus:text-white capitalize">
-                      {p}
-                    </SelectItem>
+                    <SelectItem key={p} value={p} className="capitalize">{p}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Status</Label>
+              <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Status</Label>
               <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v })}>
-                <SelectTrigger className="bg-[#111] border-[#333] text-white">
+                <SelectTrigger style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-[#1A1A1A] border-[#333]">
+                <SelectContent style={{ backgroundColor: "var(--pm-popover)", borderColor: "var(--pm-border-light)" }}>
                   {["backlog", "todo", "in_progress", "in_review", "done"].map(s => (
-                    <SelectItem key={s} value={s} className="text-white focus:bg-[#252525] focus:text-white capitalize">
-                      {s.replace(/_/g, " ")}
-                    </SelectItem>
+                    <SelectItem key={s} value={s} className="capitalize">{s.replace(/_/g, " ")}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Assignee</Label>
+              <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Assignee</Label>
               <Input
                 placeholder="Name or email"
                 value={form.assignee}
                 onChange={(e) => setForm({ ...form, assignee: e.target.value })}
-                className="bg-[#111] border-[#333] text-white placeholder:text-[#555]"
+                style={{ backgroundColor: "var(--pm-input-bg)", borderColor: "var(--pm-border-light)", color: "var(--pm-text)" }}
               />
             </div>
           </div>
           <div>
-            <Label className="text-xs text-[#6B6B6B] mb-1.5 block">Labels</Label>
+            <Label className="text-xs mb-1.5 block" style={{ color: "var(--pm-text-muted)" }}>Labels</Label>
             <div className="flex flex-wrap gap-1.5">
               {LABELS.map(label => (
                 <button
                   key={label}
                   type="button"
                   onClick={() => toggleLabel(label)}
-                  className={`text-[11px] px-2 py-1 rounded border transition-colors ${
-                    form.labels.includes(label)
-                      ? "border-[#5E6AD2] bg-[#5E6AD2]/20 text-[#8B95E5]"
-                      : "border-[#333] text-[#6B6B6B] hover:border-[#444]"
-                  }`}
+                  className="text-[11px] px-2 py-1 rounded border transition-colors"
+                  style={form.labels.includes(label)
+                    ? { borderColor: "#5E6AD2", backgroundColor: "rgba(94,106,210,0.15)", color: "#8B95E5" }
+                    : { borderColor: "var(--pm-border-light)", color: "var(--pm-text-muted)" }
+                  }
                 >
                   {label}
                 </button>
@@ -135,7 +130,7 @@ export default function CreateIssueModal({ open, onClose, onSubmit, projects }) 
             </div>
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="ghost" onClick={() => onClose(false)} className="text-[#6B6B6B] hover:text-white hover:bg-[#252525]">
+            <Button type="button" variant="ghost" onClick={() => onClose(false)} style={{ color: "var(--pm-text-muted)" }}>
               Cancel
             </Button>
             <Button type="submit" className="bg-[#5E6AD2] hover:bg-[#4F5ABF] text-white">

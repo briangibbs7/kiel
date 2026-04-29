@@ -228,7 +228,7 @@ export default function EpicsPage() {
                     setEditingEpic(selectedEpic);
                     setSelectedEpic(null);
                   }}
-                  className="border-[#333] text-white hover:text-white hover:bg-[#252525]"
+                  className="bg-[#252525] border-[#444] text-white hover:bg-[#333] hover:text-white"
                 >
                   <Edit className="w-4 h-4 mr-2" />
                   Edit

@@ -55,7 +55,7 @@ export default function NotificationBell() {
     <Popover>
       <PopoverTrigger asChild>
         <button className="relative text-[#555] hover:text-white transition-colors">
-          <Bell size={16} className="text-slate-700 lucide lucide-bell" />
+          <Bell size={16} className="text-slate-50 lucide lucide-bell" />
           {unreadCount > 0 &&
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
               {unreadCount > 9 ? "9+" : unreadCount}

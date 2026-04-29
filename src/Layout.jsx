@@ -163,10 +163,10 @@ export default function Layout({ children, currentPageName }) {
   const navItems = navSections.flatMap((s) => s.items);
 
   return (
-    <div className={`h-screen bg-[#F5F6FA] overflow-hidden ${isSidebarVertical ? "flex" : "flex flex-col"}`}>
+    <div className={`h-screen bg-[#0D0D0D] overflow-hidden ${isSidebarVertical ? "flex" : "flex flex-col"}`}>
       {/* Sidebar - Top */}
       {isSidebarTop &&
-      <aside className="h-16 flex-shrink-0 bg-white border-b border-[#E2E4EB] flex items-center px-4 gap-2 overflow-x-auto">
+      <aside className="h-16 flex-shrink-0 bg-[#111111] border-b border-[#1E1E1E] flex items-center px-4 gap-2 overflow-x-auto">
           <div className="flex items-center gap-2 flex-shrink-0">
             <Popover>
               <PopoverTrigger asChild>
@@ -176,18 +176,18 @@ export default function Layout({ children, currentPageName }) {
                       {currentApp === "pm" ? "PM" : "CF"}
                     </span>
                   </div>
-                  <span className="text-sm font-semibold text-[#1A1D2E]">
+                  <span className="text-sm font-semibold text-[#E5E5E5]">
                     {currentApp === "pm" ? "Project Management" : "Confluence"}
                   </span>
-                  <Grid3x3 size={14} className="text-[#8A90A4]" />
+                  <Grid3x3 size={14} className="text-[#666]" />
                 </button>
               </PopoverTrigger>
-              <PopoverContent className="w-64 bg-white border-[#E2E4EB] shadow-lg p-2">
+              <PopoverContent className="w-64 bg-[#1A1A1A] border-[#333] p-2">
                 <div className="space-y-1">
                   <button
                     onClick={() => handleAppSwitch("pm")}
                     className={`w-full text-left px-3 py-2 rounded transition-colors flex items-center gap-3 ${
-                      currentApp === "pm" ? "bg-[#5E6AD2] text-white" : "text-[#1A1D2E] hover:bg-[#F5F6FA]"
+                      currentApp === "pm" ? "bg-[#5E6AD2] text-white" : "text-[#CCC] hover:bg-[#252525]"
                     }`}
                   >
                     <div className="w-6 h-6 rounded bg-gradient-to-br from-[#5E6AD2] to-[#7C3AED] flex items-center justify-center">
@@ -195,13 +195,13 @@ export default function Layout({ children, currentPageName }) {
                     </div>
                     <div>
                       <div className="text-sm font-medium">Project Management</div>
-                      <div className="text-xs text-[#8A90A4]">Tasks, epics & roadmaps</div>
+                      <div className="text-xs text-[#999]">Tasks, epics & roadmaps</div>
                     </div>
                   </button>
                   <button
                     onClick={() => handleAppSwitch("confluence")}
                     className={`w-full text-left px-3 py-2 rounded transition-colors flex items-center gap-3 ${
-                      currentApp === "confluence" ? "bg-[#5E6AD2] text-white" : "text-[#1A1D2E] hover:bg-[#F5F6FA]"
+                      currentApp === "confluence" ? "bg-[#5E6AD2] text-white" : "text-[#CCC] hover:bg-[#252525]"
                     }`}
                   >
                     <div className="w-6 h-6 rounded bg-gradient-to-br from-[#2684FF] to-[#0052CC] flex items-center justify-center">
@@ -209,7 +209,7 @@ export default function Layout({ children, currentPageName }) {
                     </div>
                     <div>
                       <div className="text-sm font-medium">Confluence</div>
-                      <div className="text-xs text-[#8A90A4]">Docs, wikis & knowledge base</div>
+                      <div className="text-xs text-[#999]">Docs, wikis & knowledge base</div>
                     </div>
                   </button>
                 </div>
@@ -225,8 +225,8 @@ export default function Layout({ children, currentPageName }) {
                 to={createPageUrl(item.page)}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded text-[12px] transition-colors whitespace-nowrap ${
                 isActive ?
-                "bg-[#EEF0F5] text-[#1A1D2E] font-medium" :
-                "text-[#6B7080] hover:text-[#1A1D2E] hover:bg-[#EEF0F5]"}`
+                "bg-[#1E1E1E] text-white" :
+                "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"}`
                 }>
 
                   <item.icon size={14} />
@@ -237,11 +237,11 @@ export default function Layout({ children, currentPageName }) {
           </nav>
           <Popover>
             <PopoverTrigger asChild>
-              <button className="text-[#8A90A4] hover:text-[#1A1D2E] transition-colors flex-shrink-0">
-                <LayoutList size={16} />
+              <button className="text-[#555] hover:text-white transition-colors flex-shrink-0">
+                <LayoutList size={16} className="text-slate-100 lucide lucide-layout-list" />
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-40 bg-white border-[#E2E4EB] shadow-lg p-2">
+            <PopoverContent className="w-40 bg-[#1A1A1A] border-[#333] p-2">
               <div className="space-y-1">
                 {sidebarPositions.map((pos) =>
               <button
@@ -250,7 +250,7 @@ export default function Layout({ children, currentPageName }) {
                 className={`w-full text-left text-xs px-2 py-1.5 rounded transition-colors ${
                 sidebarPos === pos.value ?
                 "bg-[#5E6AD2] text-white" :
-                "text-[#6B7080] hover:bg-[#F5F6FA] hover:text-[#1A1D2E]"}`
+                "text-[#999] hover:bg-[#252525] hover:text-white"}`
                 }>
 
                     {pos.label}
@@ -264,11 +264,11 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Sidebar - Left/Right */}
       {isSidebarVertical &&
-      <aside className={`w-56 flex-shrink-0 bg-white ${sidebarPos === "left" ? "border-r" : "border-l"} border-[#E2E4EB] flex flex-col ${sidebarPos === "right" ? "order-last" : ""}`}>
+      <aside className={`w-56 flex-shrink-0 bg-[#111111] ${sidebarPos === "left" ? "border-r" : "border-l"} border-[#1E1E1E] flex flex-col ${sidebarPos === "right" ? "order-last" : ""}`}>
         {isSidebarVertical &&
         <>
             {/* Workspace header */}
-            <div className="px-4 py-3 border-b border-[#E2E4EB]">
+            <div className="px-4 py-3 border-b border-[#1E1E1E]">
               <Popover>
                 <PopoverTrigger asChild>
                   <button className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer mb-3 w-full">
@@ -277,18 +277,18 @@ export default function Layout({ children, currentPageName }) {
                         {currentApp === "pm" ? "PM" : "CF"}
                       </span>
                     </div>
-                    <span className="text-sm font-semibold text-[#1A1D2E] flex-1 text-left truncate">
+                    <span className="text-sm font-semibold text-[#E5E5E5] flex-1 text-left truncate">
                       {currentApp === "pm" ? "Project Mgmt" : "Confluence"}
                     </span>
-                    <Grid3x3 size={12} className="text-[#8A90A4]" />
+                    <Grid3x3 size={12} className="text-[#666]" />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent className={`w-64 bg-white border-[#E2E4EB] shadow-lg p-2 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
+                <PopoverContent className={`w-64 bg-[#1A1A1A] border-[#333] p-2 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
                   <div className="space-y-1">
                     <button
                       onClick={() => handleAppSwitch("pm")}
                       className={`w-full text-left px-3 py-2 rounded transition-colors flex items-center gap-3 ${
-                        currentApp === "pm" ? "bg-[#5E6AD2] text-white" : "text-[#1A1D2E] hover:bg-[#F5F6FA]"
+                        currentApp === "pm" ? "bg-[#5E6AD2] text-white" : "text-[#CCC] hover:bg-[#252525]"
                       }`}
                     >
                       <div className="w-6 h-6 rounded bg-gradient-to-br from-[#5E6AD2] to-[#7C3AED] flex items-center justify-center">
@@ -296,13 +296,13 @@ export default function Layout({ children, currentPageName }) {
                       </div>
                       <div>
                         <div className="text-sm font-medium">Project Management</div>
-                        <div className="text-xs text-[#8A90A4]">Tasks, epics & roadmaps</div>
+                        <div className="text-xs text-[#999]">Tasks, epics & roadmaps</div>
                       </div>
                     </button>
                     <button
                       onClick={() => handleAppSwitch("confluence")}
                       className={`w-full text-left px-3 py-2 rounded transition-colors flex items-center gap-3 ${
-                        currentApp === "confluence" ? "bg-[#5E6AD2] text-white" : "text-[#1A1D2E] hover:bg-[#F5F6FA]"
+                        currentApp === "confluence" ? "bg-[#5E6AD2] text-white" : "text-[#CCC] hover:bg-[#252525]"
                       }`}
                     >
                       <div className="w-6 h-6 rounded bg-gradient-to-br from-[#2684FF] to-[#0052CC] flex items-center justify-center">
@@ -310,7 +310,7 @@ export default function Layout({ children, currentPageName }) {
                       </div>
                       <div>
                         <div className="text-sm font-medium">Confluence</div>
-                        <div className="text-xs text-[#8A90A4]">Docs, wikis & knowledge base</div>
+                        <div className="text-xs text-[#999]">Docs, wikis & knowledge base</div>
                       </div>
                     </button>
                   </div>
@@ -319,34 +319,38 @@ export default function Layout({ children, currentPageName }) {
               <Popover>
                 <PopoverTrigger asChild>
                   <button className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer w-full">
-                    <div className="w-5 h-5 rounded bg-[#EEF0F5] flex items-center justify-center">
-                      <span className="text-[9px] font-bold text-[#5E6AD2]">W</span>
+                    <div className="w-5 h-5 rounded bg-[#252525] flex items-center justify-center">
+                      <span className="text-[9px] font-bold text-white">W</span>
                     </div>
-                    <span className="text-sm font-semibold text-[#1A1D2E] flex-1 text-left truncate">Workspace</span>
-                    <ChevronDown size={12} className="text-[#8A90A4]" />
+                    <span className="text-sm font-semibold text-[#E5E5E5] flex-1 text-left truncate">Workspace</span>
+                    <ChevronDown size={12} className="text-[#666]" />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent className={`w-48 bg-white border-[#E2E4EB] shadow-lg p-0 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
+                <PopoverContent className={`w-48 bg-[#1A1A1A] border-[#333] p-0 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
                   <div className="space-y-1">
                     <button
                     onClick={() => navigate(createPageUrl("UserManagement"))}
-                    className="w-full text-left text-sm px-4 py-2.5 text-[#1A1D2E] hover:bg-[#F5F6FA] transition-colors">
+                    className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors">
+
                       User Management
                     </button>
                     <button
                     onClick={() => navigate(createPageUrl("RoleManagement"))}
-                    className="w-full text-left text-sm px-4 py-2.5 text-[#1A1D2E] hover:bg-[#F5F6FA] transition-colors">
+                    className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors">
+
                       Role Management
                     </button>
                     <button
                     onClick={() => navigate(createPageUrl("Security"))}
-                    className="w-full text-left text-sm px-4 py-2.5 text-[#1A1D2E] hover:bg-[#F5F6FA] transition-colors">
+                    className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors">
+
                       Security
                     </button>
-                    <div className="border-t border-[#E2E4EB]" />
+                    <div className="border-t border-[#252525]" />
                     <button
                     onClick={() => base44.auth.logout()}
-                    className="w-full text-left text-sm px-4 py-2.5 text-red-500 hover:bg-[#F5F6FA] transition-colors">
+                    className="w-full text-left text-sm px-4 py-2.5 text-[#F87171] hover:bg-[#252525] transition-colors">
+
                       Logout
                     </button>
                   </div>
@@ -354,22 +358,23 @@ export default function Layout({ children, currentPageName }) {
               </Popover>
 
               <div className="flex items-center gap-1 mt-3">
-                <button className="p-1 text-[#8A90A4] hover:text-[#1A1D2E] transition-colors" onClick={() => setSearchOpen(true)}>
-                  <Search size={14} />
+                <button className="p-1 text-[#6B6B6B] hover:text-white transition-colors" onClick={() => setSearchOpen(true)}>
+                  <Search size={14} className="text-slate-50 lucide lucide-search" />
                 </button>
                 <button
                 onClick={() => navigate(createPageUrl("Tasks") + "?create=true")}
-                className="p-1 text-[#8A90A4] hover:text-[#1A1D2E] transition-colors">
-                  <PenSquare size={14} />
+                className="p-1 text-[#6B6B6B] hover:text-white transition-colors">
+
+                  <PenSquare size={14} className="text-slate-50 lucide lucide-square-pen" />
                 </button>
                 <NotificationBell />
                 <Popover>
                   <PopoverTrigger asChild>
-                    <button className="p-1 text-[#8A90A4] hover:text-[#1A1D2E] transition-colors">
-                      <LayoutList size={14} />
+                    <button className="p-1 text-[#6B6B6B] hover:text-white transition-colors">
+                      <LayoutList size={14} className="text-slate-50 lucide lucide-layout-list" />
                     </button>
                   </PopoverTrigger>
-                  <PopoverContent className={`w-40 bg-white border-[#E2E4EB] shadow-lg p-2 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
+                  <PopoverContent className={`w-40 bg-[#1A1A1A] border-[#333] p-2 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
                     <div className="space-y-1">
                       {sidebarPositions.map((pos) =>
                     <button
@@ -378,7 +383,7 @@ export default function Layout({ children, currentPageName }) {
                       className={`w-full text-left text-xs px-2 py-1.5 rounded transition-colors ${
                       sidebarPos === pos.value ?
                       "bg-[#5E6AD2] text-white" :
-                      "text-[#6B7080] hover:bg-[#F5F6FA] hover:text-[#1A1D2E]"}`
+                      "text-[#999] hover:bg-[#252525] hover:text-white"}`
                       }>
 
                           {pos.label}
@@ -401,7 +406,7 @@ export default function Layout({ children, currentPageName }) {
             return (
               <div key={section.label} className="mb-4">
                 <div className="px-4 mb-1 flex items-center justify-between">
-                  <span className="text-[10px] font-semibold text-[#A0A6B8] uppercase tracking-wider">{section.label}</span>
+                  <span className="text-[10px] font-semibold text-[#444] uppercase tracking-wider">{section.label}</span>
                   {isCollapsible && (
                     <button
                       onClick={() => setCollapsedSections(prev => ({ ...prev, [section.label]: !prev[section.label] }))}
@@ -420,7 +425,7 @@ export default function Layout({ children, currentPageName }) {
                           key={item.page}
                           to={createPageUrl(item.page)}
                           className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] transition-colors ${
-                            isActive ? "bg-[#EEF0F5] text-[#1A1D2E] font-medium" : "text-[#6B7080] hover:text-[#1A1D2E] hover:bg-[#F5F6FA]"
+                            isActive ? "bg-[#1E1E1E] text-white" : "text-[#8A8A8A] hover:text-[#CCC] hover:bg-[#161616]"
                           }`}
                         >
                           <item.icon size={15} className="flex-shrink-0" />
@@ -439,29 +444,31 @@ export default function Layout({ children, currentPageName }) {
         <>
             {/* User */}
             {user &&
-          <div className="px-3 py-3 border-t border-[#E2E4EB] flex items-center justify-between">
+          <div className="px-3 py-3 border-t border-[#1E1E1E] flex items-center justify-between">
                 <div className="flex items-center gap-2 min-w-0">
                   <div className="w-6 h-6 rounded-full bg-[#5E6AD2] flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">
                     {user.full_name?.[0]?.toUpperCase() || "U"}
                   </div>
-                  <span className="text-xs text-[#6B7080] truncate">{user.full_name || user.email}</span>
+                  <span className="text-xs text-[#999] truncate">{user.full_name || user.email}</span>
                 </div>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <button className="text-[#8A90A4] hover:text-[#1A1D2E] transition-colors" title="Settings">
+                    <button className="text-[#555] hover:text-white transition-colors" title="Settings">
                       <Settings size={13} />
                     </button>
                   </PopoverTrigger>
-                  <PopoverContent className={`w-48 bg-white border-[#E2E4EB] shadow-lg p-0 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
+                  <PopoverContent className={`w-48 bg-[#1A1A1A] border-[#333] p-0 ${sidebarPos === "right" ? "mr-2" : "ml-2"}`} side={sidebarPos === "right" ? "left" : "right"}>
                     <div className="space-y-1">
                       <button
                     onClick={() => navigate(createPageUrl("AdminPortal"))}
-                    className="w-full text-left text-sm px-4 py-2.5 text-[#1A1D2E] hover:bg-[#F5F6FA] transition-colors">
+                    className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors">
+
                         Admin Portal
                       </button>
                       <button
                     onClick={() => navigate(createPageUrl("NotificationSettings"))}
-                    className="w-full text-left text-sm px-4 py-2.5 text-[#1A1D2E] hover:bg-[#F5F6FA] transition-colors">
+                    className="w-full text-left text-sm px-4 py-2.5 text-[#CCC] hover:bg-[#252525] transition-colors">
+
                         Notification Settings
                       </button>
                     </div>

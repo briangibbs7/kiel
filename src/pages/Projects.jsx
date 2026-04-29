@@ -172,50 +172,108 @@ export default function Projects() {
       </div>
 
       {view === "list" ?
-      <>
-          {/* Table header */}
-          <div className="flex items-center gap-4 px-4 py-2 border-b border-[#1E1E1E] text-[10px] text-[#555] uppercase tracking-wider font-semibold">
-            <span className="flex-1">Name</span>
-            <span className="w-20 text-center">Target</span>
-            <span className="w-24">Health</span>
-            <span className="w-16 text-center">Issues</span>
-            <span className="w-4" />
-          </div>
+        <div className="flex-1 overflow-y-auto p-5">
+          {filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-[#555]">
+              <p className="text-sm">No projects found</p>
+              <button onClick={() => setShowTemplateSelect(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
+                Create a project
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {filtered.map((project) => {
+                const issueCount = getIssueCount(project.id);
+                const completedCount = getCompletedIssueCount(project.id);
+                const progress = issueCount > 0 ? Math.round((completedCount / issueCount) * 100) : 0;
+                const healthColors = {
+                  on_track: { dot: "bg-[#4ADE80]", text: "text-[#4ADE80]", label: "On Track" },
+                  at_risk:  { dot: "bg-[#FACC15]", text: "text-[#FACC15]", label: "At Risk"  },
+                  off_track:{ dot: "bg-[#F87171]", text: "text-[#F87171]", label: "Off Track" },
+                };
+                const health = healthColors[project.health] || healthColors.on_track;
+                return (
+                  <div
+                    key={project.id}
+                    onClick={() => handleProjectClick(project)}
+                    className="group relative bg-[#111] border border-[#1E1E1E] rounded-xl p-5 cursor-pointer hover:border-[#5E6AD2] transition-all hover:shadow-lg hover:shadow-[#5E6AD2]/5 flex flex-col gap-4"
+                  >
+                    {/* Header */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        {project.icon && <span className="text-2xl flex-shrink-0">{project.icon}</span>}
+                        <div className="min-w-0">
+                          <h3 className="text-sm font-semibold text-white truncate group-hover:text-[#5E6AD2] transition-colors">
+                            {project.name}
+                          </h3>
+                          {project.prefix && (
+                            <span className="text-[10px] text-[#555] font-mono">{project.prefix}</span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        <span className={`w-1.5 h-1.5 rounded-full ${health.dot}`} />
+                        <span className={`text-[10px] font-medium ${health.text}`}>{health.label}</span>
+                      </div>
+                    </div>
 
-          <div className="flex-1 overflow-y-auto">
-            {filtered.length === 0 ?
-          <div className="flex flex-col items-center justify-center h-full text-[#555]">
-                <p className="text-sm">No projects found</p>
-                <button onClick={() => setShowTemplateSelect(true)} className="text-xs text-[#5E6AD2] mt-2 hover:underline">
-                  Create a project
-                </button>
-              </div> :
+                    {/* Description */}
+                    {project.description && (
+                      <p className="text-xs text-[#666] line-clamp-2 leading-relaxed">{project.description}</p>
+                    )}
 
-          filtered.map((project) =>
-          <div key={project.id} className="flex items-center">
-            <ProjectRow
-              project={project}
-              issueCount={getIssueCount(project.id)}
-              completedIssueCount={getCompletedIssueCount(project.id)}
-              onClick={handleProjectClick} />
-            {canDeleteProject && (
-              <div className="w-12 flex justify-center pr-2">
-                <button
-                  onClick={() => setProjectToDelete(project)}
-                  className="text-[#555] hover:text-[#F87171] transition-colors p-1"
-                  title="Delete project"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            )}
-          </div>
-          )
-          }
-          </div>
-        </> :
+                    {/* Stats row */}
+                    <div className="flex items-center gap-3 text-xs text-[#666]">
+                      <span>{issueCount} issue{issueCount !== 1 ? "s" : ""}</span>
+                      <span className="w-px h-3 bg-[#252525]" />
+                      <span>{completedCount} done</span>
+                      {project.lead && (
+                        <>
+                          <span className="w-px h-3 bg-[#252525]" />
+                          <span className="truncate">{project.lead.split("@")[0]}</span>
+                        </>
+                      )}
+                    </div>
 
-      <ProjectTimeline projects={filtered} />
+                    {/* Progress bar */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-[10px] text-[#555]">
+                        <span>Progress</span>
+                        <span>{progress}%</span>
+                      </div>
+                      <div className="h-1.5 bg-[#1E1E1E] rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-[#5E6AD2] to-[#7C3AED] transition-all duration-300"
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Target date */}
+                    {project.target_date && (
+                      <div className="text-[10px] text-[#555]">
+                        Target: <span className="text-[#888]">{new Date(project.target_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
+                      </div>
+                    )}
+
+                    {/* Delete */}
+                    {canDeleteProject && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setProjectToDelete(project); }}
+                        className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 text-[#444] hover:text-[#F87171] transition-all p-1"
+                        title="Delete project"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      :
+        <ProjectTimeline projects={filtered} />
       }
 
       {/* Template Selection Modal */}

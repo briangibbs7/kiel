@@ -7,22 +7,33 @@ import {
   ListTodo,
   FileText,
   Folder,
-  Rocket,
-  MoreHorizontal,
   Search,
   PenSquare,
   Star,
   ChevronDown,
   ChevronRight,
-  LogOut,
   LayoutList,
-  Bell,
   Settings,
   BarChart3,
   MessageCircle,
   LayoutGrid,
   Grid3x3,
-  Clock } from
+  Clock,
+  Kanban,
+  Map,
+  Layers,
+  Zap,
+  Library,
+  PieChart,
+  Timer,
+  ScrollText,
+  SlidersHorizontal,
+  GitMerge,
+  BookOpen,
+  PenLine,
+  LayoutDashboard,
+  Users,
+  TrendingUp } from
 "lucide-react";
 import {
   Popover,
@@ -34,80 +45,67 @@ import GlobalSearch from "@/components/search/GlobalSearch";
 
 const pmNavSections = [
 {
-  label: "My Work",
+  label: "Home",
   items: [
-  { name: "Team Dashboard", icon: LayoutGrid, page: "TeamDashboard" },
+  { name: "Dashboard", icon: LayoutDashboard, page: "TeamDashboard" },
   { name: "Inbox", icon: Inbox, page: "Inbox" },
-  { name: "My Issues", icon: ListTodo, page: "MyIssues" },
-  { name: "Messages", icon: MessageCircle, page: "DirectMessages" }]
-
+  { name: "Messages", icon: MessageCircle, page: "DirectMessages" },
+  { name: "For You", icon: Star, page: "ForYou" }]
 },
 {
-  label: "Work",
+  label: "Tracking",
   items: [
-  { name: "For You", icon: Star, page: "ForYou" },
-  { name: "Tasks", icon: ListTodo, page: "Tasks" },
-  { name: "Backlog", icon: FileText, page: "Backlog" }]
-
+  { name: "My Issues", icon: ListTodo, page: "MyIssues" },
+  { name: "Tasks", icon: ScrollText, page: "Tasks" },
+  { name: "Backlog", icon: Layers, page: "Backlog" }]
 },
 {
   label: "Planning",
   items: [
   { name: "Projects", icon: Folder, page: "Projects" },
-  { name: "Sprint Board", icon: Rocket, page: "SprintBoard" },
-  { name: "Roadmap", icon: Rocket, page: "Roadmap" },
-  { name: "Initiatives", icon: Rocket, page: "Initiatives" },
-  { name: "Epics", icon: Rocket, page: "Epics" }]
-
+  { name: "Epics", icon: GitMerge, page: "Epics" },
+  { name: "Initiatives", icon: TrendingUp, page: "Initiatives" },
+  { name: "Sprint Board", icon: Kanban, page: "SprintBoard" },
+  { name: "Roadmap", icon: Map, page: "Roadmap" }]
 },
 {
-  label: "Insights",
+  label: "Workspace",
   items: [
   { name: "Custom Boards", icon: LayoutGrid, page: "CustomProjectBoards" },
-  { name: "Templates", icon: FileText, page: "ProjectTemplates" },
-  { name: "Automations", icon: Settings, page: "Automations" },
-  { name: "Advanced Search", icon: FileText, page: "AdvancedSearch" }]
-
+  { name: "Templates", icon: Library, page: "ProjectTemplates" },
+  { name: "Automations", icon: Zap, page: "Automations" },
+  { name: "Advanced Search", icon: SlidersHorizontal, page: "AdvancedSearch" }]
 },
 {
   label: "Reports",
   items: [
   { name: "Reports", icon: BarChart3, page: "Reports" },
-  { name: "Custom Reports", icon: BarChart3, page: "CustomReports" },
-  { name: "Epic Analytics", icon: BarChart3, page: "EpicAnalytics" },
-  { name: "Time Tracking", icon: BarChart3, page: "TimeTracking" }]
-
+  { name: "Custom Reports", icon: PieChart, page: "CustomReports" },
+  { name: "Epic Analytics", icon: TrendingUp, page: "EpicAnalytics" },
+  { name: "Time Tracking", icon: Timer, page: "TimeTracking" }]
 }];
 
 const confluenceNavSections = [
 {
   label: "Home",
   items: [
-  { name: "Home", icon: LayoutGrid, page: "ConfluenceHome" },
-  { name: "Spaces", icon: Folder, page: "ConfluenceSpaces" }]
-
-},
-{
-  label: "Content",
-  items: [
+  { name: "Home", icon: LayoutDashboard, page: "ConfluenceHome" },
+  { name: "Spaces", icon: Folder, page: "ConfluenceSpaces" },
   { name: "Recent", icon: Clock, page: "ConfluenceRecent" },
   { name: "Starred", icon: Star, page: "ConfluenceStarred" }]
-
 },
 {
   label: "Create",
   items: [
-  { name: "Templates", icon: FileText, page: "ConfluenceTemplates" },
-  { name: "Whiteboards", icon: LayoutGrid, page: "ConfluenceWhiteboards" },
-  { name: "Drafts", icon: FileText, page: "ConfluenceDrafts" }]
-
+  { name: "Templates", icon: Library, page: "ConfluenceTemplates" },
+  { name: "Whiteboards", icon: PenLine, page: "ConfluenceWhiteboards" },
+  { name: "Drafts", icon: BookOpen, page: "ConfluenceDrafts" }]
 },
 {
   label: "Tools",
   items: [
   { name: "Search", icon: Search, page: "ConfluenceSearch" },
   { name: "Analytics", icon: BarChart3, page: "ConfluenceAnalytics" }]
-
 }];
 
 
@@ -121,7 +119,7 @@ export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [sidebarPos, setSidebarPos] = useState("left");
   const [searchOpen, setSearchOpen] = useState(false);
-  const [collapsedSections, setCollapsedSections] = useState({ Insights: true, Reports: true });
+  const [collapsedSections, setCollapsedSections] = useState({ Workspace: true, Reports: true });
   const [currentApp, setCurrentApp] = useState("pm");
   const navigate = useNavigate();
 
@@ -402,7 +400,7 @@ export default function Layout({ children, currentPageName }) {
         {/* Navigation */}
         <nav className="flex-1 py-2 overflow-y-auto">
           {navSections.map((section) => {
-            const isCollapsible = ["Planning", "Insights", "Reports", "Content", "Create", "Tools"].includes(section.label);
+            const isCollapsible = ["Planning", "Workspace", "Reports", "Create", "Tools"].includes(section.label);
             const isCollapsed = collapsedSections[section.label];
             
             return (

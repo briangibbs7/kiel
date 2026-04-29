@@ -5,11 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Plus, FileText } from "lucide-react";
 import PageEditor from "@/components/confluence/PageEditor";
 import PageTreeItem from "@/components/confluence/PageTreeItem";
+import TemplatePickerModal from "@/components/confluence/TemplatePickerModal";
 
 export default function ConfluenceSpace() {
   const [selectedPage, setSelectedPage] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
   const [parentPageId, setParentPageId] = useState(null);
+  const [showTemplatePicker, setShowTemplatePicker] = useState(false);
+  const [pendingParentPageId, setPendingParentPageId] = useState(null);
+  const [initialContent, setInitialContent] = useState(null);
   const queryClient = useQueryClient();
 
   const params = new URLSearchParams(window.location.search);
@@ -45,14 +49,21 @@ export default function ConfluenceSpace() {
   };
 
   const handleCreateNew = (parentPage = null) => {
+    setPendingParentPageId(parentPage ? parentPage.id : null);
+    setShowTemplatePicker(true);
+  };
+
+  const handleTemplateSelected = (template) => {
     setSelectedPage(null);
-    setParentPageId(parentPage ? parentPage.id : null);
+    setParentPageId(pendingParentPageId);
+    setInitialContent(template.content || "");
     setIsCreating(true);
   };
 
   const handlePageSaved = () => {
     setIsCreating(false);
     setParentPageId(null);
+    setInitialContent(null);
     queryClient.invalidateQueries({ queryKey: ["pages", spaceId] });
   };
 
@@ -130,11 +141,13 @@ export default function ConfluenceSpace() {
             page={selectedPage}
             spaceId={spaceId}
             parentPageId={parentPageId}
+            initialContent={initialContent}
             onSave={handlePageSaved}
             onCancel={() => {
               setIsCreating(false);
               setSelectedPage(null);
               setParentPageId(null);
+              setInitialContent(null);
             }}
           />
         ) : (
@@ -150,6 +163,11 @@ export default function ConfluenceSpace() {
           </div>
         )}
       </main>
+      <TemplatePickerModal
+        open={showTemplatePicker}
+        onClose={() => setShowTemplatePicker(false)}
+        onSelect={handleTemplateSelected}
+      />
     </div>
   );
 }

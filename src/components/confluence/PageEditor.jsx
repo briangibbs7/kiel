@@ -4,7 +4,8 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Save, X, Image, MessageSquare, Send, History } from "lucide-react";
+import { Save, X, Image, MessageSquare, Send, History, Library } from "lucide-react";
+import SaveAsTemplateModal from "@/components/confluence/SaveAsTemplateModal";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { usePagePresence } from "@/hooks/usePagePresence";
@@ -12,9 +13,10 @@ import PresenceAvatars from "@/components/confluence/PresenceAvatars";
 import InlineCommentPanel from "@/components/confluence/InlineCommentPanel";
 import VersionHistoryPanel from "@/components/confluence/VersionHistoryPanel";
 
-export default function PageEditor({ page, spaceId, parentPageId, onSave, onCancel }) {
+export default function PageEditor({ page, spaceId, parentPageId, initialContent, onSave, onCancel }) {
   const [title, setTitle] = useState(page?.title || "");
-  const [content, setContent] = useState(page?.content || "");
+  const [content, setContent] = useState(page?.content ?? initialContent ?? "");
+  const [showSaveTemplate, setShowSaveTemplate] = useState(false);
   const [status, setStatus] = useState(page?.status || "draft");
   const [labels, setLabels] = useState(page?.labels?.join(", ") || "");
   const [showComments, setShowComments] = useState(false);
@@ -39,7 +41,7 @@ export default function PageEditor({ page, spaceId, parentPageId, onSave, onCanc
   useEffect(() => {
     if (page) {
       setTitle(page.title || "");
-      setContent(page.content || "");
+      setContent(page.content ?? initialContent ?? "");
       setStatus(page.status || "draft");
       setLabels(page.labels?.join(", ") || "");
     }
@@ -243,6 +245,14 @@ export default function PageEditor({ page, spaceId, parentPageId, onSave, onCanc
           <Save className="w-4 h-4 mr-2" />
           {saveMutation.isPending ? "Saving..." : "Save"}
         </Button>
+        <button
+          onClick={() => setShowSaveTemplate(true)}
+          title="Save as Template"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm border border-[#333] text-[#999] hover:text-white hover:border-[#555] transition-colors"
+        >
+          <Library className="w-4 h-4" />
+          Save as Template
+        </button>
         <Button onClick={onCancel} variant="ghost" className="text-[#999]">
           <X className="w-4 h-4" />
         </Button>
@@ -376,6 +386,13 @@ export default function PageEditor({ page, spaceId, parentPageId, onSave, onCanc
           />
         )}
       </div>
+
+      <SaveAsTemplateModal
+        open={showSaveTemplate}
+        onClose={() => setShowSaveTemplate(false)}
+        pageTitle={title}
+        pageContent={content}
+      />
     </div>
   );
 }

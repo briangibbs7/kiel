@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { FileText, Plus, Star, Users, BookOpen, Lightbulb, ClipboardList, BarChart3, CheckSquare, Layers } from "lucide-react";
+import { FileText, Plus, Star, Users, BookOpen, Lightbulb, ClipboardList, BarChart3, CheckSquare, Layers, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -201,6 +201,16 @@ export default function ConfluenceTemplates() {
     queryFn: () => base44.entities.Space.list(),
   });
 
+  const { data: customTemplates = [] } = useQuery({
+    queryKey: ["page-templates"],
+    queryFn: () => base44.entities.Template.list(),
+  });
+
+  const deleteTemplateMutation = useMutation({
+    mutationFn: (id) => base44.entities.Template.delete(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["page-templates"] }),
+  });
+
   const createPageMutation = useMutation({
     mutationFn: (data) => base44.entities.Page.create(data),
     onSuccess: (page) => {
@@ -211,6 +221,7 @@ export default function ConfluenceTemplates() {
 
   const categories = [
     { id: "all", label: "All Templates" },
+    { id: "custom", label: "My Templates" },
     { id: "meeting_notes", label: "Meetings" },
     { id: "project_plan", label: "Planning" },
     { id: "requirements", label: "Requirements" },
@@ -221,9 +232,16 @@ export default function ConfluenceTemplates() {
     { id: "blank", label: "Blank" },
   ];
 
+  const allTemplates = [
+    ...BUILT_IN_TEMPLATES,
+    ...customTemplates.map((t) => ({ ...t, _custom: true })),
+  ];
+
   const filtered = selectedCategory === "all"
-    ? BUILT_IN_TEMPLATES
-    : BUILT_IN_TEMPLATES.filter((t) => t.category === selectedCategory);
+    ? allTemplates
+    : selectedCategory === "custom"
+    ? allTemplates.filter((t) => t._custom)
+    : allTemplates.filter((t) => t.category === selectedCategory);
 
   const handleUseTemplate = () => {
     if (!form.spaceId || !form.title) return;
@@ -285,17 +303,32 @@ export default function ConfluenceTemplates() {
                       <p className="text-xs text-[#999] mt-0.5 line-clamp-2">{template.description}</p>
                     </div>
                   </div>
-                  <Button
-                    size="sm"
-                    className="w-full bg-[#5E6AD2] hover:bg-[#6E7AE2] text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setUseTemplate(template);
-                      setForm({ spaceId: spaces[0]?.id || "", title: template.name });
-                    }}
-                  >
-                    Use Template
-                  </Button>
+                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      size="sm"
+                      className="flex-1 bg-[#5E6AD2] hover:bg-[#6E7AE2] text-white"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setUseTemplate(template);
+                        setForm({ spaceId: spaces[0]?.id || "", title: template.name });
+                      }}
+                    >
+                      Use Template
+                    </Button>
+                    {template._custom && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-[#666] hover:text-red-400 px-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (confirm("Delete this template?")) deleteTemplateMutation.mutate(template.id);
+                        }}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
               );
             })}

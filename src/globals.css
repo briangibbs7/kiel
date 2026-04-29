@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+  /* Dark mode (default) */
   --pm-bg: #0D0D0D;
   --pm-surface: #161616;
   --pm-surface-hover: #1E1E1E;
@@ -12,6 +13,7 @@
   --pm-text-muted: #6B6B6B;
   --pm-text-secondary: #999999;
   --pm-accent: #5E6AD2;
+  --pm-accent-hover: #4f5bc0;
   --pm-green: #4ADE80;
   --pm-yellow: #FACC15;
   --pm-red: #F87171;
@@ -19,12 +21,47 @@
   --pm-blue: #60A5FA;
   --pm-purple: #A78BFA;
   --pm-cyan: #22D3EE;
+  --pm-nav-item-active: #1E1E1E;
+  --pm-nav-item-hover: #161616;
+  --pm-popover: #1A1A1A;
+  --pm-input-bg: #111111;
+  --pm-header-bg: #111111;
+  --pm-scrollbar: #333;
+  --pm-scrollbar-hover: #444;
+}
+
+.light-mode {
+  --pm-bg: #F5F5F5;
+  --pm-surface: #FFFFFF;
+  --pm-surface-hover: #F0F0F0;
+  --pm-border: #E0E0E0;
+  --pm-border-light: #CCCCCC;
+  --pm-text: #1A1A1A;
+  --pm-text-muted: #888888;
+  --pm-text-secondary: #555555;
+  --pm-accent: #5E6AD2;
+  --pm-accent-hover: #4f5bc0;
+  --pm-green: #16A34A;
+  --pm-yellow: #CA8A04;
+  --pm-red: #DC2626;
+  --pm-orange: #EA580C;
+  --pm-blue: #2563EB;
+  --pm-purple: #7C3AED;
+  --pm-cyan: #0891B2;
+  --pm-nav-item-active: #E8E8F0;
+  --pm-nav-item-hover: #EFEFEF;
+  --pm-popover: #FFFFFF;
+  --pm-input-bg: #F9F9F9;
+  --pm-header-bg: #FFFFFF;
+  --pm-scrollbar: #CCCCCC;
+  --pm-scrollbar-hover: #BBBBBB;
 }
 
 body {
   background-color: var(--pm-bg);
   color: var(--pm-text);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Custom scrollbar */
@@ -36,15 +73,15 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: var(--pm-scrollbar);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #444;
+  background: var(--pm-scrollbar-hover);
 }
 
 @layer base {
   * {
-    @apply border-[#252525];
+    border-color: var(--pm-border);
   }
 }

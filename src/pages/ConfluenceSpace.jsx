@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Plus, FileText, ChevronRight, Settings, MoreVertical, Star, Edit, Trash } from "lucide-react";
+import { Plus, FileText } from "lucide-react";
 import PageEditor from "@/components/confluence/PageEditor";
-import { format } from "date-fns";
+import PageTreeItem from "@/components/confluence/PageTreeItem";
 
 export default function ConfluenceSpace() {
   const [selectedPage, setSelectedPage] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
-  const navigate = useNavigate();
+  const [parentPageId, setParentPageId] = useState(null);
   const queryClient = useQueryClient();
 
   const params = new URLSearchParams(window.location.search);
@@ -44,15 +41,18 @@ export default function ConfluenceSpace() {
   const handlePageClick = (page) => {
     setSelectedPage(page);
     setIsCreating(false);
+    setParentPageId(null);
   };
 
-  const handleCreateNew = () => {
+  const handleCreateNew = (parentPage = null) => {
     setSelectedPage(null);
+    setParentPageId(parentPage ? parentPage.id : null);
     setIsCreating(true);
   };
 
   const handlePageSaved = () => {
     setIsCreating(false);
+    setParentPageId(null);
     queryClient.invalidateQueries({ queryKey: ["pages", spaceId] });
   };
 
@@ -61,6 +61,9 @@ export default function ConfluenceSpace() {
       deleteMutation.mutate(pageId);
     }
   };
+
+  // Root pages are those with no parent_page_id
+  const rootPages = pages.filter((p) => !p.parent_page_id);
 
   if (!space) {
     return (
@@ -88,7 +91,7 @@ export default function ConfluenceSpace() {
             </div>
           </div>
           <Button
-            onClick={handleCreateNew}
+            onClick={() => handleCreateNew(null)}
             className="w-full bg-[#5E6AD2] hover:bg-[#6E7AE2] text-white"
           >
             <Plus className="w-4 h-4 mr-2" />
@@ -103,27 +106,17 @@ export default function ConfluenceSpace() {
               No pages yet
             </div>
           ) : (
-            <div className="space-y-1">
-              {pages.map((page) => (
-                <div
+            <div className="space-y-0.5">
+              {rootPages.map((page) => (
+                <PageTreeItem
                   key={page.id}
-                  className={`flex items-center gap-2 px-3 py-2 rounded cursor-pointer transition-colors group ${
-                    selectedPage?.id === page.id ? "bg-[#1E1E1E] text-white" : "text-[#999] hover:bg-[#161616] hover:text-white"
-                  }`}
-                  onClick={() => handlePageClick(page)}
-                >
-                  <FileText className="w-4 h-4 flex-shrink-0" />
-                  <span className="flex-1 truncate text-sm">{page.title}</span>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeletePage(page.id);
-                    }}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <Trash className="w-3 h-3 text-[#666] hover:text-red-400" />
-                  </button>
-                </div>
+                  page={page}
+                  allPages={pages}
+                  selectedPage={selectedPage}
+                  onPageClick={handlePageClick}
+                  onCreateChild={handleCreateNew}
+                  onDeletePage={handleDeletePage}
+                />
               ))}
             </div>
           )}
@@ -136,10 +129,12 @@ export default function ConfluenceSpace() {
           <PageEditor
             page={selectedPage}
             spaceId={spaceId}
+            parentPageId={parentPageId}
             onSave={handlePageSaved}
             onCancel={() => {
               setIsCreating(false);
               setSelectedPage(null);
+              setParentPageId(null);
             }}
           />
         ) : (
@@ -147,7 +142,7 @@ export default function ConfluenceSpace() {
             <div className="text-center">
               <FileText className="w-16 h-16 mx-auto mb-4 text-[#333]" />
               <p className="text-[#666] mb-2">Select a page to view or edit</p>
-              <Button onClick={handleCreateNew} variant="outline" className="border-[#333] text-[#999]">
+              <Button onClick={() => handleCreateNew(null)} variant="outline" className="border-[#333] text-[#999]">
                 <Plus className="w-4 h-4 mr-2" />
                 Create New Page
               </Button>

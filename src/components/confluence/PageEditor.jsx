@@ -12,7 +12,7 @@ import PresenceAvatars from "@/components/confluence/PresenceAvatars";
 import InlineCommentPanel from "@/components/confluence/InlineCommentPanel";
 import VersionHistoryPanel from "@/components/confluence/VersionHistoryPanel";
 
-export default function PageEditor({ page, spaceId, onSave, onCancel }) {
+export default function PageEditor({ page, spaceId, parentPageId, onSave, onCancel }) {
   const [title, setTitle] = useState(page?.title || "");
   const [content, setContent] = useState(page?.content || "");
   const [status, setStatus] = useState(page?.status || "draft");
@@ -99,6 +99,7 @@ export default function PageEditor({ page, spaceId, onSave, onCancel }) {
       space_id: spaceId,
       status,
       labels: labels ? labels.split(",").map((l) => l.trim()).filter(Boolean) : [],
+      ...(parentPageId ? { parent_page_id: parentPageId } : {}),
     });
   };
 

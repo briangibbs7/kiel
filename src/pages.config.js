@@ -87,6 +87,7 @@ import ConfluenceWhiteboards from './pages/ConfluenceWhiteboards';
 import ConfluenceSearch from './pages/ConfluenceSearch';
 import ConfluenceAnalytics from './pages/ConfluenceAnalytics';
 import SprintBoard from './pages/SprintBoard';
+import SprintPlanning from './pages/SprintPlanning';
 import __Layout from './Layout.jsx';
 
 
@@ -131,6 +132,7 @@ export const PAGES = {
     "ConfluenceSearch": ConfluenceSearch,
     "ConfluenceAnalytics": ConfluenceAnalytics,
     "SprintBoard": SprintBoard,
+    "SprintPlanning": SprintPlanning,
 }
 
 export const pagesConfig = {

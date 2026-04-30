@@ -21,6 +21,7 @@ import {
   Clock,
   Kanban,
   Map,
+  Target,
   Layers,
   Zap,
   Library,
@@ -66,6 +67,7 @@ const pmNavSections = [
   { name: "Epics", icon: GitMerge, page: "Epics" },
   { name: "Initiatives", icon: TrendingUp, page: "Initiatives" },
   { name: "Sprint Board", icon: Kanban, page: "SprintBoard" },
+  { name: "Sprint Planning", icon: Target, page: "SprintPlanning" },
   { name: "Roadmap", icon: Map, page: "Roadmap" }]
 },
 {
